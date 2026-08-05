@@ -1,8 +1,7 @@
 # ideai-docs
 
-The website for [ideai](https://philipparndt.github.io/ideai-docs/) — a fast
-macOS project browser, editor, terminal and debugger with an IntelliJ IDEA-style
-layout.
+The website for [ideai](https://philipparndt.github.io/ideai-docs/) — a
+terminal-first IDE for AI and cloud development, on macOS.
 
 A repository of its own because the program's is private, and GitHub Pages will
 not serve a site from a private repository without a paid plan. Nothing else is
