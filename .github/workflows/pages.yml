@@ -1,0 +1,55 @@
+# Publishes the committed HTML as it is.
+#
+# The site was built by Pages' own branch pipeline until that stopped
+# deploying: the build succeeded every time, the artifact was created, and the
+# deployment then sat at `deployment_in_progress` until the ten-minute default
+# gave up — four times in an afternoon, leaving the site unserved. A workflow
+# of our own is the same steps written down, which means they can be re-run on
+# their own, given longer than ten minutes, and read when they fail.
+#
+# There is nothing to build. The repository is the site: `index.html`, the
+# pictures, and a `.nojekyll` that says so.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  # So a stalled deployment can be retried without an empty commit.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One at a time, and let a newer push win: a queue of these behind a stuck
+# deployment is what an afternoon of retries looked like.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # The repository root: what is committed is what is served.
+          path: .
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          # Twenty minutes rather than ten. The deployment that kept failing
+          # was not wrong, only slow to be picked up, and a timeout is the one
+          # thing here worth being generous about.
+          timeout: 1200000
