@@ -1,6 +1,6 @@
-# ideai-docs
+# abydos-docs
 
-The website for [ideai](https://philipparndt.github.io/ideai-docs/) — a
+The website for [Abydos](https://philipparndt.github.io/abydos-docs/) — a
 terminal-first IDE for AI and cloud development, on macOS.
 
 A repository of its own because the program's is private, and GitHub Pages will
