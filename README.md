@@ -59,10 +59,14 @@ Every picture is the app doing the thing the page claims, on a project from the
 examples repository that anybody can clone. Nothing is staged and nothing is a
 mockup.
 
-It needs both other checkouts beside this one — the app and the examples. Both
-repositories are now `abydos` and `abydos-examples`, but a clone made before the
-rename still sits in a folder called the old thing, so each is looked for under
-both names and the new one wins:
+It needs both other checkouts beside this one:
+
+    git clone https://github.com/philipparndt/abydos.git           ../abydos
+    git clone https://github.com/philipparndt/abydos-examples.git  ../abydos-examples
+
+The examples are public; the app is not yet, so taking the pictures needs
+access to it. A clone made before the rename still sits in a folder called the
+old thing, so each is looked for under both names and the new one wins:
 
     ABYDOS=../abydos             or ../ideai
     EXAMPLES=../abydos-examples  or ../ideai-examples

@@ -31,16 +31,19 @@ DOCS="$(pwd)"
 # kind of chore that waits. So the new name is tried first and the old one is
 # the fallback, which works on either side of it without an edit here.
 find_checkout() {
-	local name="$1"; shift
+	local name="$1" repo="$2"; shift 2
 	for candidate in "$@"; do
 		if [ -d "$candidate" ]; then (cd "$candidate" && pwd); return 0; fi
 	done
+	# Where to get it, rather than only that it is missing: the answer to "no
+	# examples checkout" is a clone, and it saves looking the name up.
 	echo "no $name checkout — looked in $*" >&2
+	echo "  git clone https://github.com/philipparndt/$repo.git ${1}" >&2
 	return 1
 }
 
-ABYDOS="${ABYDOS:-$(find_checkout app ../abydos ../ideai)}"
-EXAMPLES="${EXAMPLES:-$(find_checkout examples ../abydos-examples ../ideai-examples)}"
+ABYDOS="${ABYDOS:-$(find_checkout app abydos ../abydos ../ideai)}"
+EXAMPLES="${EXAMPLES:-$(find_checkout examples abydos-examples ../abydos-examples ../ideai-examples)}"
 OUT="${OUT:-$DOCS/images}"
 SIZE="${SIZE:-1600x1000}"
 THEME="${THEME:-abydos}"
