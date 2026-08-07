@@ -1,0 +1,32 @@
+/* Tables, cards and figures: the three things the pages are made of. */
+
+/* Tables: the ones that answer "can it do X" and "for my language". */
+.scroll { overflow-x: auto; margin: 1rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+th, td { text-align: left; padding: .55rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--head); font-weight: 600; white-space: nowrap; }
+td.mid, th.mid { text-align: center; }
+tbody tr:hover { background: var(--panel); }
+.yes { color: var(--green); font-weight: 700; }
+.no { color: var(--dim); }
+td .note { color: var(--dim); font-size: .85em; display: block; }
+
+/* Feature cards */
+.cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin: 1.5rem 0; }
+.card { border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.1rem; background: var(--panel); }
+.card h3 { margin: 0 0 .35rem; font-size: 1rem; }
+.card p { margin: 0; color: var(--text); font-size: .93rem; }
+.card p + p { margin-top: .6rem; }
+
+/* Screenshots. Taken by `make screenshots` against the examples repository, so
+   every one is the app doing the thing beside it. The build reads the width and
+   the height out of the PNG, which is why the tags here carry neither. */
+figure { margin: 1.5rem 0; }
+figure img {
+	width: 100%;
+	height: auto;
+	display: block;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+}
+figcaption { color: var(--dim); font-size: .88rem; margin-top: .5rem; text-align: center; }

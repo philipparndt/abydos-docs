@@ -1,0 +1,35 @@
+/* The app's own palette: a sun on the horizon, which is what the icon is.
+   Amber earns its place three times over — CRT phosphor, desert, and a warm
+   ground in a category that is wall-to-wall blue.
+
+   These are the six colours the `abydos` theme is built from, and the page is
+   the same six. Change one here and it changes everywhere, which is the reason
+   the stylesheet was pulled out of the page in the first place. */
+:root {
+	--bg: #151210;      /* ground */
+	--panel: #1d1813;
+	--line: #33240F;    /* deep */
+	--text: #cdc0ae;
+	--head: #FFE0AC;    /* core light */
+	--dim: #8b7a64;
+	--blue: #F7B44E;    /* amber — the link colour */
+	--amber: #D97F18;   /* ember */
+	--green: #9fb37a;
+	--red: #d6706e;
+	--mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--bg: #fbf6ee;
+		--panel: #f5ecdd;
+		--line: #e3d3ba;
+		--text: #33240F;    /* deep */
+		--head: #151210;    /* ground */
+		--dim: #8E7A63;
+		--blue: #8E4A14;    /* sandstone, which is what carries on white */
+		--amber: #D97F18;
+		--green: #4a6b2f;
+		--red: #b4553f;
+	}
+}

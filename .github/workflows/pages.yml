@@ -1,4 +1,4 @@
-# Publishes the committed HTML as it is.
+# Builds the site and publishes it.
 #
 # The site was built by Pages' own branch pipeline until that stopped
 # deploying: the build succeeded every time, the artifact was created, and the
@@ -7,12 +7,16 @@
 # of our own is the same steps written down, which means they can be re-run on
 # their own, given longer than ten minutes, and read when they fail.
 #
-# There is nothing to build. The repository is the site: `index.html`, the
-# pictures, and a `.nojekyll` that says so.
+# `make build` assembles src/ into dist/, and dist/ is what gets uploaded. It
+# needs python3 and nothing else, which the runner already has — so there is no
+# setup step, no lockfile, and nothing to keep current.
 name: Pages
 
 on:
   push:
+    branches: [main]
+  # So the build can be checked before it is published.
+  pull_request:
     branches: [main]
   # So a stalled deployment can be retried without an empty commit.
   workflow_dispatch:
@@ -29,22 +33,37 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/configure-pages@v5
 
+      - name: Build the site
+        run: make build
+
+      # A page that references a picture that is not there builds happily and
+      # is wrong in the browser, so the build is asked to prove otherwise: it
+      # reads the width and height out of every PNG it links, which means a
+      # missing one is a failed build rather than a broken image.
+      - name: Show what was built
+        run: find dist -type f | sort
+
       - name: Upload the site
         uses: actions/upload-pages-artifact@v3
         with:
-          # The repository root: what is committed is what is served.
-          path: .
+          path: dist
 
+  deploy:
+    # Pull requests build to check the build; only main is published.
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

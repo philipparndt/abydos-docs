@@ -1,0 +1,60 @@
+/* The theme gallery.
+
+   Stacked at full width rather than three across: a palette is a thing you
+   judge on a screen's worth of code, and three thumbnails of an IDE side by
+   side show you three grey rectangles. */
+
+.theme { margin: 3rem 0 4rem; }
+.theme > figure { margin-top: 1rem; }
+.theme > figure img {
+	/* The window is drawn on the page's background rather than the panel's, so
+	   a light theme photographed for a dark page reads as a window and not as a
+	   hole. */
+	background: var(--bg);
+}
+.theme p.lead { max-width: 44rem; }
+
+/* The colours the theme is actually built from, straight out of Theme.swift.
+   Named as well as shown, because "the amber one" is how they get discussed and
+   `#F7B44E` is how they get used. */
+.swatches {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	margin: 1rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+.swatches li {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+	padding: .35rem .6rem .35rem .4rem;
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	background: var(--panel);
+	font-family: var(--mono);
+	font-size: .78rem;
+	color: var(--dim);
+}
+.swatches b {
+	width: 1.15rem;
+	height: 1.15rem;
+	border-radius: 4px;
+	/* Its own hairline: a near-black chip on a near-black card is invisible
+	   otherwise, and those are the ones worth seeing. */
+	box-shadow: inset 0 0 0 1px rgb(128 128 128 / .45);
+}
+.swatches span { color: var(--text); }
+
+/* The strip under each heading saying what the theme follows and what it is
+   called in Settings. */
+.theme-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .4rem .9rem;
+	margin: .35rem 0 1rem;
+	color: var(--dim);
+	font-size: .88rem;
+}
+.theme-meta code { color: var(--text); }

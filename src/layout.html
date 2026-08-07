@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<meta property="og:title" content="{{ og_title }}">
+<meta property="og:description" content="{{ og_description }}">
+<meta property="og:type" content="website">
+<!-- The icon as a flat data URI: three shapes, no gradients, because a favicon
+     is 16 pixels and a request for one is a request the page does not need. The
+     same shapes appear at full size in partials/icon.svg. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='230' fill='%23151210'/%3E%3Cpath d='M226 636a286 286 0 0 1 572 0z' fill='%23F7B44E'/%3E%3Crect y='632' width='1024' height='392' fill='%230d0b09'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="{{ stylesheet }}">
+</head>
+<body>
+<main>
+
+{{ body }}
+
+{{ include partials/footer.html }}
+
+</main>
+</body>
+</html>

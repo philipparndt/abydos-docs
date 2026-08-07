@@ -1,0 +1,17 @@
+<svg viewBox="0 0 1024 1024" aria-label="Abydos">
+	<defs>
+		<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#151210"/>
+			<stop offset="1" stop-color="#241a12"/>
+		</linearGradient>
+		<linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#FFE0AC"/>
+			<stop offset="1" stop-color="#D97F18"/>
+		</linearGradient>
+		<clipPath id="above"><rect x="0" y="0" width="1024" height="636"/></clipPath>
+	</defs>
+	<rect width="1024" height="1024" rx="230" fill="url(#sky)"/>
+	<circle cx="512" cy="636" r="286" fill="url(#sun)" clip-path="url(#above)"/>
+	<rect x="0" y="632" width="1024" height="6" fill="#8E4A14"/>
+	<rect x="0" y="638" width="1024" height="386" fill="#0d0b09"/>
+</svg>

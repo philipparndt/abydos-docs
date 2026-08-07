@@ -1,0 +1,30 @@
+/* The masthead, in two sizes: the front page's, which is the whole
+   introduction, and the one every other page gets, which is a way back. */
+
+header { padding: 4.5rem 0 1rem; text-align: center; }
+header svg { width: 104px; height: 104px; border-radius: 23%; }
+header h1 { margin: 1rem 0 .25rem; font-size: 2.6rem; letter-spacing: -.02em; }
+header p.tagline { margin: 0 auto; max-width: 40rem; font-size: 1.15rem; color: var(--text); }
+header p.sub { color: var(--dim); max-width: 42rem; margin: .75rem auto 0; }
+
+header.inner { padding: 2.5rem 0 .5rem; text-align: left; }
+header.inner svg { width: 44px; height: 44px; vertical-align: -.7rem; margin-right: .6rem; }
+header.inner h1 { display: inline; font-size: 1.9rem; }
+header.inner p.tagline { margin: 1rem 0 0; max-width: 44rem; font-size: 1rem; }
+
+.back { display: block; margin-bottom: 1.5rem; font-size: .9rem; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+
+.actions { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0 1rem; }
+.actions a {
+	display: inline-block;
+	padding: .6rem 1.2rem;
+	border-radius: 8px;
+	border: 1px solid var(--line);
+	background: var(--panel);
+	color: var(--head);
+	text-decoration: none;
+	font-weight: 550;
+}
+.actions a.primary { background: var(--blue); border-color: var(--blue); color: #0d1117; }
+.actions a:hover { border-color: var(--blue); }

@@ -1,0 +1,134 @@
+---
+title: Themes — Abydos
+description: The three palettes Abydos ships with — its own amber one, a dark one and a light one — each photographed on the same project, with the colours they are built from.
+og_title: Abydos themes
+og_description: Abydos, dusk and daylight: the same window photographed three times, with the palette each is built from.
+---
+<header class="inner">
+	<a class="back" href="index.html">← Abydos</a>
+	{{ include partials/icon.svg }}
+	<h1>Themes</h1>
+	<p class="tagline">Three palettes, and the system's answer as a fourth choice.
+	   The same project, the same file, the same window size — so what differs
+	   between these pictures is only the colour.</p>
+</header>
+
+<p>
+	<kbd>⌘,</kbd> → <strong>Editor</strong> → <strong>Appearance</strong>. It takes
+	effect on the windows that are already open: the palette is swapped underneath
+	them rather than applied to the next one.
+</p>
+<p>
+	Every picture on this page was taken by <code>make theme-shots</code>, which
+	runs the app once per theme with <code>--theme</code> and captures the window.
+	The colours listed under each are read out of the app's own
+	<code>Theme.swift</code>, so what is named here is what is drawn.
+</p>
+
+<div class="theme">
+	<h2 id="abydos">Abydos</h2>
+	<div class="theme-meta">
+		<span>Settings: <code>Abydos</code></span>
+		<span>Terminal scheme: <code>abydos</code></span>
+		<span>The default for the pictures on this site</span>
+	</div>
+	<p class="lead">
+		The app's own palette: a sun on the horizon, which is what the icon is.
+		Amber earns its place three times over — it is CRT phosphor, it is desert,
+		and it is a warm ground in a category that is wall to wall blue. The
+		surfaces are nearly black with warmth in them rather than brown: a brown
+		editor is tiring within the hour, and what should be warm is the light
+		falling on it, not the paper.
+	</p>
+	<ul class="swatches">
+		<li><b style="background:#151210"></b><span>#151210</span> ground</li>
+		<li><b style="background:#1C1712"></b><span>#1C1712</span> sidebar</li>
+		<li><b style="background:#E8D9C0"></b><span>#E8D9C0</span> text</li>
+		<li><b style="background:#FFE0AC"></b><span>#FFE0AC</span> core light</li>
+		<li><b style="background:#F7B44E"></b><span>#F7B44E</span> amber</li>
+		<li><b style="background:#D97F18"></b><span>#D97F18</span> ember</li>
+		<li><b style="background:#8E4A14"></b><span>#8E4A14</span> sandstone</li>
+		<li><b style="background:#9FB37A"></b><span>#9FB37A</span> string</li>
+	</ul>
+	<figure>
+		<img src="images/themes/abydos.png" alt="Abydos in its own amber theme: a Go project, the navigator on the left and main.go in the editor, on near-black surfaces with warm syntax colours."
+		     loading="lazy">
+		<figcaption>The amber theme. One warm colour does the work a blue accent
+		   usually does, and the greens stay green because "added" has only one
+		   colour it can be.</figcaption>
+	</figure>
+</div>
+
+<div class="theme">
+	<h2 id="dusk">Dusk</h2>
+	<div class="theme-meta">
+		<span>Settings: <code>Dark</code></span>
+		<span>What <code>System</code> resolves to after dark</span>
+	</div>
+	<p class="lead">
+		The dark theme, for anyone who wants the familiar arrangement: quiet chrome,
+		one warm colour for keywords, green for the text you wrote, blue for the
+		things that are called. The greys carry a little more blue than most, and
+		the syntax hues are pulled apart so keyword, type and call read as three
+		colours rather than as three shades of one.
+	</p>
+	<ul class="swatches">
+		<li><b style="background:#1A1C21"></b><span>#1A1C21</span> window</li>
+		<li><b style="background:#24272E"></b><span>#24272E</span> sidebar</li>
+		<li><b style="background:#C2C6D0"></b><span>#C2C6D0</span> text</li>
+		<li><b style="background:#D8926B"></b><span>#D8926B</span> keyword</li>
+		<li><b style="background:#62B4F0"></b><span>#62B4F0</span> call</li>
+		<li><b style="background:#7FB98C"></b><span>#7FB98C</span> string</li>
+		<li><b style="background:#AFB3EC"></b><span>#AFB3EC</span> type</li>
+		<li><b style="background:#3A5691"></b><span>#3A5691</span> selection</li>
+	</ul>
+	<figure>
+		<img src="images/themes/dusk.png" alt="Abydos in the dusk theme: the same Go project on cool dark grey surfaces, with blue, green and orange syntax colours."
+		     loading="lazy">
+		<figcaption>Dusk. The same window, one palette over.</figcaption>
+	</figure>
+</div>
+
+<div class="theme">
+	<h2 id="daylight">Daylight</h2>
+	<div class="theme-meta">
+		<span>Settings: <code>Light</code></span>
+		<span>What <code>System</code> resolves to in the day</span>
+	</div>
+	<p class="lead">
+		Not the dark palette inverted. A light theme wants more contrast in the text
+		and less in the surfaces, or every panel edge shouts — so the greys sit close
+		together and the colours do the separating. The editor is the one white
+		surface on the screen, which is what makes it the thing you look at.
+	</p>
+	<ul class="swatches">
+		<li><b style="background:#F7F8FA"></b><span>#F7F8FA</span> window</li>
+		<li><b style="background:#FFFFFF"></b><span>#FFFFFF</span> editor</li>
+		<li><b style="background:#2B2D30"></b><span>#2B2D30</span> text</li>
+		<li><b style="background:#0033B3"></b><span>#0033B3</span> keyword</li>
+		<li><b style="background:#00627A"></b><span>#00627A</span> call</li>
+		<li><b style="background:#067D17"></b><span>#067D17</span> string</li>
+		<li><b style="background:#7A3E9D"></b><span>#7A3E9D</span> type</li>
+		<li><b style="background:#CBDEFB"></b><span>#CBDEFB</span> selection</li>
+	</ul>
+	<figure>
+		<img src="images/themes/daylight.png" alt="Abydos in the daylight theme: the same Go project on white and light grey surfaces, with blue, green and purple syntax colours."
+		     loading="lazy">
+		<figcaption>Daylight. Native controls follow it too — the scrollers, the
+		   fields and the titlebar are drawn light, because a light window with dark
+		   scrollbars in it looks broken.</figcaption>
+	</figure>
+</div>
+
+<h2>System</h2>
+<p>
+	The fourth choice is not a palette but a deferral: <code>System</code> follows
+	the Mac's own light and dark setting and resolves to <strong>daylight</strong>
+	or <strong>dusk</strong>. It changes while the app is running, so a machine that
+	switches at sunset switches the editor with it.
+</p>
+<p class="foot-note">
+	Abydos is not in that pair on purpose. It is a palette you choose rather than
+	one you are given, and a window that turned amber by itself at six in the
+	evening would be a surprise rather than a preference.
+</p>

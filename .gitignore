@@ -1,0 +1,6 @@
+# Assembled by `make build`. The sources are in src/; this is the output, and
+# the workflow builds it fresh on every push.
+dist/
+
+.DS_Store
+__pycache__/

@@ -1,0 +1,57 @@
+/* Typography and the page frame: everything a document has before it has
+   components. */
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
+	font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+}
+
+main { max-width: 62rem; margin: 0 auto; padding: 0 1.25rem 6rem; }
+
+a { color: var(--blue); }
+
+h1, h2, h3 { color: var(--head); line-height: 1.25; }
+h2 {
+	margin: 3.5rem 0 1rem;
+	font-size: 1.5rem;
+	padding-bottom: .5rem;
+	border-bottom: 1px solid var(--line);
+}
+h3 { margin: 2rem 0 .5rem; font-size: 1.1rem; }
+
+code, kbd { font-family: var(--mono); font-size: .9em; }
+kbd {
+	border: 1px solid var(--line);
+	border-radius: 4px;
+	padding: .05em .35em;
+	background: var(--panel);
+	white-space: nowrap;
+}
+
+pre {
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	padding: .9rem 1rem;
+	overflow-x: auto;
+	font-family: var(--mono);
+	font-size: .88rem;
+}
+pre .c { color: var(--dim); }
+
+sup { font-size: .7em; }
+.foot-note { color: var(--dim); font-size: .9rem; }
+
+footer {
+	border-top: 1px solid var(--line);
+	margin-top: 4rem;
+	padding: 1.5rem 0;
+	color: var(--dim);
+	font-size: .9rem;
+	text-align: center;
+}
