@@ -168,29 +168,29 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 <table>
 	<thead>
 		<tr>
-			<th>Language</th><th class="mid">Highlight</th><th class="mid">Fold</th>
+			<th>Language</th><th class="mid">Highlight</th><th class="mid">Fold<sup>3</sup></th>
 			<th class="mid">Outline</th><th>Server</th><th>Run</th><th>Debug</th><th class="mid">Cluster</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr><td><strong>Java</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>jdtls</td><td>Maven, Gradle, <code>main</code></td><td>java-debug</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Kotlin</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td>jdtls<sup>1</sup></td><td>Gradle, <code>main</code></td><td>java-debug</td><td class="mid yes">✓</td></tr>
-		<tr><td><strong>Go</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid yes">✓</td><td>gopls</td><td><code>go run</code>, make</td><td>Delve</td><td class="mid yes">✓</td></tr>
+		<tr><td><strong>Go</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>gopls</td><td><code>go run</code>, make</td><td>Delve</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Swift</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>sourcekit-lsp</td><td>make, launch config</td><td>LLDB</td><td class="mid">via make</td></tr>
-		<tr><td><strong>Rust</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid yes">✓</td><td>rust-analyzer</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
-		<tr><td><strong>C / C++</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid yes">✓</td><td>clangd</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
+		<tr><td><strong>Rust</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>rust-analyzer</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
+		<tr><td><strong>C / C++</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>clangd</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Zig</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td class="no">—</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Odin</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td class="no">—</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
-		<tr><td><strong>Python</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid yes">✓</td><td>pyright</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
-		<tr><td><strong>TypeScript / TSX</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid yes">✓</td><td>typescript-language-server</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
-		<tr><td><strong>JavaScript</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid yes">✓</td><td>typescript-language-server</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>Python</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>pyright</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>TypeScript / TSX</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>typescript-language-server</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>JavaScript</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>typescript-language-server</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
 		<tr><td><strong>Groovy</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid">build files<sup>2</sup></td><td class="no">—</td><td>Gradle</td><td class="no">—</td><td class="mid no">—</td></tr>
-		<tr><td><strong>Makefile</strong></td><td class="mid">as shell</td><td class="mid">structural</td><td class="mid"><span class="yes">✓</span> targets</td><td class="no">—</td><td>every goal</td><td>Go goals</td><td class="mid yes">✓</td></tr>
-		<tr><td><strong>JSON</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid no">—</td><td>vscode-json-language-server</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
-		<tr><td><strong>Shell</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid no">—</td><td class="no">—</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
-		<tr><td><strong>HTML / XML</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
-		<tr><td><strong>OpenSCAD</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid">server</td><td>openscad-lsp</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
-		<tr><td><strong>CSS, YAML, TOML, Markdown, Svelte</strong></td><td class="mid yes">✓</td><td class="mid">structural</td><td class="mid no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>Makefile</strong></td><td class="mid">as shell</td><td class="mid yes">✓</td><td class="mid"><span class="yes">✓</span> targets</td><td class="no">—</td><td>every goal</td><td>Go goals</td><td class="mid yes">✓</td></tr>
+		<tr><td><strong>JSON</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td>vscode-json-language-server</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>Shell</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td class="no">—</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>HTML / XML</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>OpenSCAD</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid">server</td><td>openscad-lsp</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>CSS, YAML, TOML, Markdown, Svelte</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
 	</tbody>
 </table>
 </div>
@@ -201,8 +201,12 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 	<sup>2</sup> A <code>pom.xml</code> or Gradle build file has no server, and its
 	grammar knows nothing about modules — so <kbd>⇧⌘O</kbd> over one is answered by
 	that build file's own parser: modules, plugins, dependencies, tasks.<br>
-	"Structural" folding derives regions from any multi-line node in the parse tree,
-	so every language folds; a <code>folds.scm</code> only makes it tidier.
+	<sup>3</sup> Every language folds, by one of two routes. Where the grammar ships
+	a <code>folds.scm</code> — or one is written here, as Java's is — the fold points
+	are the ones that query names. Where it does not, they are derived from the parse
+	tree: any node spanning more than one line. The derived set is the larger of the
+	two and the named set is the tidier, which is a difference in taste rather than
+	in support.
 </p>
 <p>
 	Nothing is bundled. A language server, a debugger and a build tool each have
