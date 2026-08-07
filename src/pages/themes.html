@@ -1,14 +1,14 @@
 ---
 title: Themes — Abydos
-description: The two themes Abydos ships with, each in light and dark — the app's own amber one and the blue-grey it started with — photographed on the same project, with the colours they are built from.
+description: The three themes Abydos ships with, each in light and dark — the app's own amber one, the blue-grey it started with, and Dracula at upstream's own values — photographed on the same project, with the colours they are built from.
 og_title: Abydos themes
-og_description: Two themes, each with a light and a dark: abydos, abydos-light, dusk and daylight, photographed on one project with the palette each is built from.
+og_description: Three themes, each with a light and a dark: abydos, abydos-light, dusk, daylight, dracula and its daylight half Alucard, photographed on one project with the palette each is built from.
 ---
 <header class="inner">
 	<a class="back" href="index.html">← Abydos</a>
 	{{ include partials/icon.svg }}
 	<h1>Themes</h1>
-	<p class="tagline">Two themes, each with a daylight half and a dark one. The
+	<p class="tagline">Three themes, each with a daylight half and a dark one. The
 	   same project, the same file, the same window size — so what differs between
 	   these pictures is only the colour.</p>
 </header>
@@ -21,12 +21,13 @@ og_description: Two themes, each with a light and a dark: abydos, abydos-light, 
 </p>
 <p>
 	Two questions rather than one list. <strong>Theme</strong> is which palette —
-	Abydos or Blue — and <strong>Light or dark</strong> is how light it should be,
-	with <code>System</code> as the third answer to the second question rather than
-	an entry in the first. That is what a single list could not say: somebody who
-	wants the warm palette wants it in the morning too, and somebody who follows
-	the system wants the theme they chose to follow along rather than be swapped
-	for another one.
+	Abydos, Blue or Dracula — and <strong>Light or dark</strong> is how light it
+	should be, with <code>System</code> as the third answer to the second question
+	rather than an entry in the first. That is what a single list could not say:
+	somebody who wants the warm palette wants it in the morning too, and somebody
+	who follows the system wants the theme they chose to follow along rather than
+	be swapped for another one. Three by three, and the six that are not a
+	deferral are below.
 </p>
 <p>
 	Every picture on this page was taken by <code>make theme-shots</code>, which
@@ -167,14 +168,84 @@ og_description: Two themes, each with a light and a dark: abydos, abydos-light, 
 	</figure>
 </div>
 
+<div class="theme">
+	<h2 id="dracula">Dracula</h2>
+	<div class="theme-meta">
+		<span>Settings: <code>Dracula</code> + <code>Dark</code></span>
+		<span>Terminal scheme: Dracula's own sixteen, unchanged</span>
+		<span>The one palette here that is not ours</span>
+	</div>
+	<p class="lead">
+		People arrive with this one rather than discover it here — from a terminal,
+		an editor, a whole desktop — and that is the whole point of offering it. So
+		the values are upstream's rather than adjusted to taste, and the six accents
+		keep the roles Dracula assigns them: pink for keywords, green for functions,
+		purple for constants and numbers, cyan for types, orange for parameters,
+		yellow for strings. Somebody who picks it should see the same file in the
+		same colours as in whatever they came from. Only the roles this app has and
+		Dracula does not — a git status, a fold placeholder — are placed, each given
+		the accent that already means it elsewhere.
+	</p>
+	<ul class="swatches">
+		<li><b style="background:#282A36"></b><span>#282A36</span> background</li>
+		<li><b style="background:#F8F8F2"></b><span>#F8F8F2</span> foreground</li>
+		<li><b style="background:#6272A4"></b><span>#6272A4</span> comment</li>
+		<li><b style="background:#FF79C6"></b><span>#FF79C6</span> keyword</li>
+		<li><b style="background:#50FA7B"></b><span>#50FA7B</span> function</li>
+		<li><b style="background:#BD93F9"></b><span>#BD93F9</span> constant</li>
+		<li><b style="background:#8BE9FD"></b><span>#8BE9FD</span> type</li>
+		<li><b style="background:#F1FA8C"></b><span>#F1FA8C</span> string</li>
+	</ul>
+	<figure>
+		<img src="images/themes/dracula.png" alt="Abydos in the Dracula theme: the same Go project on Dracula's dark blue-grey, with pink keywords, green functions, purple numbers and yellow strings."
+		     loading="lazy">
+		<figcaption>Dracula, at upstream's values. The terminal gets Dracula's own
+		   sixteen unchanged, so a prompt built for it looks like itself.</figcaption>
+	</figure>
+</div>
+
+<div class="theme">
+	<h2 id="dracula-light">Alucard</h2>
+	<div class="theme-meta">
+		<span>Settings: <code>Dracula</code> + <code>Light</code></span>
+		<span>What <code>Dracula</code> + <code>System</code> resolves to in the day</span>
+		<span>Upstream's own daylight counterpart</span>
+	</div>
+	<p class="lead">
+		Every theme here comes in both lightnesses, and Dracula upstream is dark
+		only — but it publishes a daylight counterpart, Alucard, for exactly the
+		reason that inverting the dark one gives neon on white. So the light half is
+		not invented here: role for role with the dark one, in Alucard's darkened
+		hues on its warm off-white. Alucard publishes eight hues rather than a full
+		table, so the terminal's bright half is each of them lifted — which is what
+		the dark scheme's bright half already is.
+	</p>
+	<ul class="swatches">
+		<li><b style="background:#FFFBEB"></b><span>#FFFBEB</span> background</li>
+		<li><b style="background:#1F1F1F"></b><span>#1F1F1F</span> foreground</li>
+		<li><b style="background:#6C664B"></b><span>#6C664B</span> comment</li>
+		<li><b style="background:#A3144D"></b><span>#A3144D</span> keyword</li>
+		<li><b style="background:#14710A"></b><span>#14710A</span> function</li>
+		<li><b style="background:#644AC9"></b><span>#644AC9</span> constant</li>
+		<li><b style="background:#036A96"></b><span>#036A96</span> type</li>
+		<li><b style="background:#846E15"></b><span>#846E15</span> string</li>
+	</ul>
+	<figure>
+		<img src="images/themes/dracula-light.png" alt="Abydos in the Alucard theme: the same Go project on a warm off-white, with dark pink keywords, dark green functions, violet numbers and olive strings."
+		     loading="lazy">
+		<figcaption>Alucard. The same six roles as the dark one, darkened to where
+		   they can be read on a warm off-white rather than inverted onto white.</figcaption>
+	</figure>
+</div>
+
 <h2>System</h2>
 <p>
 	<code>System</code> is not a palette but a deferral, and it belongs to the
 	second question rather than the first: it follows the Mac's own light and dark
 	setting without touching which theme you chose. Abydos plus <code>System</code>
-	is amber all day and warm paper by day; Blue plus <code>System</code> is dusk
-	and daylight. It changes while the app is running, so a machine that switches at
-	sunset switches the editor with it.
+	is amber after dark and warm paper by day; Blue gives dusk and daylight;
+	Dracula gives Dracula and Alucard. It changes while the app is running, so a
+	machine that switches at sunset switches the editor with it.
 </p>
 <p class="foot-note">
 	It used to be one list, and one list could not say that. Abydos and Abydos Light

@@ -78,18 +78,23 @@ Scripts/screenshots.sh site debugger      # just that one
 THEME=light Scripts/screenshots.sh site   # the pages, in daylight
 ```
 
-`THEME` takes what Settings stores — `abydos`, `abydos-light`, `dark`, `light` —
-and defaults to `abydos`, so the pictures do not depend on whichever theme the
-machine taking them happens to be set to. It is checked against that list before
-the app is launched, because the app treats an unrecognised value as "follow the
-system": `--theme daylight` on a dark Mac quietly photographs dusk instead of
-failing, which cost an afternoon once.
+`THEME` takes what Settings stores — `abydos`, `abydos-light`, `dark`, `light`,
+`dracula`, `dracula-light` — and defaults to `abydos`, so the pictures do not
+depend on whichever theme the machine taking them happens to be set to. It is
+checked against that list before the app is launched, because the app treats an
+unrecognised value as "follow the system": `--theme daylight` on a dark Mac
+quietly photographs dusk instead of failing, which cost an afternoon once.
 
-`themes.html` names the palettes — `abydos`, `abydos-light`, `dusk`, `daylight`
-— and the script maps between the two spellings. The stored value is one string
-holding both halves of what is now asked as two questions in Settings: which
-theme, and how light. The two values that mean "follow the system" are not
+`themes.html` names the palettes — `abydos`, `abydos-light`, `dusk`, `daylight`,
+`dracula`, `dracula-light` — and the script maps between the two spellings. The
+stored value is one string holding both halves of what is asked as two questions
+in Settings: which theme, and how light. Three themes with a light and a dark
+each is six pictures; the three values that mean "follow the system" are not
 photographed, because they are not palettes.
+
+The page calls `dracula-light` **Alucard**, since that is upstream's own name
+for it, but the file keeps the setting's name. The mapping stays in one
+direction that way: what the app stores is what the picture is called.
 
 The captures are reproducible on purpose: the window is given a size, the panel
 is given a height, and the examples are cloned into a temporary directory first,

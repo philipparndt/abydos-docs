@@ -49,22 +49,31 @@ SIZE="${SIZE:-1600x1000}"
 THEME="${THEME:-abydos}"
 APP="$ABYDOS/build/Abydos.app/Contents/MacOS/Abydos"
 
-# The four palettes, minus the two values that mean "follow the system" — which
-# is not a palette but a deferral, and resolves to one of these.
+# The six palettes — three themes with a light and a dark each — minus the three
+# values that mean "follow the system", which is not a palette but a deferral and
+# resolves to one of these.
 #
 # `setting:palette`, because those are two different names for the same thing
 # and the app answers to only one of them. `--theme` takes what Settings stores
-# — abydos, abydos-light, dark, light — while Theme.swift calls the palettes
-# abydos, abydos-light, dusk and daylight, and the page uses those. Worth
-# spelling out, because an unrecognised value is not an error: the app falls
-# back to following the system, so `--theme daylight` on a dark Mac quietly
-# photographs dusk. Which is how this list came to be written down at all.
+# — abydos, abydos-light, dark, light, dracula, dracula-light — while Theme.swift
+# calls the palettes abydos, abydos-light, dusk, daylight, dracula and
+# dracula-light, and the page uses those. Worth spelling out, because an
+# unrecognised value is not an error: the app falls back to following the system,
+# so `--theme daylight` on a dark Mac quietly photographs dusk. Which is how this
+# list came to be written down at all.
 #
-# Two of the four now agree on their name, which is the settle-down after the
-# theme became two questions rather than one list: the stored string is the pair
-# — which palette, and how light — so the warm one in daylight had to be called
-# something, and it is called what it is.
-THEMES=(abydos:abydos abydos-light:abydos-light dark:dusk light:daylight)
+# Only Blue's two disagree, which is the leftover from when the theme was one
+# list rather than the pair it is now — every palette added since has been stored
+# under the name it is called by.
+#
+# The page calls dracula-light Alucard, because that is what upstream calls it.
+# The file is named for the setting rather than the heading, so the mapping stays
+# in one direction: what the app stores is what the picture is called.
+THEMES=(
+	abydos:abydos abydos-light:abydos-light
+	dark:dusk light:daylight
+	dracula:dracula dracula-light:dracula-light
+)
 
 usage() { sed -n '2,23p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
 

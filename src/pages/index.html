@@ -135,9 +135,24 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 	</div>
 	<div class="card">
 		<h3>Run and debug, here too</h3>
-		<p>Launch configurations, Makefile goals, Maven goals, Gradle tasks and entry
-		   points found by scanning. Breakpoints — conditional, hit counts, log
-		   points — over DAP, with stack, variables and watches.</p>
+		<p>Launch configurations, Makefile goals, Maven goals, Gradle tasks, Bazel
+		   targets, Conan commands and entry points found by scanning. Breakpoints —
+		   conditional, hit counts, log points — over DAP, with stack, variables and
+		   watches.</p>
+	</div>
+	<div class="card">
+		<h3>Tools out of an image</h3>
+		<p>A checkout can say where its tools come from. <code>.abydos/tools.json</code>
+		   names an image per tool and is checked in, so what draws a diagram in a
+		   repository is that repository's business and a machine that never
+		   installed the tool gets the same answer as everybody else. Settings say
+		   the same thing for one person across every project, and the file wins
+		   where both speak.</p>
+		<p>Apple's <code>container</code> by default, because it needs no daemon
+		   running before it will answer — or Docker, nerdctl or podman, which all
+		   take the three flags this needs. Said rather than guessed: ask for Docker
+		   and have none and you are told so, instead of quietly getting the other
+		   one. Whatever is already installed is still used first.</p>
 	</div>
 	<div class="card">
 		<h3>Navigator</h3>
@@ -167,11 +182,12 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		   terminal. No Xcode window, and nothing to keep in step with one.</p>
 	</div>
 	<div class="card">
-		<h3>Two themes, four palettes</h3>
-		<p>The app's own amber one or the blue-grey it started with, and each has a
-		   daylight half — a separate question, so following the system does not
-		   cost you the theme you chose. All four are the same interface
-		   photographed four times — <a href="themes.html">see them</a>.</p>
+		<h3>Three themes, six palettes</h3>
+		<p>The app's own amber one, the blue-grey it started with, or Dracula at
+		   upstream's own values. Each has a daylight half — a separate question, so
+		   following the system does not cost you the theme you chose. All six are
+		   the same interface photographed six times —
+		   <a href="themes.html">see them</a>.</p>
 	</div>
 </div>
 
@@ -192,11 +208,14 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 	</thead>
 	<tbody>
 		<tr><td><strong>Navigator</strong></td><td>project tree, version-control colours, keyboard-driven, FSEvents-live</td><td class="no">—</td></tr>
-		<tr><td><strong>Editor</strong></td><td>tree-sitter highlighting, folding, word wrap, hex viewer, markdown preview</td><td class="no">—</td></tr>
+		<tr><td><strong>Editor</strong></td><td>tree-sitter highlighting, folding, word wrap, hex viewer, markdown and PlantUML preview — source, preview, or both split either way</td><td class="no">—</td></tr>
 		<tr><td><strong>Search</strong></td><td>find in file (<kbd>⌘F</kbd>), project-wide streaming search (<kbd>⇧⌘F</kbd>)</td><td class="no">—</td></tr>
 		<tr><td><strong>Outline</strong></td><td><kbd>⇧⌘O</kbd>; symbols from the language server, or from a build file's own parser</td><td>a server, for source files</td></tr>
 		<tr><td><strong>Language servers</strong></td><td>completion, problems, hover, go-to-declaration, find-usages</td><td>the server for that language</td></tr>
 		<tr><td><strong>Run</strong></td><td>launch configurations, imported <code>launch.json</code>, Makefile goals, Maven goals, Gradle tasks, entry points</td><td>that language's toolchain</td></tr>
+		<tr><td><strong>Bazel</strong></td><td>every <code>*_binary</code> and <code>*_test</code> in a <code>BUILD</code> file becomes <code>bazel run</code> or <code>bazel test</code> on its label</td><td>bazel, to run it</td></tr>
+		<tr><td><strong>Conan</strong></td><td>install, build, create and test a <code>conanfile.py</code>; install a <code>conanfile.txt</code></td><td>conan, to run it</td></tr>
+		<tr><td><strong>Tools from an image</strong></td><td><code>.abydos/tools.json</code> names an image per tool, checked in with the project</td><td>Apple <code>container</code>, Docker, nerdctl or podman</td></tr>
 		<tr><td><strong>Debug</strong></td><td>breakpoints, stack, variables, watches — over the Debug Adapter Protocol</td><td>Delve, LLDB, or jdtls's java-debug</td></tr>
 		<tr><td><strong>Run in a cluster</strong></td><td>build here, push into a development pod, run it there, follow its output</td><td>kubectl, a cluster</td></tr>
 		<tr><td><strong>Debug in a cluster</strong></td><td>the same pod, held at the first instruction until the debugger arrives</td><td>the above, and that language's pod image</td></tr>
@@ -268,6 +287,19 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 	opinions about your toolchain, and the ones already on your machine are the
 	right ones — so what is missing is named in a bar at the top of the editor,
 	with the one command that installs it.
+</p>
+<p>
+	And nothing has to be installed for a project to be <em>read</em>. What a build
+	file offers comes out of the file, not out of the tool: a <code>BUILD</code>
+	file's <code>*_binary</code> and <code>*_test</code> rules are the targets, and
+	which Conan commands make sense follows from whether there is a
+	<code>conanfile.py</code> or only a <code>conanfile.txt</code> — a list of
+	dependencies has nothing to build, so it is not offered. <code>bazel query</code>
+	would be the more correct answer and is also a build-graph load that wants
+	Bazel present and can take a minute, which is too long to spend filling in a
+	menu. Neither recipe is executed to ask it what it contains. The commands are
+	the tools' own, so running one without the tool fails the way it always does,
+	rather than in a way this has to explain.
 </p>
 
 <figure>
