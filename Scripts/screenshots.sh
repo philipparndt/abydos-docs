@@ -6,8 +6,8 @@
 # clone — nothing is staged, nothing is drawn by hand, and nothing is a mockup.
 #
 # Reproducible on purpose. The window is given a size, the panel is given a
-# height, and each project is copied to a temporary directory first, because the
-# window frame, the split position and which files were last open are all
+# height, and the examples are cloned into a temporary directory first, because
+# the window frame, the split position and which files were last open are all
 # remembered per machine. A screenshot that depends on those is a screenshot
 # that looks different for everybody who takes it.
 #
@@ -16,10 +16,10 @@
 # picture — which is a thing you find out only by looking at the diff.
 #
 #   Scripts/screenshots.sh                 # both sets
-#   Scripts/screenshots.sh site            # the five the pages use
+#   Scripts/screenshots.sh site            # the six the pages use
 #   Scripts/screenshots.sh site debugger   # just that one
-#   Scripts/screenshots.sh themes          # one scene in each theme
-#   THEME=daylight Scripts/screenshots.sh site
+#   Scripts/screenshots.sh themes          # one scene in each palette
+#   THEME=light Scripts/screenshots.sh site
 #   ABYDOS=~/dev/abydos EXAMPLES=~/dev/abydos-examples Scripts/screenshots.sh
 set -euo pipefail
 
@@ -49,19 +49,24 @@ SIZE="${SIZE:-1600x1000}"
 THEME="${THEME:-abydos}"
 APP="$ABYDOS/build/Abydos.app/Contents/MacOS/Abydos"
 
-# The themes the app offers, minus "system" — which is not a palette but a
-# deferral, and resolves to one of the other two.
+# The four palettes, minus the two values that mean "follow the system" — which
+# is not a palette but a deferral, and resolves to one of these.
 #
 # `setting:palette`, because those are two different names for the same thing
 # and the app answers to only one of them. `--theme` takes what Settings stores
-# — dark, light, abydos — while Theme.swift calls the palettes dusk, daylight
-# and abydos, and the page uses those. Worth spelling out, because an
-# unrecognised value is not an error: the app falls back to following the
-# system, so `--theme daylight` on a dark Mac quietly photographs dusk. Which is
-# how this list came to be written down at all.
-THEMES=(abydos:abydos dark:dusk light:daylight)
+# — abydos, abydos-light, dark, light — while Theme.swift calls the palettes
+# abydos, abydos-light, dusk and daylight, and the page uses those. Worth
+# spelling out, because an unrecognised value is not an error: the app falls
+# back to following the system, so `--theme daylight` on a dark Mac quietly
+# photographs dusk. Which is how this list came to be written down at all.
+#
+# Two of the four now agree on their name, which is the settle-down after the
+# theme became two questions rather than one list: the stored string is the pair
+# — which palette, and how light — so the warm one in daylight had to be called
+# something, and it is called what it is.
+THEMES=(abydos:abydos abydos-light:abydos-light dark:dusk light:daylight)
 
-usage() { sed -n '2,26p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
+usage() { sed -n '2,23p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
 
 case "${1:-}" in
 	-h|--help) usage 0 ;;
@@ -91,17 +96,38 @@ mkdir -p "$OUT" "$OUT/themes"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
-# A copy, not the original: opening a project writes a session file into it, and
-# a subdirectory of a git repository resolves to the repository root — so
-# `--open examples/go-service` would open the whole examples repo with whatever
-# was last open in it.
+# Where the examples came from, so a clone of them can be pointed back at it.
+# Without this the origin is a path in /tmp, and a palette that offers "Open
+# Repository on GitHub" would be offering it about a directory that is deleted
+# when this script exits.
+ORIGIN="$(git -C "$EXAMPLES" remote get-url origin 2>/dev/null || true)"
+
+# A clone, not the original and no longer a copy.
+#
+# Not the original because opening a project writes a session file into it, and
+# because a subdirectory of a git repository resolves to the repository root —
+# so the shots would carry whatever was last open in the examples checkout.
+#
+# A clone rather than `cp -R` because the titlebar now says which project *and*
+# which branch, and a copied folder has no branch to say: every capsule came out
+# with half of itself missing. It is also faster and cleaner — the examples
+# working tree is a hundred megabytes of build output and the history is under
+# one, so a clone is both cheaper to make and already free of the `build/` and
+# `target/` directories that used to be deleted by hand afterwards.
+#
+# One clone per shot rather than one per run, because two shots of the same
+# example want different state: the breakpoint one writes a session file, and
+# the debugger one must not find it.
 prepare() {
 	local example="$1" name="$2"
 	rm -rf "${WORK:?}/$name"
-	cp -R "$EXAMPLES/$example" "$WORK/$name"
-	rm -rf "$WORK/$name/.abydos/session.json" "$WORK/$name/.ideai/session.json" \
-	       "$WORK/$name/build" "$WORK/$name/target"
-	(cd "$WORK/$name" && pwd -P)
+	git clone --quiet "$EXAMPLES" "$WORK/$name"
+	# An `if` rather than `[ … ] && …`, which under `set -e` fails the whole run
+	# on the day somebody's examples checkout has no remote.
+	if [ -n "$ORIGIN" ]; then
+		git -C "$WORK/$name" remote set-url origin "$ORIGIN"
+	fi
+	(cd "$WORK/$name/$example" && pwd -P)
 }
 
 wanted() {
@@ -135,13 +161,21 @@ shot_editor() {
 # filling the window, because that is both the state people work in and the one
 # the debugger has to recover from.
 #
-# No `--file`: stopping opens the file itself, and opening it first leaves two
-# tabs for the one file — the debugger names it by the path Delve reports, which
-# is the resolved one.
+# `--file`, and it has to be there: both `--breakpoint` and `--debug-line` act on
+# whatever file is open, and a project with no session file open has none — so
+# without this the app came up on "Select a file to open", the two flags did
+# nothing each, and the picture was of an idle window. It said so, too: no
+# breakpoint in the gutter and no colour in the seam, which is exactly what an
+# app that is not running looks like.
+#
+# The path is the resolved one, because `prepare` hands one back and the
+# debugger names the file by what Delve reports, which is also resolved. When
+# the two spellings differed this left two tabs for the one file.
 shot_debugger() {
 	local theme="$1" path="$2"
 	local go; go="$(prepare go-service go-service)"
-	shoot "$path" "$theme" --open "$go" --maximize-terminal --breakpoint 25 --debug-line 18 --delay 40
+	shoot "$path" "$theme" --open "$go" --file "$go/main.go" \
+		--maximize-terminal --breakpoint 25 --debug-line 18 --delay 40
 }
 
 # A terminal that is a terminal: tmux's own windows as the panel's tabs, with
@@ -210,11 +244,37 @@ shot_breakpoint() {
 	return 0
 }
 
-# No git shot. These are copies, and a copy has no `.git` — the changes pane
-# would be photographed empty, which says the opposite of what it is for.
-# Photographing this repository instead would mean whatever happened to be
-# uncommitted that day.
-SITE_SHOTS=(editor debugger terminal java breakpoint)
+# The command palette, which is what the titlebar became: one field over
+# everything the app can be asked to do.
+#
+# `>` and nothing after it, because the list is the claim. A word typed after it
+# would photograph the filter working, which is a smaller thing to say than what
+# is in there — the project's own handoffs first, then every command the menus
+# offer, each with the menu it lives in and the key it already answers to.
+#
+# The clone is what makes the top of that list exist: the three GitHub rows are
+# offered because this is a checkout with a remote, and are absent from a folder
+# that only looks like one.
+#
+# A popover is a window of its own, so it is nowhere in the picture of the
+# window it is over. It lands beside the capture as a child and is moved onto
+# the name that was asked for, the way the breakpoint sheet is.
+shot_palette() {
+	local theme="$1" path="$2"
+	local go; go="$(prepare go-service palette)"
+	local popover="${path%.png}-child0.png"
+	rm -f "$popover"
+	shoot "$path" "$theme" --open "$go" --file "$go/main.go" --panel-height 0 \
+		--switcher '>' --delay 9
+	[ -f "$popover" ] && mv "$popover" "$path"
+	return 0
+}
+
+# No git shot yet. These are fresh clones with nothing uncommitted in them, so
+# the changes pane would be photographed empty, which says the opposite of what
+# it is for. Photographing this repository instead would mean whatever happened
+# to be lying around that day.
+SITE_SHOTS=(editor debugger terminal java breakpoint palette)
 
 if [ "$SET" = site ] || [ "$SET" = all ]; then
 	echo "==> The pages' pictures, in $THEME ($SIZE) → ${OUT#"$DOCS"/}"
@@ -224,10 +284,10 @@ if [ "$SET" = site ] || [ "$SET" = all ]; then
 	done
 fi
 
-# One scene, three palettes. The same shot every time on purpose: a gallery
-# where each picture also shows a different file is a gallery about the files.
+# One scene, four palettes. The same shot every time on purpose: a gallery where
+# each picture also shows a different file is a gallery about the files.
 if [ "$SET" = themes ] || [ "$SET" = all ]; then
-	echo "==> One scene in each theme ($SIZE) → ${OUT#"$DOCS"/}/themes"
+	echo "==> One scene in each palette ($SIZE) → ${OUT#"$DOCS"/}/themes"
 	for pair in "${THEMES[@]}"; do
 		setting="${pair%%:*}" palette="${pair#*:}"
 		wanted "$palette" || continue

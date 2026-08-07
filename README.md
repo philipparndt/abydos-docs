@@ -50,8 +50,8 @@ of shipping a broken image.
 ## The pictures
 
 ```sh
-make screenshots        # the five the pages use, in the app's own theme
-make theme-shots        # one scene in each theme, for themes.html
+make screenshots        # the six the pages use, in the app's own theme
+make theme-shots        # one scene in each palette, for themes.html
 make shots              # both
 ```
 
@@ -78,25 +78,39 @@ Scripts/screenshots.sh site debugger      # just that one
 THEME=light Scripts/screenshots.sh site   # the pages, in daylight
 ```
 
-`THEME` takes what Settings stores — `abydos`, `dark`, `light` — and defaults to
-`abydos`, so the pictures do not depend on whichever theme the machine taking
-them happens to be set to. It is checked against that list before the app is
-launched, because the app treats an unrecognised value as "follow the system":
-`--theme daylight` on a dark Mac quietly photographs dusk instead of failing,
-which cost an afternoon once.
+`THEME` takes what Settings stores — `abydos`, `abydos-light`, `dark`, `light` —
+and defaults to `abydos`, so the pictures do not depend on whichever theme the
+machine taking them happens to be set to. It is checked against that list before
+the app is launched, because the app treats an unrecognised value as "follow the
+system": `--theme daylight` on a dark Mac quietly photographs dusk instead of
+failing, which cost an afternoon once.
 
-`themes.html` names the palettes — `abydos`, `dusk`, `daylight` — and the script
-maps between the two spellings.
+`themes.html` names the palettes — `abydos`, `abydos-light`, `dusk`, `daylight`
+— and the script maps between the two spellings. The stored value is one string
+holding both halves of what is now asked as two questions in Settings: which
+theme, and how light. The two values that mean "follow the system" are not
+photographed, because they are not palettes.
 
 The captures are reproducible on purpose: the window is given a size, the panel
-is given a height, and each project is copied to a temporary directory first,
+is given a height, and the examples are cloned into a temporary directory first,
 because the window frame, the split position and which files were last open are
 all remembered per machine.
+
+A clone rather than a copy, since the titlebar says which project *and* which
+branch: a copied folder has no branch, so every capsule came out with half of
+itself missing. The clone's `origin` is set to wherever the examples checkout
+points, so the rows the palette offers name GitHub rather than a directory
+in `/tmp` that is deleted when the script exits.
 
 Two of them want a working environment rather than just the app: `debugger`
 needs Delve and a Go toolchain, and `terminal` needs `tmux` — and it will attach
 to a session that is already running, so a stale one gets photographed. Check
 what came out before committing it.
+
+`palette` photographs a popover, which is a window of its own and so is nowhere
+in the picture of the window it is over. The app writes it out beside the
+capture and the script moves it onto the name that was asked for, the same way
+`breakpoint` handles its sheet.
 
 `../abydos/Scripts/screenshots.sh` does the same job and predates this one; its
 output was copied here by hand. This is now the only copy the site depends on,

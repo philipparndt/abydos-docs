@@ -28,7 +28,7 @@ screenshots: ## Photograph the app for the pages (THEME=abydos, SHOT=one)
 	@Scripts/screenshots.sh site $(SHOT)
 
 .PHONY: theme-shots
-theme-shots: ## Photograph one scene in each theme, for themes.html
+theme-shots: ## Photograph one scene in each palette, for themes.html
 	@Scripts/screenshots.sh themes
 
 .PHONY: shots

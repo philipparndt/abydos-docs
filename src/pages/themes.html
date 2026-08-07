@@ -1,26 +1,36 @@
 ---
 title: Themes — Abydos
-description: The three palettes Abydos ships with — its own amber one, a dark one and a light one — each photographed on the same project, with the colours they are built from.
+description: The two themes Abydos ships with, each in light and dark — the app's own amber one and the blue-grey it started with — photographed on the same project, with the colours they are built from.
 og_title: Abydos themes
-og_description: Abydos, dusk and daylight: the same window photographed three times, with the palette each is built from.
+og_description: Two themes, each with a light and a dark: abydos, abydos-light, dusk and daylight, photographed on one project with the palette each is built from.
 ---
 <header class="inner">
 	<a class="back" href="index.html">← Abydos</a>
 	{{ include partials/icon.svg }}
 	<h1>Themes</h1>
-	<p class="tagline">Three palettes, and the system's answer as a fourth choice.
-	   The same project, the same file, the same window size — so what differs
-	   between these pictures is only the colour.</p>
+	<p class="tagline">Two themes, each with a daylight half and a dark one. The
+	   same project, the same file, the same window size — so what differs between
+	   these pictures is only the colour.</p>
 </header>
 
 <p>
-	<kbd>⌘,</kbd> → <strong>Editor</strong> → <strong>Appearance</strong>. It takes
-	effect on the windows that are already open: the palette is swapped underneath
-	them rather than applied to the next one.
+	<kbd>⌘,</kbd> → <strong>Appearance</strong>, which is the first page and holds
+	the editor's colours and the terminal's together — one thing to look at, so one
+	place to decide it. It takes effect on the windows that are already open: the
+	palette is swapped underneath them rather than applied to the next one.
+</p>
+<p>
+	Two questions rather than one list. <strong>Theme</strong> is which palette —
+	Abydos or Blue — and <strong>Light or dark</strong> is how light it should be,
+	with <code>System</code> as the third answer to the second question rather than
+	an entry in the first. That is what a single list could not say: somebody who
+	wants the warm palette wants it in the morning too, and somebody who follows
+	the system wants the theme they chose to follow along rather than be swapped
+	for another one.
 </p>
 <p>
 	Every picture on this page was taken by <code>make theme-shots</code>, which
-	runs the app once per theme with <code>--theme</code> and captures the window.
+	runs the app once per palette with <code>--theme</code> and captures the window.
 	The colours listed under each are read out of the app's own
 	<code>Theme.swift</code>, so what is named here is what is drawn.
 </p>
@@ -28,7 +38,7 @@ og_description: Abydos, dusk and daylight: the same window photographed three ti
 <div class="theme">
 	<h2 id="abydos">Abydos</h2>
 	<div class="theme-meta">
-		<span>Settings: <code>Abydos</code></span>
+		<span>Settings: <code>Abydos</code> + <code>Dark</code></span>
 		<span>Terminal scheme: <code>abydos</code></span>
 		<span>The default for the pictures on this site</span>
 	</div>
@@ -60,10 +70,47 @@ og_description: Abydos, dusk and daylight: the same window photographed three ti
 </div>
 
 <div class="theme">
+	<h2 id="abydos-light">Abydos Light</h2>
+	<div class="theme-meta">
+		<span>Settings: <code>Abydos</code> + <code>Light</code></span>
+		<span>Terminal scheme: <code>abydos</code>, at daylight weights</span>
+		<span>What <code>Abydos</code> + <code>System</code> resolves to in the day</span>
+	</div>
+	<p class="lead">
+		Not the dark one inverted, and this is the theme where that matters most.
+		Amber on near-black works because the amber is the light in the room; the
+		same amber on paper is a highlighter pen. So the warmth moves into the
+		surfaces instead — unbleached paper rather than white — and the ink is a
+		dark brown that reads as black until it is next to one. The accent stays
+		amber and is taken down to where it can be read on paper, which is roughly
+		the colour of that pigment in shadow. Comments are the one thing that moves
+		rather than darkens: a grey-brown at this weight disappears, so they keep a
+		little green and sit clearly behind the code.
+	</p>
+	<ul class="swatches">
+		<li><b style="background:#FAF5EC"></b><span>#FAF5EC</span> window</li>
+		<li><b style="background:#FFFBF3"></b><span>#FFFBF3</span> editor</li>
+		<li><b style="background:#2E241B"></b><span>#2E241B</span> ink</li>
+		<li><b style="background:#B07407"></b><span>#B07407</span> accent</li>
+		<li><b style="background:#9A5B0C"></b><span>#9A5B0C</span> keyword</li>
+		<li><b style="background:#A8600A"></b><span>#A8600A</span> call</li>
+		<li><b style="background:#4F6B2A"></b><span>#4F6B2A</span> string</li>
+		<li><b style="background:#F6E3BC"></b><span>#F6E3BC</span> selection</li>
+	</ul>
+	<figure>
+		<img src="images/themes/abydos-light.png" alt="Abydos in its light theme: the same Go project on unbleached paper, with brown ink and amber, gold and green syntax colours."
+		     loading="lazy">
+		<figcaption>Abydos Light. The same roles in the same hues as the dark
+		   one — keywords amber, strings green, calls the accent — each taken to
+		   where it can be read on paper.</figcaption>
+	</figure>
+</div>
+
+<div class="theme">
 	<h2 id="dusk">Dusk</h2>
 	<div class="theme-meta">
-		<span>Settings: <code>Dark</code></span>
-		<span>What <code>System</code> resolves to after dark</span>
+		<span>Settings: <code>Blue</code> + <code>Dark</code></span>
+		<span>What <code>Blue</code> + <code>System</code> resolves to after dark</span>
 	</div>
 	<p class="lead">
 		The dark theme, for anyone who wants the familiar arrangement: quiet chrome,
@@ -92,8 +139,8 @@ og_description: Abydos, dusk and daylight: the same window photographed three ti
 <div class="theme">
 	<h2 id="daylight">Daylight</h2>
 	<div class="theme-meta">
-		<span>Settings: <code>Light</code></span>
-		<span>What <code>System</code> resolves to in the day</span>
+		<span>Settings: <code>Blue</code> + <code>Light</code></span>
+		<span>What <code>Blue</code> + <code>System</code> resolves to in the day</span>
 	</div>
 	<p class="lead">
 		Not the dark palette inverted. A light theme wants more contrast in the text
@@ -122,13 +169,17 @@ og_description: Abydos, dusk and daylight: the same window photographed three ti
 
 <h2>System</h2>
 <p>
-	The fourth choice is not a palette but a deferral: <code>System</code> follows
-	the Mac's own light and dark setting and resolves to <strong>daylight</strong>
-	or <strong>dusk</strong>. It changes while the app is running, so a machine that
-	switches at sunset switches the editor with it.
+	<code>System</code> is not a palette but a deferral, and it belongs to the
+	second question rather than the first: it follows the Mac's own light and dark
+	setting without touching which theme you chose. Abydos plus <code>System</code>
+	is amber all day and warm paper by day; Blue plus <code>System</code> is dusk
+	and daylight. It changes while the app is running, so a machine that switches at
+	sunset switches the editor with it.
 </p>
 <p class="foot-note">
-	Abydos is not in that pair on purpose. It is a palette you choose rather than
-	one you are given, and a window that turned amber by itself at six in the
-	evening would be a surprise rather than a preference.
+	It used to be one list, and one list could not say that. Abydos and Abydos Light
+	sat in it as two entries, <code>System</code> sat in it as a fifth — and the
+	thing most people actually want, the warm palette following the light, was the
+	one combination there was no way to ask for. Five entries saying four things,
+	and still not the one that mattered.
 </p>

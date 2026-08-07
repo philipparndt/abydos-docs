@@ -67,6 +67,57 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 	   <code>tmux list-windows</code> are the same list.</figcaption>
 </figure>
 
+<h2>One field at the top of the window</h2>
+<p>
+	The titlebar is a capsule: which project on the left, which branch on the
+	right, a hairline between them, and <kbd>⇧⌘P</kbd> written on it. Press that
+	and a field opens underneath it, on the thing it is about. The shortcut is VS
+	Code's on purpose — a decade of it has taught everybody's hands where a palette
+	lives, and muscle memory is worth more than a free letter.
+</p>
+<div class="cards">
+	<div class="card">
+		<h3>Everything, in one list</h3>
+		<p>Typing searches projects, the branches of the repository that is open,
+		   and the commands. A project opens; a branch is checked out where the
+		   branch menu would have put it; a command runs. Projects are found on disk
+		   as well as in the recents, so the case a switcher exists for — opening
+		   something for the first time — is the case it handles.</p>
+	</div>
+	<div class="card">
+		<h3><code>&gt;</code> for commands, <code>:</code> for a line</h3>
+		<p>VS Code's prefixes, in the same field. <code>&gt;</code> narrows to
+		   commands; <code>:</code> takes a number and puts the caret on that line
+		   of whatever is open. The placeholder says so, because a prefix nobody
+		   knows about is a prefix nobody uses.</p>
+	</div>
+	<div class="card">
+		<h3>The menu bar is the list</h3>
+		<p>The commands are not a list kept beside the menus — they <em>are</em> the
+		   menus, read at the moment you ask. Each row carries the menu it lives in
+		   and the key it already answers to, so the palette teaches the shortcut
+		   instead of replacing it. Anything greyed out in the menu is absent here:
+		   a palette is what can be done now.</p>
+	</div>
+	<div class="card">
+		<h3>A line that means one thing</h3>
+		<p>Under the titlebar is a seam that is coloured only while something is
+		   running, and red if it failed. It holds still rather than sweeping —
+		   a bar that crawls is claiming a percentage nothing here knows — and it
+		   carries no other meaning, which is what lets it be absent the rest of
+		   the time.</p>
+	</div>
+</div>
+
+<figure>
+	<img src="images/palette.png" alt="Abydos's command palette: a search field holding a greater-than sign, and beneath it the project's own actions followed by commands from the menu bar, each with the menu it lives in and its keyboard shortcut."
+	     loading="lazy">
+	<figcaption>The palette with <code>&gt;</code> typed into it. What this
+	   repository can hand off comes first — those rows exist because this is a
+	   checkout with a remote — and under them the menu bar, with its own
+	   shortcuts.</figcaption>
+</figure>
+
 <h2>And the rest of an IDE</h2>
 <div class="cards">
 	<div class="card">
@@ -96,8 +147,10 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 	</div>
 	<div class="card">
 		<h3>Git</h3>
-		<p>Status, changes, history, blame, branches, worktrees, stash and push, with
-		   the project badge and current branch on the traffic-light row.</p>
+		<p>Status, changes, history, blame, branches, worktrees, stash and push. The
+		   branch is in the titlebar, and a worktree keeps the repository's name and
+		   gains a chip beside it — asked of git rather than read off the path, since
+		   a worktree can be made anywhere.</p>
 	</div>
 	<div class="card">
 		<h3>Profiler</h3>
@@ -114,10 +167,11 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		   terminal. No Xcode window, and nothing to keep in step with one.</p>
 	</div>
 	<div class="card">
-		<h3>Three themes</h3>
-		<p>The app's own amber palette, a dark one, a light one, or whatever the
-		   system is set to. All three are the same interface photographed three
-		   times — <a href="themes.html">see them</a>.</p>
+		<h3>Two themes, four palettes</h3>
+		<p>The app's own amber one or the blue-grey it started with, and each has a
+		   daylight half — a separate question, so following the system does not
+		   cost you the theme you chose. All four are the same interface
+		   photographed four times — <a href="themes.html">see them</a>.</p>
 	</div>
 </div>
 
@@ -151,7 +205,8 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		<tr><td><strong>Profiler</strong></td><td>CPU, heap, goroutine, block and mutex profiles; flame graph; pods too</td><td>a Go program serving pprof</td></tr>
 		<tr><td><strong>Git</strong></td><td>status, changes, history, blame, branches, worktrees, stash, push</td><td>git</td></tr>
 		<tr><td><strong>Terminal</strong></td><td>real PTY, VT100/xterm, tmux windows as tabs</td><td class="no">—</td></tr>
-		<tr><td><strong>Themes</strong></td><td>Abydos, dark, light, or the system's — <a href="themes.html">all three</a></td><td class="no">—</td></tr>
+		<tr><td><strong>Command palette</strong></td><td><kbd>⇧⌘P</kbd> — projects, branches and every menu command; <code>&gt;</code> for commands, <code>:</code> for a line</td><td class="no">—</td></tr>
+		<tr><td><strong>Themes</strong></td><td>Abydos or Blue, light or dark or the system's — <a href="themes.html">all four</a></td><td class="no">—</td></tr>
 		<tr><td><strong>Agent review</strong></td><td><kbd>⇧⌘R</kbd> — findings arrive over MCP as typed data</td><td>Claude Code</td></tr>
 	</tbody>
 </table>
