@@ -19,13 +19,21 @@ td .note { color: var(--dim); font-size: .85em; display: block; }
 .card p + p { margin-top: .6rem; }
 
 /* Screenshots. Taken by `make screenshots` against the examples repository, so
-   every one is the app doing the thing beside it. The build reads the width and
-   the height out of the PNG, which is why the tags here carry neither. */
+   every one is the app doing the thing beside it. The build reads the width,
+   the height and the density out of the PNG, which is why the tags here carry
+   none of the three.
+
+   `max-width` rather than `width`: a window shot is wider than the column and
+   should come down to it, but a picture of a sheet is 460 points wide and
+   stretching it to the column is a 2× upsample of something that was sharp.
+   Which is what was happening to the breakpoint options. Anything narrower than
+   the column is centred instead. */
 figure { margin: 1.5rem 0; }
 figure img {
-	width: 100%;
+	max-width: 100%;
 	height: auto;
 	display: block;
+	margin: 0 auto;
 	border: 1px solid var(--line);
 	border-radius: 10px;
 }

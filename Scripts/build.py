@@ -97,20 +97,55 @@ def expand(text: str, values: dict[str, str], root: Path, where: str, depth: int
 	return TOKEN.sub(replace, text)
 
 
-def png_size(path: Path) -> tuple[int, int]:
-	"""Width and height from a PNG's IHDR, which is always the first chunk.
+def png_info(path: Path) -> tuple[int, int, int]:
+	"""Width, height and pixel density, walking the PNG's chunks.
 
-	Eight bytes of signature, four of chunk length, four of chunk type, then the
-	two dimensions as big-endian 32-bit integers.
+	IHDR is always first and carries the two dimensions as big-endian 32-bit
+	integers. pHYs, if it is there at all, carries pixels per metre — 5669 of
+	them is 144 dpi, which is a retina capture and means the picture is meant to
+	be shown at half its pixel size. A file without pHYs is taken to be 1x,
+	which is what the older shots here are.
+
+	The density matters because without it a small picture gets stretched to the
+	width of the column and goes soft, which is what happened to the breakpoint
+	sheet.
 	"""
-	header = path.read_bytes()[:24]
-	if len(header) < 24 or header[:8] != b"\x89PNG\r\n\x1a\n":
+	data = path.read_bytes()
+	if data[:8] != b"\x89PNG\r\n\x1a\n":
 		raise BuildError(f"{path}: not a PNG")
-	return struct.unpack(">II", header[16:24])
+
+	width = height = 0
+	density = 1
+	offset = 8
+	while offset + 8 <= len(data):
+		length = struct.unpack(">I", data[offset:offset + 4])[0]
+		kind = data[offset + 4:offset + 8]
+		body = data[offset + 8:offset + 8 + length]
+
+		if kind == b"IHDR":
+			width, height = struct.unpack(">II", body[:8])
+		elif kind == b"pHYs" and length >= 9:
+			per_metre, _, unit = struct.unpack(">IIB", body[:9])
+			if unit == 1 and per_metre:
+				# 0.0254 metres to the inch, 72 dpi to the point.
+				density = max(1, round(per_metre * 0.0254 / 72))
+		elif kind == b"IDAT":
+			break  # Everything worth reading comes before the pixels.
+
+		offset += 12 + length
+
+	if not width:
+		raise BuildError(f"{path}: no IHDR")
+	return width, height, density
 
 
 def size_images(html: str, root: Path, where: str) -> str:
-	"""Gives every local <img> its intrinsic size, so the layout does not jump.
+	"""Gives every local <img> its display size, so the layout does not jump.
+
+	The size written out is the pixel size divided by the density: a 920-pixel
+	capture of a 460-point sheet is a 460-wide picture that happens to have twice
+	the detail. A `srcset` says so, which is how the browser is told to spend
+	those pixels on sharpness rather than on size.
 
 	A picture already carrying both attributes is left alone: a shot that is
 	deliberately shown at some other size says so in the tag.
@@ -121,12 +156,16 @@ def size_images(html: str, root: Path, where: str) -> str:
 		if "width=" in tag and "height=" in tag:
 			return tag
 
-		path = root / match.group("src")
+		source = match.group("src")
+		path = root / source
 		if not path.is_file():
-			raise BuildError(f"{where}: <img> names a file that is not there — {match.group('src')}")
+			raise BuildError(f"{where}: <img> names a file that is not there — {source}")
 
-		width, height = png_size(path)
-		return tag[:-1].rstrip() + f' width="{width}" height="{height}">'
+		width, height, density = png_info(path)
+		attributes = f' width="{width // density}" height="{height // density}"'
+		if density > 1:
+			attributes += f' srcset="{source} {density}x"'
+		return tag[:-1].rstrip() + attributes + ">"
 
 	return IMG.sub(annotate, html)
 
