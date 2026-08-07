@@ -26,9 +26,10 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 DOCS="$(pwd)"
 
-# Both checkouts are being renamed from ideai to abydos, and the folders have
-# not caught up yet. Try the new name first and fall back, so this keeps working
-# on either side of the rename without an edit here.
+# Both repositories are called abydos now, but a clone made before the rename
+# still sits in a folder called the old thing — and renaming a folder is the
+# kind of chore that waits. So the new name is tried first and the old one is
+# the fallback, which works on either side of it without an edit here.
 find_checkout() {
 	local name="$1"; shift
 	for candidate in "$@"; do

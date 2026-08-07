@@ -59,10 +59,12 @@ Every picture is the app doing the thing the page claims, on a project from the
 examples repository that anybody can clone. Nothing is staged and nothing is a
 mockup.
 
-It needs both other checkouts beside this one — the app and the examples — and
-finds them under either name while the rename from `ideai` is in progress:
+It needs both other checkouts beside this one — the app and the examples. Both
+repositories are now `abydos` and `abydos-examples`, but a clone made before the
+rename still sits in a folder called the old thing, so each is looked for under
+both names and the new one wins:
 
-    ABYDOS=../abydos    or ../ideai
+    ABYDOS=../abydos             or ../ideai
     EXAMPLES=../abydos-examples  or ../ideai-examples
 
 Both are overridable, as are `OUT`, `SIZE`, `THEME` and which shots to take:
