@@ -3,8 +3,9 @@
 The website for [Abydos](https://philipparndt.github.io/abydos-docs/) — a
 terminal-first IDE for AI and cloud development, on macOS.
 
-A repository of its own because the program's is private, and GitHub Pages will
-not serve a site from a private repository without a paid plan.
+A repository of its own because the program's was private when this was made,
+and GitHub Pages will not serve a site from a private repository without a paid
+plan. That repository is public now; the site stays here, where its history is.
 
 ## What is in it
 
@@ -27,9 +28,9 @@ make serve      # ...and serve it on http://localhost:8000
 make help       # everything else
 ```
 
-There is a build now because there are two pages. One page justified one file;
-two pages sharing a palette, a header and a footer by having been copied are two
-pages that drift, and the drift is always the second one. Nothing is installed
+There is a build because there is more than one page. One page justified one
+file; pages sharing a palette, a header and a footer by having been copied are
+pages that drift, and the drift is always the one nobody edited. Nothing is installed
 to run it — `python3` is on macOS and on the runner, and there is no lockfile,
 no `node_modules` and nothing to keep current.
 
@@ -50,7 +51,7 @@ of shipping a broken image.
 ## The pictures
 
 ```sh
-make screenshots        # the six the pages use, in the app's own theme
+make screenshots        # the eight the pages use, in the app's own theme
 make theme-shots        # one scene in each palette, for themes.html
 make shots              # both
 ```
@@ -64,9 +65,8 @@ It needs both other checkouts beside this one:
     git clone https://github.com/philipparndt/abydos.git           ../abydos
     git clone https://github.com/philipparndt/abydos-examples.git  ../abydos-examples
 
-The examples are public; the app is not yet, so taking the pictures needs
-access to it. A clone made before the rename still sits in a folder called the
-old thing, so each is looked for under both names and the new one wins:
+Both are public. A clone made before the rename still sits in a folder called
+the old thing, so each is looked for under both names and the new one wins:
 
     ABYDOS=../abydos             or ../ideai
     EXAMPLES=../abydos-examples  or ../ideai-examples
@@ -107,10 +107,19 @@ itself missing. The clone's `origin` is set to wherever the examples checkout
 points, so the rows the palette offers name GitHub rather than a directory
 in `/tmp` that is deleted when the script exits.
 
-Two of them want a working environment rather than just the app: `debugger`
+Four of them want a working environment rather than just the app. `debugger`
 needs Delve and a Go toolchain, and `terminal` needs `tmux` — and it will attach
 to a session that is already running, so a stale one gets photographed. Check
 what came out before committing it.
+
+`scad` needs OpenSCAD, and `cadova` needs a Swift toolchain and the network once.
+`cadova` is also the slow one, at about three and a half minutes: `prepare` hands
+out a fresh clone for every shot, so the package resolves seven dependencies and
+compiles a C++ geometry kernel from cold every time. That is the honest cost of
+the picture — it is the app doing what the page says, and what the page says is
+that the model is built and run rather than read. A machine with no network
+photographs the pane saying what the build said, which is true and is not the
+picture wanted.
 
 `palette` photographs a popover, which is a window of its own and so is nowhere
 in the picture of the window it is over. The app writes it out beside the

@@ -16,9 +16,7 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		<a class="primary" href="https://github.com/philipparndt/abydos/releases/latest">Download the latest release</a>
 		<a href="https://github.com/philipparndt/abydos">Source on GitHub</a>
 	</div>
-	<p class="foot-note">macOS 14 or newer, Apple silicon. Signed with a Developer ID and notarised.<br>
-	   The source is on invitation for now — both links need access, and will open to
-	   everyone in time.</p>
+	<p class="foot-note">macOS 14 or newer, Apple silicon. Signed with a Developer ID and notarised.</p>
 </header>
 
 <figure>
@@ -159,36 +157,21 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		   is wearing, so a dark window does not hold one white rectangle.</p>
 	</div>
 	<div class="card">
-		<h3>Models, pictures and PDFs</h3>
-		<p>A file written in order to make a shape opens showing both: an OpenSCAD
-		   <code>.scad</code> beside its render, and a <code>.scad</code> that will
-		   not compile shows no shape at all rather than the last one that did. A
-		   go3mf recipe is the exception and opens as its text, with the model
-		   offered rather than drawn — a recipe is an assembly, so its model is every
-		   part's render and a <code>go3mf build</code> on top of them, which is the
-		   slowest preview here.</p>
-		<p>An STL or a 3MF opens in the viewer, a picture opens at the size it was
-		   taken and zooms to the pixels, and a PDF opens as a PDF. A preview nobody
-		   has looked at costs nothing — arrowing through a directory of models
-		   renders none of them.</p>
+		<h3>3D modelling</h3>
+		<p>An OpenSCAD <code>.scad</code> and a <a href="https://github.com/tomasf/Cadova">Cadova</a>
+		   model written in Swift both open with the shape beside the source, rendered
+		   by running the tool whose file it is. A go3mf recipe offers its assembly, a
+		   mesh opens as itself, and a render that failed shows nothing at all rather
+		   than a cube that is not your model —
+		   <a href="3d-modelling.html">the whole of it</a>.</p>
 	</div>
 	<div class="card">
-		<h3>Cadova: a model that is a program</h3>
-		<p>A <a href="https://github.com/tomasf/Cadova">Cadova</a> model is Swift, and
-		   opens with the shape beside the code. A <code>.swift</code> is a model when
-		   the package above it declares an executable target that depends on Cadova
-		   and this file is one of that target's sources — the manifest is the only
-		   place that says so, and neither the name of the file nor its contents
-		   can.</p>
-		<p>Which means the shape is not read but <em>run</em>: <code>swift run</code>
-		   in the package root, the pane carrying the build's own last line while it
-		   goes, and the compiler's complaint in place of the model when it will not
-		   build. Any of the target's sources rebuilds it, because a helper file
-		   changes the shape as much as the one with the model in it; a burst of
-		   saves is one rebuild; and no build is killed to make way for a newer one,
-		   since a half-stopped <code>swift build</code> makes the next one a cold
-		   one. The file is rewritten in place, so turning the part round to see what
-		   changed survives the rebuild.</p>
+		<h3>Pictures and PDFs</h3>
+		<p>A picture opens at the size it was taken and zooms to the pixels rather
+		   than zooming the window around it; an SVG is drawn rather than shown as
+		   markup; a PDF opens as a PDF. A binary or an oversized file opens as a tab
+		   explaining itself, over a hex viewer that memory-maps the file and draws
+		   only the rows on screen.</p>
 	</div>
 	<div class="card">
 		<h3>Run and debug, here too</h3>

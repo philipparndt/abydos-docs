@@ -16,7 +16,7 @@
 # picture — which is a thing you find out only by looking at the diff.
 #
 #   Scripts/screenshots.sh                 # both sets
-#   Scripts/screenshots.sh site            # the six the pages use
+#   Scripts/screenshots.sh site            # the eight the pages use
 #   Scripts/screenshots.sh site debugger   # just that one
 #   Scripts/screenshots.sh themes          # one scene in each palette
 #   THEME=light Scripts/screenshots.sh site
@@ -253,6 +253,38 @@ shot_breakpoint() {
 	return 0
 }
 
+# A shape and the file that describes it, which is the whole claim of the 3D
+# page. The render is OpenSCAD's own, run on the file as it is on disk — so a
+# picture of this is a picture of OpenSCAD agreeing, and a broken one would show
+# an empty pane rather than a cube, which is the behaviour 0484 settled.
+#
+# `bracket.scad` rather than `dollhouse.scad`: the small one fits beside its own
+# source at this window size, and the point being made is that both halves are
+# there, not how large a model can be.
+shot_scad() {
+	local theme="$1" path="$2"
+	local scad; scad="$(prepare openscad openscad)"
+	shoot "$path" "$theme" --open "$scad" --file "$scad/bracket.scad" \
+		--preview-mode split --panel-height 0 --delay 14
+}
+
+# Cadova, where the model is a *program* and not a file: there is no shape until
+# the package has been built and run, so this delay is a cold `swift build` and
+# not a render. About 90 seconds from a fresh clone — 23 s to resolve seven
+# packages and 65 s to compile a C++ geometry kernel — and `prepare` hands out a
+# fresh clone every time on purpose, so it is cold every time.
+#
+# The network is needed once, for the resolve. A machine without it photographs
+# the pane saying what the build said, which is honest and is not the picture
+# the page wants.
+shot_cadova() {
+	local theme="$1" path="$2"
+	local pkg; pkg="$(prepare cadova-models cadova)"
+	shoot "$path" "$theme" --open "$pkg" \
+		--file "$pkg/Sources/HexKeyHolder/main.swift" \
+		--preview-mode split --panel-height 0 --delay 200
+}
+
 # The command palette, which is what the titlebar became: one field over
 # everything the app can be asked to do.
 #
@@ -283,7 +315,7 @@ shot_palette() {
 # the changes pane would be photographed empty, which says the opposite of what
 # it is for. Photographing this repository instead would mean whatever happened
 # to be lying around that day.
-SITE_SHOTS=(editor debugger terminal java breakpoint palette)
+SITE_SHOTS=(editor debugger terminal java breakpoint palette scad cadova)
 
 if [ "$SET" = site ] || [ "$SET" = all ]; then
 	echo "==> The pages' pictures, in $THEME ($SIZE) → ${OUT#"$DOCS"/}"
