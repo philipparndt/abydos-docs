@@ -1,0 +1,141 @@
+---
+title: Editor — Abydos
+description: The editor in Abydos: a persistent rope behind the text, tree-sitter highlighting scoped to the viewport, folding for 24 languages, and a parser allowed to land a frame late so typing never waits for it.
+og_title: The Abydos editor
+og_description: A persistent rope, highlighting scoped to what is on screen, and a parser off the main thread. A keystroke costs 0.013 ms in a 100,000-line file.
+---
+<header class="inner">
+	<a class="back" href="index.html">← Abydos</a>
+	{{ include partials/icon.svg }}
+	<h1>Editor</h1>
+	<p class="tagline">The design goal was that cost scales with the <em>viewport</em>,
+	   not the file. Three decisions do most of that, and everything else on this
+	   page is ordinary editing done in the ordinary way.</p>
+</header>
+
+<figure>
+	<img src="images/editor.png" alt="Abydos with a Go project open: the navigator on the left and main.go in the editor, syntax highlighted."
+	     loading="lazy">
+	<figcaption>A Go file, opened as it comes.</figcaption>
+</figure>
+
+<h2>What it is built on</h2>
+<div class="cards">
+	<div class="card">
+		<h3>A persistent rope</h3>
+		<p>Whose interior nodes sum bytes, UTF-16 units and newlines — so a line
+		   number, a byte offset and the position AppKit is asking about are all
+		   the same walk, and an edit shares the parts of the tree it did not
+		   touch.</p>
+	</div>
+	<div class="card">
+		<h3>Highlighting scoped to the bytes on screen</h3>
+		<p>tree-sitter parses the file, and the query that turns a parse tree into
+		   colours is run over the viewport rather than the document. A 100,000-line
+		   file costs what eighty lines cost, because eighty lines is what is being
+		   looked at.</p>
+	</div>
+	<div class="card">
+		<h3>A parser that may land a frame late</h3>
+		<p>It runs off the main thread and is allowed to arrive after the keystroke
+		   that caused it. <strong>The rope is authoritative for text and the parser
+		   only for colour</strong>, so the worst a late parse can do is colour a
+		   character the wrong way for one frame — and typing never waits for it.</p>
+	</div>
+</div>
+
+<h2>Measured</h2>
+<p>On Apple silicon, release build:</p>
+<div class="scroll">
+<table>
+	<thead><tr><th>Operation</th><th>File</th><th>Time</th></tr></thead>
+	<tbody>
+		<tr><td>Build rope</td><td>7 MB / 200k lines</td><td><strong>11 ms</strong></td></tr>
+		<tr><td>Keystroke (main thread)</td><td>3.5 MB / 100k lines</td><td><strong>0.013 ms</strong></td></tr>
+		<tr><td>Highlight one viewport (80 lines)</td><td>3.5 MB / 100k lines</td><td><strong>2.5 ms</strong></td></tr>
+		<tr><td>10k random line lookups</td><td>200k lines</td><td><strong>8 ms</strong></td></tr>
+		<tr><td>Edit cost growth over a 200× larger file</td><td>—</td><td><strong>2.8×</strong></td></tr>
+	</tbody>
+</table>
+</div>
+
+<h2>Editing</h2>
+<div class="cards">
+	<div class="card">
+		<h3><kbd>⌘/</kbd> comments what is selected</h3>
+		<p>At the indent the lines share, blank lines neither commented nor
+		   counted, and the selection still covering the same text afterwards. It
+		   answers to <kbd>⌘/</kbd> on every keyboard layout rather than to
+		   whichever key happens to carry a slash.</p>
+		<p>It uses the <em>file's</em> language and not the fence's: <kbd>⌘/</kbd>
+		   inside a Swift block in a markdown file refuses and says markdown has no
+		   line comment, rather than putting <code>//</code> in the prose. Which
+		   range is in which language is a question this editor cannot answer yet,
+		   and guessing is how <code>//</code> ends up in the middle of markup.</p>
+	</div>
+	<div class="card">
+		<h3>Completions arrive with their holes</h3>
+		<p>A server that answers with <code>union() $0</code> means the caret goes
+		   where <code>$0</code> is — not that a dollar sign should be typed into
+		   the file. Every stop leaves its default text, the first is selected so
+		   typing replaces it, <kbd>⇥</kbd> moves to the next and <kbd>⇧⇥</kbd>
+		   back.</p>
+	</div>
+	<div class="card">
+		<h3><kbd>⇧F6</kbd> renames</h3>
+		<p>Through the language server, worked out in full before anything is
+		   written, across every file it touches — and undone by one
+		   <kbd>⌘Z</kbd>. Open documents are changed through the rope rather than
+		   on disk, so a tab does not reload underneath you, and a rename that
+		   cannot be offered is not offered.</p>
+	</div>
+	<div class="card">
+		<h3>The motions somebody's hands already know</h3>
+		<p><kbd>⌃B</kbd> and <kbd>⌃F</kbd> a character, <kbd>⌃A</kbd> and
+		   <kbd>⌃E</kbd> to the ends of the line, <kbd>⌃K</kbd> to the end of it,
+		   <kbd>⌃O</kbd> to open a line below. A character is a grapheme cluster,
+		   so the caret does not come to rest inside an accent that is written as
+		   two code points.</p>
+	</div>
+	<div class="card">
+		<h3>Find belongs to the tab it searched</h3>
+		<p><kbd>⌘F</kbd> searches this file; the match <kbd>⌘G</kbd> is on is the
+		   loudest thing on the page, and the others are quieter than it on
+		   purpose. A search that found nothing says so in red, and so does a
+		   regular expression that did not run.</p>
+	</div>
+	<div class="card">
+		<h3>Folding, for every language</h3>
+		<p>By one of two routes. Where a grammar ships a <code>folds.scm</code> —
+		   or one is written here, as Java's is — the fold points are the ones that
+		   query names. Where it does not, they are derived from the parse tree:
+		   any node spanning more than one line. The derived set is larger and the
+		   named set tidier, which is a difference in taste rather than in
+		   support.</p>
+	</div>
+</div>
+
+<h2>What a tab can be</h2>
+<p>
+	A tab is source, or a rendered view of it, or both split either way — and the
+	choice is remembered per file, so a tab comes back in the mode it was left in.
+	<kbd>⌥⌘Z</kbd> wraps, <kbd>⇧⌘V</kbd> previews markdown, <kbd>⌘\\</kbd> splits.
+	A file dropped on the editor opens in it.
+</p>
+<p>
+	Files with no readable source open as what they are: a picture at the size it
+	was taken, zooming to the pixels rather than zooming the window around it; an
+	SVG drawn rather than shown as markup; a PDF as a PDF. A binary or an oversized
+	file opens as a tab explaining itself, over a hex viewer that memory-maps the
+	file and draws only the rows on screen, so a 100 MB mesh opens instantly.
+	<a href="diagrams.html">Diagrams</a> and
+	<a href="3d-modelling.html">3D models</a> have pages of their own.
+</p>
+
+<p class="foot-note">
+	Twenty-four languages are highlighted and folded, and which of them also have a
+	server, a debugger and a build tool is
+	<a href="languages.html">the languages page</a>. The colours all of this is
+	drawn in are <a href="themes.html">the themes page</a>, and are files you can
+	write.
+</p>

@@ -38,3 +38,58 @@ figure img {
 	border-radius: 10px;
 }
 figcaption { color: var(--dim); font-size: .88rem; margin-top: .5rem; text-align: center; }
+
+/* The grid on the front page: eight pictures, each a way in to the page about
+   the thing in it.
+
+   A tile is a link with a picture in it rather than a card with a link at the
+   bottom, so the whole thing is the target — a row of "read more" is a row of
+   the same three words, and the picture is what somebody is choosing between
+   anyway.
+
+   The pictures are `images/thumbs/`, made by `make thumbs` at a quarter of the
+   width. Eight full screenshots is four megabytes to look at a page of links,
+   and a tile is never read at 1600 wide. */
+.tiles {
+	display: grid;
+	gap: 1.25rem;
+	grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+	margin: 1.5rem 0;
+}
+.tile {
+	display: block;
+	color: inherit;
+	text-decoration: none;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	overflow: hidden;
+	background: var(--panel);
+	transition: border-color .15s ease, transform .15s ease;
+}
+.tile:hover, .tile:focus-visible { border-color: var(--blue); transform: translateY(-2px); }
+/* The picture sits against the ground rather than the card, because every one
+   of them is a window with its own dark edge and two panels of different
+   colours meeting at that edge reads as a mistake. */
+.tile img {
+	display: block;
+	width: 100%;
+	background: var(--bg);
+	border-bottom: 1px solid var(--line);
+	/* One shape for every tile, whatever shape the picture is. Eight of these
+	   are a 1600x1000 window and the ninth is a popover, 400x539 — left to its
+	   own dimensions that tile is twice the height of the others and the grid
+	   reads as broken.
+
+	   Cropped from the top rather than letterboxed: the top of a window shot is
+	   the titlebar and the first rows of whatever is being shown, which is the
+	   part that says which picture this is, and a letterboxed popover would be
+	   a small picture in a large empty box. The whole picture is one click
+	   away on the page the tile leads to. */
+	aspect-ratio: 16 / 10;
+	object-fit: cover;
+	object-position: center top;
+}
+.tile-text { padding: .85rem 1rem 1rem; }
+.tile h3 { margin: 0 0 .3rem; font-size: 1rem; color: var(--head); }
+.tile:hover h3 { color: var(--blue); }
+.tile p { margin: 0; color: var(--dim); font-size: .9rem; }

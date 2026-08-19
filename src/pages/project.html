@@ -1,0 +1,144 @@
+---
+title: Getting around a project — Abydos
+description: One field at the top of the window for projects, branches and every command; a navigator that shows what the project depends on; git as folders rather than paths; and search results you work through rather than read.
+og_title: Getting around a project in Abydos
+og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies root beside the files, git as a tree, search and usages as a checklist, and a backlog an agent can be handed.
+---
+<header class="inner">
+	<a class="back" href="index.html">← Abydos</a>
+	{{ include partials/icon.svg }}
+	<h1>Getting around a project</h1>
+	<p class="tagline">One field for everything the app can be asked to do, a tree
+	   that shows what the project depends on as well as what is in it, and lists
+	   that are worked through rather than read.</p>
+</header>
+
+<h2>One field at the top of the window</h2>
+<p>
+	The titlebar is a capsule: which project on the left, which branch on the right,
+	a hairline between them, and <kbd>⇧⌘P</kbd> written on it. Press that and a
+	field opens underneath it, on the thing it is about. The shortcut is VS Code's
+	on purpose — a decade of it has taught everybody's hands where a palette lives,
+	and muscle memory is worth more than a free letter.
+</p>
+<div class="cards">
+	<div class="card">
+		<h3>Everything, in one list</h3>
+		<p>Typing searches projects, the branches of the repository that is open,
+		   and the commands. A project opens; a branch is checked out where the
+		   branch menu would have put it; a command runs. Projects are found on
+		   disk as well as in the recents, so the case a switcher exists for —
+		   opening something for the first time — is the case it handles.</p>
+	</div>
+	<div class="card">
+		<h3><code>&gt;</code> for commands, <code>:</code> for a line</h3>
+		<p>VS Code's prefixes, in the same field. <code>&gt;</code> narrows to
+		   commands; <code>:</code> takes a number and puts the caret on that line
+		   of whatever is open. The placeholder says so, because a prefix nobody
+		   knows about is a prefix nobody uses.</p>
+	</div>
+	<div class="card">
+		<h3>The menu bar is the list</h3>
+		<p>The commands are not a list kept beside the menus — they <em>are</em>
+		   the menus, read at the moment you ask. Each row carries the menu it
+		   lives in and the key it already answers to, so the palette teaches the
+		   shortcut instead of replacing it. Anything greyed out in the menu is
+		   absent here: a palette is what can be done now.</p>
+	</div>
+</div>
+
+<figure>
+	<img src="images/palette.png" alt="Abydos's command palette: a search field holding a greater-than sign, and beneath it the project's own actions followed by commands from the menu bar, each with the menu it lives in and its keyboard shortcut."
+	     loading="lazy">
+	<figcaption>The palette with <code>&gt;</code> typed into it. What this
+	   repository can hand off comes first — those rows exist because this is a
+	   checkout with a remote — and under them the menu bar, with its own
+	   shortcuts.</figcaption>
+</figure>
+
+<h2>The navigator</h2>
+<p>
+	Version-control colours, lazily-loaded directories, a warm tint on build output,
+	and full keyboard navigation. FSEvents keeps it live, so a
+	<code>git checkout</code> in a terminal recolours it. Files are made, renamed,
+	dragged, copied and thrown away in the tree itself — named on the row rather
+	than in a dialog, with <kbd>⌘Z</kbd> taking any of it back, including out of the
+	trash. <em>New</em> is a submenu of the kinds of file this project actually has,
+	so the extension is not typed out again every time.
+</p>
+
+<h2>What the project depends on</h2>
+<p>
+	The tree has a second root, where IntelliJ puts <em>External Libraries</em>: the
+	packages this project depends on, named as packages and each saying which
+	version and where it came from. Swift packages, Go modules, Cargo, npm — with
+	pnpm and yarn named as themselves, since the lock file beside
+	<code>package.json</code> is what says which of the three installed it — Maven,
+	Gradle, Bazel and Conan.
+</p>
+<p>
+	Read off what is already on disk. No <code>cargo metadata</code>, no
+	<code>npm ls</code>, no <code>mvn dependency:list</code>, and not Gradle, which
+	was expected to be the kind that forced the rule and turned out to be the kind
+	that needs it least. A lock file that cannot be made sense of says so — a Conan
+	1 <code>conan.lock</code>, a <code>pnpm-lock.yaml</code> with no version — which
+	is a different sentence from a project that genuinely depends on nothing, and
+	both are better than an empty list.
+</p>
+
+<h2>Git, as the folders it changed</h2>
+<p>
+	Status, changes, history, blame, branches, worktrees, stash and push. The working
+	copy is shown as the folders it changed rather than as a flat list of paths: a
+	folder stages everything under it, and says how much of itself is on this side
+	of the index. Changes are thrown away from the unstaged side only, and the sheet
+	says how much it is about to take and which of it is a deletion rather than a
+	revert.
+</p>
+<p>
+	The branch is in the titlebar, and a worktree keeps the repository's name and
+	gains a chip beside it — asked of git rather than read off the path, since a
+	worktree can be made anywhere. The repository's other checkouts are in that same
+	control, and choosing one opens it as a project.
+</p>
+
+<h2>Lists you work through</h2>
+<div class="cards">
+	<div class="card">
+		<h3>Search and usages, in one shape</h3>
+		<p>A project-wide search (<kbd>⇧⌘F</kbd>) and Find Usages both answer in
+		   the bottom panel, in a list that is a checklist: rows are marked done as
+		   you look at them, several at a time, struck through where they stand
+		   while the heading counts off <code>2/3</code>.</p>
+		<p>It touches nothing on disk, <kbd>⌘Z</kbd> takes back the last marking,
+		   and a mark survives the search being run again — so a file that gains
+		   one new match comes back with that match under it rather than staying
+		   finished.</p>
+	</div>
+	<div class="card">
+		<h3>And keep the keyboard</h3>
+		<p>The list arrives with the keyboard in it and nothing opened yet; ↓ shows
+		   each result without leaving the list. It can sit under the editor,
+		   beside the project view, or in a window of its own, and which of those
+		   is remembered. A single usage is not a list at all — it is the place to
+		   go, so the file opens at that line.</p>
+	</div>
+	<div class="card">
+		<h3>A backlog three things read</h3>
+		<p>Everything left to do is markdown in <code>.abydos/backlog/</code>, in a
+		   folder per state. <kbd>⇧⌘B</kbd> shows it as a list or a board, the
+		   <code>abydos-backlog</code> command works it from a shell, and an agent
+		   moves the same files. No database and no server, so the three cannot
+		   disagree about where an item stands.</p>
+		<p>An item picked up gets a worktree of its own, and its card reads the
+		   checklist and the estimate out of <em>that</em> checkout —
+		   <code>3/6 in the worktree</code>. The card opens it as a project, or a
+		   shell in it. A project keeping <code>openspec/changes</code> instead is
+		   shown that, from the same button.</p>
+	</div>
+</div>
+
+<p class="foot-note">
+	The agent that gets handed one of those items, and the session it runs in, are
+	<a href="terminal.html">the terminal page</a>.
+</p>

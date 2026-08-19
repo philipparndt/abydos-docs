@@ -1,0 +1,100 @@
+---
+title: Terminal and agents — Abydos
+description: The terminal in Abydos is not a strip at the bottom of an editor: a real PTY with a VT100/xterm emulator, tmux's own windows as the panel's tabs, and agent sessions the app owns rather than a view.
+og_title: Terminal and agents in Abydos
+og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux windows as tabs. Agent sessions are PTYs the app owns, so hiding one does not kill it, and findings come back over MCP as typed data.
+---
+<header class="inner">
+	<a class="back" href="index.html">← Abydos</a>
+	{{ include partials/icon.svg }}
+	<h1>Terminal and agents</h1>
+	<p class="tagline">The terminal is not a strip at the bottom of an editor here.
+	   It is where the work happens — shells, tmux windows, agents, a program
+	   running in a pod — and the editor, the debugger and the cluster arrange
+	   themselves around it.</p>
+</header>
+
+<figure>
+	<img src="images/terminal.png" alt="Abydos with a tmux session in the bottom panel, the panel's tabs being tmux's own windows, and a Go build running in one of them."
+	     loading="lazy">
+	<figcaption>The panel's tabs are tmux's windows: the strip and
+	   <code>tmux list-windows</code> are the same list.</figcaption>
+</figure>
+
+<h2>A real terminal</h2>
+<p>
+	A PTY with a VT100/xterm emulator over it: full colour, mouse reporting, the
+	alternate screen, and kitty graphics, so a picture printed into a pane is a
+	picture. A Nerd Font is bundled, which means a powerline prompt renders without
+	anybody installing anything first — the most common way a terminal in an editor
+	announces that it is not the real one.
+</p>
+<p>
+	<kbd>⌘J</kbd> opens one and <kbd>⌘⏎</kbd> gives it the whole window. A pane
+	shows what a command printed even when the command has already finished, and a
+	tab that does not fit is reachable from a chevron that says how many are behind
+	it rather than being unreachable.
+</p>
+
+<h2>tmux's windows as the panel's tabs</h2>
+<p>
+	Not a tmux-shaped feature of the panel: the strip <em>is</em>
+	<code>tmux list-windows</code>. Opening a window from inside the terminal puts a
+	tab in the strip, closing one takes it away, and renaming one renames the tab —
+	because there is one list and tmux owns it. A pane also does not inherit a tmux
+	socket path that could not exist, which is the failure that used to make a
+	terminal opened inside one of these come up empty.
+</p>
+
+<h2><code>abydos some-file.md</code></h2>
+<p>
+	Typed in one of these panes, it opens that file in the editor of <em>this</em>
+	window, puts the keyboard in it, and gets the terminal out of the way if it was
+	covering the editor. Three things, and the third is what makes it a gesture
+	rather than a background event: opening a file into a pane nobody can see is the
+	same as not opening it.
+</p>
+<p>
+	The pane's own file descriptor is what says which window asked. Nothing has to
+	be installed, no port is listened on and no lock file is written — the terminal
+	this was typed into is already connected to the window that should answer, and
+	the message goes up that channel as an escape sequence, wrapped for tmux so
+	tmux passes it through.
+</p>
+
+<h2>Agents are sessions, not a sidebar</h2>
+<div class="cards">
+	<div class="card">
+		<h3>The app owns the PTY</h3>
+		<p>An agent session is a pseudo-terminal the application owns rather than
+		   something a view owns. So it can be hidden, shown again, or handed over
+		   for manual takeover, and its process keeps running throughout —
+		   including while you are looking at something else entirely.</p>
+	</div>
+	<div class="card">
+		<h3>Findings arrive as data</h3>
+		<p><kbd>⇧⌘R</kbd> reviews the branch and <kbd>⇧⌘U</kbd> what is not
+		   committed yet. Results come back over a local MCP server as typed
+		   data — file, line, severity, detail — arriving as the work proceeds, so
+		   a click goes to the line.</p>
+		<p>Scraping a rendered screen would break the first time the tool restyled
+		   its output. This is a contract instead.</p>
+	</div>
+	<div class="card">
+		<h3>And work to hand them</h3>
+		<p>The backlog is markdown in state folders that the app, the terminal and
+		   an agent all move. An item picked up gets a worktree of its own, and its
+		   card reads the progress out of that checkout —
+		   <a href="project.html">on the project page</a>.</p>
+	</div>
+</div>
+
+<p class="foot-note">
+	There is a second terminal engine in the build — libghostty-vt, ghostty's state
+	machine with no pty and no renderer of its own — behind a setting that is off,
+	and it stays off here until it has been run for weeks. It is mentioned because
+	it is in the binary either way, not because it is a feature yet: the engine a
+	pane is emulated by is decided when the pane is made, since an engine holds the
+	scrollback, the modes and the images, and swapping one out under a running shell
+	would throw all three away.
+</p>

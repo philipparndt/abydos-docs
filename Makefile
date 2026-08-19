@@ -35,6 +35,10 @@ theme-shots: ## Photograph one scene in each palette, for themes.html
 shots: ## Both sets
 	@Scripts/screenshots.sh all
 
+.PHONY: thumbs
+thumbs: ## Small copies of the pictures, for the grid on the front page
+	@Scripts/thumbs.sh
+
 .PHONY: clean
 clean: ## Remove dist/
 	@rm -rf dist

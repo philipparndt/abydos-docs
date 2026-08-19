@@ -1,0 +1,121 @@
+---
+title: Run and debug — Abydos
+description: What a project can run is found rather than configured, and a program stops on a breakpoint where it actually runs — including inside a development pod in your Kubernetes cluster, in about a second.
+og_title: Run and debug in Abydos
+og_description: Makefile goals, Maven, Gradle, Bazel, Conan, Swift packages and Xcode schemes, found by reading rather than by asking. Breakpoints over DAP, and a program that stops in the pod.
+---
+<header class="inner">
+	<a class="back" href="index.html">← Abydos</a>
+	{{ include partials/icon.svg }}
+	<h1>Run and debug</h1>
+	<p class="tagline">What a project can run is <em>found</em> rather than
+	   configured, and pressing debug stops the program where it actually runs —
+	   which for a service is a pod in a cluster and not this laptop.</p>
+</header>
+
+<figure>
+	<img src="images/debugger.png" alt="Abydos stopped on a breakpoint: the editor showing the stopped line, and the panel below it showing the call stack and the local variables."
+	     loading="lazy">
+	<figcaption>Stopped on a breakpoint. The terminal had the whole window a moment
+	   earlier; stopping gives it back and shows the variables, because that is what
+	   there is to look at now.</figcaption>
+</figure>
+
+<h2>Found, not configured</h2>
+<p>
+	Open a project and the run list already has things in it, because a build file
+	says what it can do and that is enough. Makefile goals, Maven goals, Gradle
+	tasks, every <code>*_binary</code> and <code>*_test</code> in a
+	<code>BUILD</code> file, what a Conan recipe can be asked for, a Swift package's
+	executable products and its <code>swift test</code>, an Xcode project's schemes,
+	<code>main</code> functions found by scanning, and a
+	<code>.vscode/launch.json</code> imported as it stands.
+</p>
+<p>
+	<strong>And every one of them is read rather than run.</strong>
+	<code>bazel query</code> is the more correct way to ask what targets exist, and
+	it is also a build-graph load that wants Bazel installed and can take a minute —
+	too long to spend filling in a menu, and a lock on the output base that would
+	leave this and somebody's build waiting on each other. A
+	<code>conanfile.py</code> is a Python program and a <code>Package.swift</code>
+	is a Swift one; asking either means compiling and running somebody's build
+	script to draw a menu. So the text is read, and what reading cannot see — an
+	executable whose name is computed rather than written — is an entry missing
+	rather than an entry that does not work, which is the right way round.
+</p>
+<p>
+	The cost of asking was measured rather than assumed:
+	<code>swift package dump-package</code> takes 0.74 to 0.92 seconds per manifest,
+	warm cache or cold, on a search that runs once per directory three deep and
+	again on every write that could change the answer — and it writes a
+	<code>.build</code> directory into the project as a side effect, so merely
+	looking at what a project can run would leave build output in it.
+</p>
+
+<h2>Breakpoints that are more than a place</h2>
+<figure>
+	<img src="images/breakpoint.png" alt="Abydos's breakpoint options: a condition, a hit count and a log message, each written in a field that colours the expression as code."
+	     loading="lazy">
+	<figcaption>The condition, the hit count and the message are code, and are
+	   coloured by the grammar of the file the breakpoint is in —
+	   <code>{…}</code> in a log message is the part that gets
+	   evaluated.</figcaption>
+</figure>
+<p>
+	Conditions, hit counts and log points, over the Debug Adapter Protocol, with the
+	call stack, the variables and watches. Delve for Go, LLDB for the compiled
+	languages, and for Java a bundle the language server loads rather than a program
+	of its own — jdtls is asked for a debug session, answers with a port, and the
+	classpath comes from the same server because nothing else knows it.
+</p>
+
+<h2>Where the program actually runs</h2>
+<div class="cards">
+	<div class="card">
+		<h3>Into a pod, in about a second</h3>
+		<p>A launch configuration with one extra key builds for the cluster's
+		   architecture, pushes the binary into a development pod and runs it
+		   there — against the minutes an image build and a rollout cost. The pod
+		   has the real chart's config, its secrets, its service account and its
+		   sidecars, so the program finds what production would give it.</p>
+	</div>
+	<div class="card">
+		<h3>And stops there</h3>
+		<p>Press debug and it stops on your breakpoint <em>in the pod</em>, in your
+		   own sources — because the binary was compiled on this machine and its
+		   debug information names these files. A JVM is held suspended with JDWP
+		   open until you attach, so a worker cannot finish before you arrive,
+		   which is the only way to debug one.</p>
+	</div>
+	<div class="card">
+		<h3>Profiles, here or there</h3>
+		<p>CPU, heap, goroutine, block and mutex profiles with a flame graph,
+		   pointed at a program on this machine or at a pod in the cluster through
+		   a forwarded port.</p>
+	</div>
+	<div class="card">
+		<h3>Swift apps, on the device in your hand</h3>
+		<p>An Xcode project's schemes appear beside everything else that can be
+		   run, and a submenu says where: this Mac, a simulator, or a phone — over
+		   the cable or over Wi-Fi, whichever it is paired by. Where a scheme went
+		   last is remembered, so the play button repeats it. It builds, installs,
+		   launches, and the app's own output arrives in the terminal — no Xcode
+		   window, and nothing to keep in step with one.</p>
+	</div>
+</div>
+
+<h2>A line that means one thing</h2>
+<p>
+	Under the titlebar is a seam that is coloured only while something is running,
+	and red if it failed. It holds still rather than sweeping — a bar that crawls is
+	claiming a percentage nothing here knows — and it carries no other meaning,
+	which is what lets it be absent the rest of the time.
+</p>
+
+<p class="foot-note">
+	Which languages can be run, debugged and taken to a cluster is
+	<a href="languages.html">the languages page</a>. Nothing is bundled: Delve, LLDB
+	and a build tool each have opinions about your toolchain, and the ones already on
+	your machine are the right ones — so what is missing is named in a bar at the top
+	of the editor, with the one command that installs it.
+</p>

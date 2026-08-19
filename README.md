@@ -15,8 +15,10 @@ plan. That repository is public now; the site stays here, where its history is.
     src/pages/*.html       one file per page, with its title in front matter
     Scripts/build.py       assembles src/ into dist/
     Scripts/screenshots.sh drives the app and photographs it into images/
+    Scripts/thumbs.sh      small copies of those, for the grid on the front page
     images/                the pictures, committed — they need a Mac to make
-    Makefile               the four commands below
+    images/thumbs/         derived from them by `make thumbs`, committed too
+    Makefile               the commands below
 
 `dist/` is the site and is not committed: the workflow builds it on every push.
 
@@ -51,10 +53,16 @@ of shipping a broken image.
 ## The pictures
 
 ```sh
-make screenshots        # the eight the pages use, in the app's own theme
+make screenshots        # the nine the pages use, in the app's own theme
 make theme-shots        # one scene in each palette, for themes.html
 make shots              # both
+make thumbs             # small copies of all of them, after either
 ```
+
+`make thumbs` is `sips`, which is macOS's own — the pictures need a Mac to make
+in the first place, so nothing is lost by the thumbnails needing one too. The
+front page shows nine at once, and nine full screenshots is four megabytes to
+look at a page of links.
 
 Every picture is the app doing the thing the page claims, on a project from the
 examples repository that anybody can clone. Nothing is staged and nothing is a
@@ -112,7 +120,10 @@ needs Delve and a Go toolchain, and `terminal` needs `tmux` — and it will atta
 to a session that is already running, so a stale one gets photographed. Check
 what came out before committing it.
 
-`scad` needs OpenSCAD, and `cadova` needs a Swift toolchain and the network once.
+`scad` needs OpenSCAD, `cadova` needs a Swift toolchain and the network once, and
+`diagram` needs nothing at all — it is Mermaid, which is inside the app, chosen
+over PlantUML for exactly that reason: no container runtime will start on this
+machine, so the one diagram anybody can reproduce is the one that needs no tool.
 `cadova` is also the slow one, at about three and a half minutes: `prepare` hands
 out a fresh clone for every shot, so the package resolves seven dependencies and
 compiles a C++ geometry kernel from cold every time. That is the honest cost of

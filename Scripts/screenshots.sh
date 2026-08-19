@@ -294,6 +294,19 @@ shot_cadova() {
 		--preview-mode split --panel-height 0 --delay 200
 }
 
+# A diagram beside the text that makes it. Mermaid rather than PlantUML, and
+# not because it is the better tool: PlantUML is a JVM and wants a container or
+# an install, and the machine these are taken on has no container runtime that
+# will start. Mermaid is 3.6 MB of JavaScript inside the app, so this shot needs
+# nothing that the app does not already carry — which also makes it the one
+# diagram anybody can reproduce.
+shot_diagram() {
+	local theme="$1" path="$2"
+	local mmd; mmd="$(prepare mermaid mermaid)"
+	shoot "$path" "$theme" --open "$mmd" --file "$mmd/project.mmd" \
+		--preview-mode split --panel-height 0 --delay 10
+}
+
 # The command palette, which is what the titlebar became: one field over
 # everything the app can be asked to do.
 #
@@ -324,7 +337,7 @@ shot_palette() {
 # the changes pane would be photographed empty, which says the opposite of what
 # it is for. Photographing this repository instead would mean whatever happened
 # to be lying around that day.
-SITE_SHOTS=(editor debugger terminal java breakpoint palette scad cadova)
+SITE_SHOTS=(editor debugger terminal java breakpoint palette scad cadova diagram)
 
 if [ "$SET" = site ] || [ "$SET" = all ]; then
 	echo "==> The pages' pictures, in $THEME ($SIZE) → ${OUT#"$DOCS"/}"
