@@ -277,11 +277,20 @@ shot_scad() {
 # The network is needed once, for the resolve. A machine without it photographs
 # the pane saying what the build said, which is honest and is not the picture
 # the page wants.
+#
+# `coaster` rather than `HexKeyHolder`, which this was first. The hex key holder
+# is the model from Cadova's own README and is the better *model*; it is also
+# eighty-one lines that open on twenty-six of comment, so the picture was a
+# screenful of prose with `import Cadova` at the top and the shape beside it. The
+# coaster is twenty-eight lines whole — the import, four constants and the three
+# operations that make it — so the claim the page makes, that the shape is beside
+# the code describing it, is a thing somebody can check in the picture rather
+# than take on trust.
 shot_cadova() {
 	local theme="$1" path="$2"
 	local pkg; pkg="$(prepare cadova-models cadova)"
 	shoot "$path" "$theme" --open "$pkg" \
-		--file "$pkg/Sources/HexKeyHolder/main.swift" \
+		--file "$pkg/Sources/coaster/main.swift" \
 		--preview-mode split --panel-height 0 --delay 200
 }
 
