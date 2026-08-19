@@ -126,17 +126,75 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		   alternate screen, kitty graphics, and a bundled Nerd Font. <kbd>⌘J</kbd>
 		   opens one, <kbd>⌘⏎</kbd> gives it the whole window, and the panel's tabs
 		   can <em>be</em> tmux's windows.</p>
+		<p><code>abydos some-file.md</code> typed in one of them opens that file in
+		   the editor of <em>this</em> window and puts the keyboard in it, getting the
+		   terminal out of the way if it was covering it. The pane's own file
+		   descriptor is what says which window asked, so nothing has to be
+		   installed and nothing has to be configured.</p>
 	</div>
 	<div class="card">
 		<h3>Editor</h3>
-		<p>tree-sitter highlighting and folding for 23 languages, a persistent rope
+		<p>tree-sitter highlighting and folding for 24 languages, a persistent rope
 		   behind the text, and a parser that is allowed to land a frame late so
 		   typing never waits for it.</p>
+		<p><kbd>⌘/</kbd> comments the lines a selection touches, at the indent they
+		   share; a completion that came with holes in it is stepped through with
+		   <kbd>⇥</kbd>; and <kbd>⇧F6</kbd> renames through the language server —
+		   worked out in full before anything is written, across every file it
+		   touches, and undone by one <kbd>⌘Z</kbd>.</p>
+	</div>
+	<div class="card">
+		<h3>Diagrams</h3>
+		<p>A <code>.puml</code>, a <code>.mmd</code> and a <code>.drawio</code> open
+		   with the drawing beside the source, and a fence in a Markdown file is
+		   drawn where it stands. Mermaid is the real Mermaid, in the app rather
+		   than in a container — 3.6 MB of JavaScript against 2.16 GB of headless
+		   browser — and what it hands back is flattened into plain geometry, so
+		   the picture in the pane, the one in <code>Export ▸ SVG</code> and the one
+		   a browser draws are the same picture.</p>
+		<p>draw.io is the whole editor, not a viewer: the shapes are dragged in the
+		   tab, and the document stays the app's — the edited dot, <kbd>⌘S</kbd> and
+		   the file watcher work as they do for text, and a file that arrived
+		   compressed is written back compressed. Diagrams follow the theme the app
+		   is wearing, so a dark window does not hold one white rectangle.</p>
+	</div>
+	<div class="card">
+		<h3>Models, pictures and PDFs</h3>
+		<p>A file written in order to make a shape opens showing both: an OpenSCAD
+		   <code>.scad</code> beside its render, and a <code>.scad</code> that will
+		   not compile shows no shape at all rather than the last one that did. A
+		   go3mf recipe is the exception and opens as its text, with the model
+		   offered rather than drawn — a recipe is an assembly, so its model is every
+		   part's render and a <code>go3mf build</code> on top of them, which is the
+		   slowest preview here.</p>
+		<p>An STL or a 3MF opens in the viewer, a picture opens at the size it was
+		   taken and zooms to the pixels, and a PDF opens as a PDF. A preview nobody
+		   has looked at costs nothing — arrowing through a directory of models
+		   renders none of them.</p>
+	</div>
+	<div class="card">
+		<h3>Cadova: a model that is a program</h3>
+		<p>A <a href="https://github.com/tomasf/Cadova">Cadova</a> model is Swift, and
+		   opens with the shape beside the code. A <code>.swift</code> is a model when
+		   the package above it declares an executable target that depends on Cadova
+		   and this file is one of that target's sources — the manifest is the only
+		   place that says so, and neither the name of the file nor its contents
+		   can.</p>
+		<p>Which means the shape is not read but <em>run</em>: <code>swift run</code>
+		   in the package root, the pane carrying the build's own last line while it
+		   goes, and the compiler's complaint in place of the model when it will not
+		   build. Any of the target's sources rebuilds it, because a helper file
+		   changes the shape as much as the one with the model in it; a burst of
+		   saves is one rebuild; and no build is killed to make way for a newer one,
+		   since a half-stopped <code>swift build</code> makes the next one a cold
+		   one. The file is rewritten in place, so turning the part round to see what
+		   changed survives the rebuild.</p>
 	</div>
 	<div class="card">
 		<h3>Run and debug, here too</h3>
 		<p>Launch configurations, Makefile goals, Maven goals, Gradle tasks, Bazel
-		   targets, Conan commands and entry points found by scanning. Breakpoints —
+		   targets, Conan commands, a Swift package's executables and its
+		   <code>swift test</code>, and entry points found by scanning. Breakpoints —
 		   conditional, hit counts, log points — over DAP, with stack, variables and
 		   watches.</p>
 	</div>
@@ -152,20 +210,53 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		   running before it will answer — or Docker, nerdctl or podman, which all
 		   take the three flags this needs. Said rather than guessed: ask for Docker
 		   and have none and you are told so, instead of quietly getting the other
-		   one. Whatever is already installed is still used first.</p>
+		   one. Whatever is already installed is still used first. An image a
+		   machine has not got is fetched before it is first needed, and one this
+		   app ships a recipe for is built here rather than pulled.</p>
+	</div>
+	<div class="card">
+		<h3>The container the project says it is worked on in</h3>
+		<p>A checkout carrying a <code>devcontainer.json</code> is offered its own
+		   toolchain: the language servers run <em>inside</em> that container, so the
+		   problems on screen are the problems from the build rather than from
+		   whatever this Mac happens to have installed.</p>
+		<p>Asked for rather than done — one question, once per project, at the moment
+		   something needs it. A pill beside the project's name says a container is
+		   in use, and its menu lists the ones the repository has, moves the servers
+		   between them, or gives the work back to this machine.</p>
 	</div>
 	<div class="card">
 		<h3>Navigator</h3>
 		<p>Version-control colours, lazily-loaded directories, a warm tint on build
 		   output, and full keyboard navigation. FSEvents keeps it live, so a
-		   <code>git checkout</code> in a terminal recolours it.</p>
+		   <code>git checkout</code> in a terminal recolours it. Files are made,
+		   renamed, dragged, copied and thrown away in the tree itself — named on the
+		   row rather than in a dialog — and <kbd>⌘Z</kbd> takes any of it back.</p>
+	</div>
+	<div class="card">
+		<h3>What the project depends on</h3>
+		<p>The tree has a second root, where IntelliJ puts <em>External Libraries</em>:
+		   the packages this project depends on, named as packages and each saying
+		   which version and where it came from. Swift packages, Go modules, Cargo,
+		   npm — pnpm and yarn as themselves — Maven, Gradle, Bazel and Conan.</p>
+		<p>Read off what is already on disk. No <code>cargo metadata</code>, no
+		   <code>npm ls</code>, no Gradle: a tree row is not worth starting a build
+		   tool for, and Conan's recipe is a Python program that filling in a row
+		   should not be running. A lock file that cannot be made sense of says so,
+		   which is a different sentence from a project that depends on nothing.</p>
 	</div>
 	<div class="card">
 		<h3>Git</h3>
 		<p>Status, changes, history, blame, branches, worktrees, stash and push. The
 		   branch is in the titlebar, and a worktree keeps the repository's name and
 		   gains a chip beside it — asked of git rather than read off the path, since
-		   a worktree can be made anywhere.</p>
+		   a worktree can be made anywhere. The other checkouts of the repository are
+		   in that same control, and choosing one opens it as a project.</p>
+		<p>The working copy is shown as the folders it changed rather than as a flat
+		   list of paths: a folder stages everything under it and says how much of
+		   itself is on this side of the index. Changes are thrown away from the
+		   unstaged side only, and the sheet says how much it is about to take and
+		   which of it is a deletion rather than a revert.</p>
 	</div>
 	<div class="card">
 		<h3>Profiler</h3>
@@ -182,12 +273,38 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		   terminal. No Xcode window, and nothing to keep in step with one.</p>
 	</div>
 	<div class="card">
-		<h3>Three themes, six palettes</h3>
+		<h3>A backlog the app, the terminal and an agent all read</h3>
+		<p>Everything left to do is markdown in <code>.abydos/backlog/</code>, in a
+		   folder per state. <kbd>⇧⌘B</kbd> shows it as a list or a board, the
+		   <code>abydos-backlog</code> command works it from a shell, and an agent
+		   moves the same files. There is no database and no server, so the three of
+		   them cannot disagree about where an item stands. A project keeping
+		   <code>openspec/changes</code> instead is shown that, from the same button.</p>
+		<p>An item picked up gets a worktree of its own, and its card reads the
+		   checklist, the estimate and the pictures out of <em>that</em> checkout —
+		   <code>3/6 in the worktree</code>, and what the branch thinks is left. The
+		   card opens the worktree as a project, or a shell in it.</p>
+	</div>
+	<div class="card">
+		<h3>Results you work through, not results you read</h3>
+		<p>A project-wide search and a Find Usages both answer in the bottom panel,
+		   in a list that is a checklist: rows are marked done as you look at them,
+		   several at a time, struck through where they stand while the heading
+		   counts off <code>2/3</code>. It touches nothing on disk, <kbd>⌘Z</kbd>
+		   takes back the last marking, and a mark survives the search being run
+		   again.</p>
+		<p>The keyboard stays in the list — ↓ shows each result without leaving it —
+		   and the list can sit under the editor, beside the project view, or in a
+		   window of its own, which is remembered.</p>
+	</div>
+	<div class="card">
+		<h3>Three themes, six palettes — or one of your own</h3>
 		<p>The app's own amber one, the blue-grey it started with, or Dracula at
 		   upstream's own values. Each has a daylight half — a separate question, so
 		   following the system does not cost you the theme you chose. All six are
 		   the same interface photographed six times —
-		   <a href="themes.html">see them</a>.</p>
+		   <a href="themes.html">see them</a>. A scheme is a JSON file now, so a
+		   seventh is one dropped into <code>~/.config/abydos/schemes</code>.</p>
 	</div>
 </div>
 
@@ -208,25 +325,34 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 	</thead>
 	<tbody>
 		<tr><td><strong>Navigator</strong></td><td>project tree, version-control colours, keyboard-driven, FSEvents-live</td><td class="no">—</td></tr>
-		<tr><td><strong>Editor</strong></td><td>tree-sitter highlighting, folding, word wrap, hex viewer, markdown and PlantUML preview — source, preview, or both split either way</td><td class="no">—</td></tr>
-		<tr><td><strong>Search</strong></td><td>find in file (<kbd>⌘F</kbd>), project-wide streaming search (<kbd>⇧⌘F</kbd>)</td><td class="no">—</td></tr>
+		<tr><td><strong>Editor</strong></td><td>tree-sitter highlighting, folding, word wrap, <kbd>⌘/</kbd>, hex viewer, markdown preview — source, preview, or both split either way</td><td class="no">—</td></tr>
+		<tr><td><strong>Diagrams</strong></td><td>PlantUML, Mermaid and draw.io, beside the source or in a markdown fence; export as SVG or PNG</td><td>PlantUML, for <code>.puml</code></td></tr>
+		<tr><td><strong>3D models</strong></td><td>STL and 3MF meshes; a <code>.scad</code> rendered beside its source, a go3mf recipe's assembly offered beside its text</td><td>OpenSCAD; go3mf</td></tr>
+		<tr><td><strong>Cadova</strong></td><td>an executable target that depends on <a href="https://github.com/tomasf/Cadova">Cadova</a> is a 3D model: built, run, and shown beside the Swift that describes it</td><td>a Swift toolchain</td></tr>
+		<tr><td><strong>Pictures and PDFs</strong></td><td>opened at their own size, zoomed to the pixels; SVG too</td><td class="no">—</td></tr>
+		<tr><td><strong>Search</strong></td><td>find in file (<kbd>⌘F</kbd>), project-wide streaming search (<kbd>⇧⌘F</kbd>) — a checklist that can be marked off</td><td class="no">—</td></tr>
+		<tr><td><strong>Usages</strong></td><td>Find Usages answers in the panel beside search, in the same checklist</td><td>the server for that language</td></tr>
 		<tr><td><strong>Outline</strong></td><td><kbd>⇧⌘O</kbd>; symbols from the language server, or from a build file's own parser</td><td>a server, for source files</td></tr>
-		<tr><td><strong>Language servers</strong></td><td>completion, problems, hover, go-to-declaration, find-usages</td><td>the server for that language</td></tr>
-		<tr><td><strong>Run</strong></td><td>launch configurations, imported <code>launch.json</code>, Makefile goals, Maven goals, Gradle tasks, entry points</td><td>that language's toolchain</td></tr>
+		<tr><td><strong>Language servers</strong></td><td>completion with tab stops, problems, hover, go-to-declaration, find-usages, rename (<kbd>⇧F6</kbd>) across files as one undo</td><td>the server for that language</td></tr>
+		<tr><td><strong>Which server</strong></td><td>a project names the server it wants for a language in <code>.abydos/tools.json</code>, and where it comes from; the footer says which one answered</td><td class="no">—</td></tr>
+		<tr><td><strong>Run</strong></td><td>launch configurations, imported <code>launch.json</code>, Makefile goals, Maven goals, Gradle tasks, a Swift package's executables and its tests, entry points</td><td>that language's toolchain</td></tr>
 		<tr><td><strong>Bazel</strong></td><td>every <code>*_binary</code> and <code>*_test</code> in a <code>BUILD</code> file becomes <code>bazel run</code> or <code>bazel test</code> on its label</td><td>bazel, to run it</td></tr>
 		<tr><td><strong>Conan</strong></td><td>install, build, create and test a <code>conanfile.py</code>; install a <code>conanfile.txt</code></td><td>conan, to run it</td></tr>
-		<tr><td><strong>Tools from an image</strong></td><td><code>.abydos/tools.json</code> names an image per tool, checked in with the project</td><td>Apple <code>container</code>, Docker, nerdctl or podman</td></tr>
+		<tr><td><strong>Dependencies</strong></td><td>a second root in the tree: SwiftPM, Go modules, Cargo, npm, pnpm, yarn, Maven, Gradle, Bazel and Conan, each with its version and where it came from</td><td class="no">—</td></tr>
+		<tr><td><strong>Tools from an image</strong></td><td><code>.abydos/tools.json</code> names an image per tool, checked in with the project; an image Abydos has a recipe for is built here rather than pulled</td><td>Apple <code>container</code>, Docker, nerdctl or podman</td></tr>
+		<tr><td><strong>Devcontainers</strong></td><td>the language servers run in the container the repository names; a pill in the titlebar switches between them</td><td>a <code>devcontainer.json</code>, and a runtime</td></tr>
 		<tr><td><strong>Debug</strong></td><td>breakpoints, stack, variables, watches — over the Debug Adapter Protocol</td><td>Delve, LLDB, or jdtls's java-debug</td></tr>
 		<tr><td><strong>Run in a cluster</strong></td><td>build here, push into a development pod, run it there, follow its output</td><td>kubectl, a cluster</td></tr>
 		<tr><td><strong>Debug in a cluster</strong></td><td>the same pod, held at the first instruction until the debugger arrives</td><td>the above, and that language's pod image</td></tr>
 		<tr><td><strong>Xcode schemes</strong></td><td>run a scheme on this Mac, a simulator or a device, over USB or Wi-Fi; output in the terminal</td><td>Xcode</td></tr>
 		<tr><td><strong>Breakpoint options</strong></td><td>conditions, hit counts and log messages, written as code and coloured as code</td><td class="no">—</td></tr>
 		<tr><td><strong>Profiler</strong></td><td>CPU, heap, goroutine, block and mutex profiles; flame graph; pods too</td><td>a Go program serving pprof</td></tr>
-		<tr><td><strong>Git</strong></td><td>status, changes, history, blame, branches, worktrees, stash, push</td><td>git</td></tr>
+		<tr><td><strong>Git</strong></td><td>status, changes as a tree staged by folder, discard, history, blame, branches, worktrees, stash, push</td><td>git</td></tr>
 		<tr><td><strong>Terminal</strong></td><td>real PTY, VT100/xterm, tmux windows as tabs</td><td class="no">—</td></tr>
 		<tr><td><strong>Command palette</strong></td><td><kbd>⇧⌘P</kbd> — projects, branches and every menu command; <code>&gt;</code> for commands, <code>:</code> for a line</td><td class="no">—</td></tr>
-		<tr><td><strong>Themes</strong></td><td>Abydos or Blue, light or dark or the system's — <a href="themes.html">all four</a></td><td class="no">—</td></tr>
-		<tr><td><strong>Agent review</strong></td><td><kbd>⇧⌘R</kbd> — findings arrive over MCP as typed data</td><td>Claude Code</td></tr>
+		<tr><td><strong>Themes</strong></td><td>Abydos, Blue or Dracula, light or dark or the system's — <a href="themes.html">all six</a> — and your own, as a file</td><td class="no">—</td></tr>
+		<tr><td><strong>Agent review</strong></td><td><kbd>⇧⌘R</kbd> for the branch, <kbd>⇧⌘U</kbd> for what is not committed — findings arrive over MCP as typed data</td><td>Claude Code</td></tr>
+		<tr><td><strong>Backlog</strong></td><td><kbd>⇧⌘B</kbd> — markdown in <code>.abydos/backlog/</code> as a list or a board, an item picked up into a worktree of its own; <code>openspec/changes</code> too</td><td>an agent, to hand one to</td></tr>
 	</tbody>
 </table>
 </div>
@@ -247,17 +373,17 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		</tr>
 	</thead>
 	<tbody>
-		<tr><td><strong>Java</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>jdtls</td><td>Maven, Gradle, <code>main</code></td><td>java-debug</td><td class="mid yes">✓</td></tr>
+		<tr><td><strong>Java</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>jdtls, or kmp-lsp<sup>4</sup></td><td>Maven, Gradle, <code>main</code></td><td>java-debug</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Kotlin</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td>jdtls<sup>1</sup></td><td>Gradle, <code>main</code></td><td>java-debug</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Go</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>gopls</td><td><code>go run</code>, make</td><td>Delve</td><td class="mid yes">✓</td></tr>
-		<tr><td><strong>Swift</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>sourcekit-lsp</td><td>make, launch config</td><td>LLDB</td><td class="mid">via make</td></tr>
+		<tr><td><strong>Swift</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>sourcekit-lsp</td><td><code>swift run</code>, <code>swift test</code>, make</td><td>LLDB</td><td class="mid">via make</td></tr>
 		<tr><td><strong>Rust</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>rust-analyzer</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
-		<tr><td><strong>C / C++</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>clangd</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
+		<tr><td><strong>C / C++ / Objective-C</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>clangd</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Zig</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td class="no">—</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Odin</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td class="no">—</td><td>make, launch config</td><td>LLDB</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>Python</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>pyright</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
 		<tr><td><strong>TypeScript / TSX</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>typescript-language-server</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
-		<tr><td><strong>JavaScript</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>typescript-language-server</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
+		<tr><td><strong>JavaScript / JSX</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid yes">✓</td><td>typescript-language-server</td><td>make</td><td class="no">—</td><td class="mid no">—</td></tr>
 		<tr><td><strong>Groovy</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid">build files<sup>2</sup></td><td class="no">—</td><td>Gradle</td><td class="no">—</td><td class="mid no">—</td></tr>
 		<tr><td><strong>Makefile</strong></td><td class="mid">as shell</td><td class="mid yes">✓</td><td class="mid"><span class="yes">✓</span> targets</td><td class="no">—</td><td>every goal</td><td>Go goals</td><td class="mid yes">✓</td></tr>
 		<tr><td><strong>JSON</strong></td><td class="mid yes">✓</td><td class="mid yes">✓</td><td class="mid no">—</td><td>vscode-json-language-server</td><td class="no">—</td><td class="no">—</td><td class="mid no">—</td></tr>
@@ -280,13 +406,31 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 	are the ones that query names. Where it does not, they are derived from the parse
 	tree: any node spanning more than one line. The derived set is the larger of the
 	two and the named set is the tidier, which is a difference in taste rather than
-	in support.
+	in support.<br>
+	<sup>4</sup> Two servers, and a project says which in <code>.abydos/tools.json</code>.
+	jdtls is the default and is type-aware: it reads the build file for the
+	classpath, so it knows a call has the wrong argument type — and importing a
+	five-hundred-bundle reactor is minutes and gigabytes first. kmp-lsp indexes
+	source instead, with no JVM and no type checking at all. On Eclipse's
+	<code>eclipse.platform.ui</code> — 143 bundles, 7,566 files — it was answering
+	go-to-definition across bundles at 2.6 seconds, where jdtls on the same symbol
+	was still silent at ten minutes holding 3.97 GB. Debugging works either way:
+	jdtls is started for the debugger alone when you press Debug.
+</p>
+<p>
+	PlantUML, Mermaid and draw.io are not in the table, because what there is to
+	say about a diagram is that it is drawn rather than that it is coloured. A
+	<code>.puml</code> is served by <code>plantuml-lsp</code> all the same, the way
+	a <code>.scad</code> is by <code>openscad-lsp</code>.
 </p>
 <p>
 	Nothing is bundled. A language server, a debugger and a build tool each have
 	opinions about your toolchain, and the ones already on your machine are the
 	right ones — so what is missing is named in a bar at the top of the editor,
-	with the one command that installs it.
+	with the one command that installs it. Where more than one server answers for
+	a language, the project says which it wants and where it comes from — installed
+	here, or an image — and the footer says which one actually answered and what
+	chose it: the project's file, your settings, or this app's own default.
 </p>
 <p>
 	And nothing has to be installed for a project to be <em>read</em>. What a build
@@ -319,6 +463,12 @@ og_description: A terminal-first IDE for AI and cloud development. Agents as fir
 		<p><code>brew install jdtls</code>. Each project gets an index of its own,
 		   and the JDKs installed on the machine are reported to it, so a module
 		   targeting 17 compiles against 17.</p>
+		<p>Or the other one. A repository that is five hundred bundles can say
+		   <code>{"languages": {"java": "kmp-lsp"}}</code> and get a syntactic server
+		   that has the whole thing navigable in seconds — no JVM, no reactor import,
+		   and no type checking at all. It is a trade, it is written down where the
+		   choice is made, and Debug still starts jdtls, because the classpath is
+		   only there.</p>
 	</div>
 	<div class="card">
 		<h3>Maven and Gradle</h3>

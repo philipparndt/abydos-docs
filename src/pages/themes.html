@@ -1,6 +1,6 @@
 ---
 title: Themes — Abydos
-description: The three themes Abydos ships with, each in light and dark — the app's own amber one, the blue-grey it started with, and Dracula at upstream's own values — photographed on the same project, with the colours they are built from.
+description: The three themes Abydos ships with, each in light and dark — the app's own amber one, the blue-grey it started with, and Dracula at upstream's own values — photographed on the same project, with the colours they are built from, and how to write one of your own.
 og_title: Abydos themes
 og_description: Three themes, each with a light and a dark: abydos, abydos-light, dusk, daylight, dracula and its daylight half Alucard, photographed on one project with the palette each is built from.
 ---
@@ -32,8 +32,9 @@ og_description: Three themes, each with a light and a dark: abydos, abydos-light
 <p>
 	Every picture on this page was taken by <code>make theme-shots</code>, which
 	runs the app once per palette with <code>--theme</code> and captures the window.
-	The colours listed under each are read out of the app's own
-	<code>Theme.swift</code>, so what is named here is what is drawn.
+	The colours listed under each are read out of the scheme the app ships —
+	<code>abydos.json</code>, <code>blue.json</code>, <code>dracula.json</code> — so
+	what is named here is what is drawn.
 </p>
 
 <div class="theme">
@@ -58,7 +59,7 @@ og_description: Three themes, each with a light and a dark: abydos, abydos-light
 		<li><b style="background:#FFE0AC"></b><span>#FFE0AC</span> core light</li>
 		<li><b style="background:#F7B44E"></b><span>#F7B44E</span> amber</li>
 		<li><b style="background:#D97F18"></b><span>#D97F18</span> ember</li>
-		<li><b style="background:#8E4A14"></b><span>#8E4A14</span> sandstone</li>
+		<li><b style="background:#4A2C0E"></b><span>#4A2C0E</span> selection</li>
 		<li><b style="background:#9FB37A"></b><span>#9FB37A</span> string</li>
 	</ul>
 	<figure>
@@ -253,4 +254,42 @@ og_description: Three themes, each with a light and a dark: abydos, abydos-light
 	thing most people actually want, the warm palette following the light, was the
 	one combination there was no way to ask for. Five entries saying four things,
 	and still not the one that mattered.
+</p>
+
+<h2>One of your own</h2>
+<p>
+	A scheme is a file, and each of the three above is one:
+	<code>abydos.json</code>, <code>blue.json</code>, <code>dracula.json</code>. Two
+	sections — <code>app</code> for the editor and its chrome, <code>terminal</code>
+	for the terminal — and every colour a light/dark pair, so a palette is one thing
+	to read rather than four places in two source files.
+</p>
+<p>
+	Yours goes in <code>~/.config/abydos/schemes</code>, which is read at every
+	start. Dropping a file in there is the whole of adding a palette, and one
+	carrying the same <code>id</code> as a shipped scheme replaces it — so the amber
+	one can be adjusted rather than copied.
+</p>
+<pre>{
+  "id": "nord",
+  "title": "Nord",
+  "app": {
+    "windowBackground": { "light": "#F7F8FA", "dark": "#1A1C21" },
+    "syntax": { "keyword": { "light": "#0033B3", "dark": "#D8926B" } }
+  },
+  "terminal": {
+    "ansi": { "black": { "light": "#2B2D30", "dark": "#1D1F21" } }
+  }
+}</pre>
+<p class="foot-note">
+	Abbreviated: every role, every syntax kind and all sixteen ANSI colours have to
+	be there, both halves of each pair, each <code>#RRGGBB</code>. A file missing one
+	is not loaded at all, and the key and the file are named in
+	<code>~/Library/Logs/Abydos/schemes.log</code>. The alternative was to fill the
+	gap in from somewhere, and a theme applied nine-tenths of the way is diagnosed by
+	staring at a window and wondering, while a forgotten key and an unread file look
+	exactly alike. Three keys may be left out, each with a stated derivation rather
+	than a silent default: they arrived after people already kept schemes in a
+	dotfiles repository, and requiring them would have refused every one of those for
+	having been written first.
 </p>
