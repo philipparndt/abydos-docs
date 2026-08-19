@@ -36,7 +36,12 @@ done
 # grid. Prefixed, because `abydos.png` under images/themes/ and a tile called
 # `abydos.png` in one flat directory would be two different pictures with one
 # name the day another set arrives.
-for picture in images/themes/abydos.png; do
+#
+# Both lightnesses, because the tile that stands for the themes page must not be
+# in the theme every other tile is already in: eight amber windows and a ninth
+# amber window says nothing about palettes. The page uses the daylight one, which
+# is the one that differs at a glance rather than on inspection.
+for picture in images/themes/abydos.png images/themes/daylight.png; do
 	thumb "$picture" "themes-$(basename "$picture")"
 done
 echo "==> thumbnails at ${WIDTH}px"

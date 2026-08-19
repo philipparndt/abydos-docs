@@ -88,6 +88,13 @@ figcaption { color: var(--dim); font-size: .88rem; margin-top: .5rem; text-align
 	aspect-ratio: 16 / 10;
 	object-fit: cover;
 	object-position: center top;
+	/* And `height: auto` is load-bearing, not tidiness. The build writes the
+	   PNG's own `width` and `height` onto the tag so the page does not jump as
+	   the pictures load, and those attributes are presentational hints — they
+	   set the CSS `height`, and `aspect-ratio` only decides a height that is
+	   `auto`. Without this line the popover tile drew 539px tall and took its
+	   whole row out of line with it. */
+	height: auto;
 }
 .tile-text { padding: .85rem 1rem 1rem; }
 .tile h3 { margin: 0 0 .3rem; font-size: 1rem; color: var(--head); }
