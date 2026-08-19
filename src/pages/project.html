@@ -102,6 +102,58 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 	control, and choosing one opens it as a project.
 </p>
 
+<h2>The terminal and the project follow each other</h2>
+<p>
+	The two halves of the window are tied together in both directions, and each
+	direction is one sentence with a good deal of care behind it.
+</p>
+<h3>The window follows the terminal</h3>
+<p>
+	<strong>Follow the terminal's project</strong>, in Settings, and off until it is
+	asked for: when the shell in the pane in front moves to another project, the
+	window changes to that project. New windows start the way the setting says, and
+	each window can still be switched by hand afterwards — so it is a default for
+	new windows rather than a rule about all of them.
+</p>
+<p>
+	What makes it bearable to leave switched on is what does <em>not</em> count as
+	moving. <code>cd Sources</code> is somebody going about their work rather than
+	somebody leaving, so a directory inside the project changes nothing — and
+	<em>inside the project</em> is not the same as inside the repository around it.
+	A project opened at a subdirectory of a checkout — a package in a monorepo, one
+	example in a folder of them — has a repository above it that answers for every
+	directory in it, including its own. Reading "which repository is this directory
+	in" as "where has the shell gone" made every such project throw itself away for
+	the checkout about a second after it was opened, for a shell sitting exactly
+	where the window had put it, and nothing said so.
+</p>
+<p>
+	So the question is asked about the project rather than the repository: a
+	directory inside it is not a move, only a directory outside it is, and a
+	directory belonging to no repository at all leaves the window where it is. A
+	shell that really walks out — <code>cd ..</code> into the checkout, or into
+	anything else — is followed, because that is a person navigating.
+</p>
+<p>
+	And the window arrives with what that project had. A switch captures the editor
+	session, the terminals, the tmux window, which subproject was open, the selected
+	run configuration, where each Xcode scheme last went and the breakpoints — and
+	restores the same seven for the project being opened. Going and coming back is
+	not a reset.
+</p>
+<h3>The terminal reaches the window</h3>
+<p>
+	<code>abydos some-file.md</code>, typed in one of these panes, opens that file
+	in the editor of <em>this</em> window and puts the keyboard in it. The pane's
+	own file descriptor is what says which window asked — nothing is installed, no
+	port is listened on, and no lock file is written — and
+	<a href="terminal.html">the terminal page</a> has the mechanism.
+</p>
+<p>
+	The backlog goes the same way: a card offers to open its item's worktree as a
+	project, or a shell already in it.
+</p>
+
 <h2>Lists you work through</h2>
 <div class="cards">
 	<div class="card">
