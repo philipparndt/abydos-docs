@@ -35,21 +35,13 @@ og_description: Makefile goals, Maven, Gradle, Bazel, Conan, Swift packages and 
 	<strong>And every one of them is read rather than run.</strong>
 	<code>bazel query</code> is the more correct way to ask what targets exist, and
 	it is also a build-graph load that wants Bazel installed and can take a minute —
-	too long to spend filling in a menu, and a lock on the output base that would
-	leave this and somebody's build waiting on each other. A
-	<code>conanfile.py</code> is a Python program and a <code>Package.swift</code>
-	is a Swift one; asking either means compiling and running somebody's build
-	script to draw a menu. So the text is read, and what reading cannot see — an
-	executable whose name is computed rather than written — is an entry missing
-	rather than an entry that does not work, which is the right way round.
-</p>
-<p>
-	The cost of asking was measured rather than assumed:
-	<code>swift package dump-package</code> takes 0.74 to 0.92 seconds per manifest,
-	warm cache or cold, on a search that runs once per directory three deep and
-	again on every write that could change the answer — and it writes a
-	<code>.build</code> directory into the project as a side effect, so merely
-	looking at what a project can run would leave build output in it.
+	too long to spend filling in a menu. A <code>conanfile.py</code> is a Python
+	program and a <code>Package.swift</code> is a Swift one; asking either means
+	compiling and running somebody's build script to draw a menu, and
+	<code>swift package dump-package</code> writes a <code>.build</code> directory
+	into the project as a side effect. So the text is read, and what reading cannot
+	see — an executable whose name is computed rather than written — is an entry
+	missing rather than an entry that does not work.
 </p>
 
 <h2>Breakpoints that are more than a place</h2>

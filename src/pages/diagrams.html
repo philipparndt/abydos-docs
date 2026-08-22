@@ -17,18 +17,16 @@ og_description: A .puml, a .mmd and a .drawio open with the drawing beside the s
 <figure>
 	<img src="images/diagram.png" alt="Abydos showing project.mmd: the Mermaid source of an entity-relationship diagram on the left, and the diagram itself drawn on the right."
 	     loading="lazy">
-	<figcaption>Mermaid, drawn in the app. The diagram is in the app's own colours
-	   rather than Mermaid's default white, which is the difference between a
-	   picture you can look at in a dark window and one you squint past.</figcaption>
+	<figcaption>Mermaid, drawn in the app — in the app's own colours rather than
+	   Mermaid's default white.</figcaption>
 </figure>
 
 <h2>Mermaid, without a browser to install</h2>
 <p>
 	Mermaid is JavaScript, and every command-line form of it is a headless Chromium.
 	So the real Mermaid is here instead — 3.6 MB of it, in a web view inside the
-	app — against the 2.16 GB a container would have cost. Nothing to install,
-	nothing to start, and no first diagram that takes a minute while an image comes
-	down.
+	app — against the 2.16 GB a container would have cost. Nothing to install and
+	nothing to start.
 </p>
 <p>
 	<strong>What it hands back is flattened before it is shown or written.</strong>
@@ -37,15 +35,13 @@ og_description: A .puml, a .mmd and a .drawio open with the drawing beside the s
 	expected to place. The pane draws through CoreSVG and the exported PNG is
 	rasterised by WebKit, so anything left in the file that needs a browser draws
 	one picture on screen and a different one in the file somebody sends on. Every
-	style is resolved onto the shape it paints, every arrowhead and every row of
-	text put where the browser measured it — and the two renderers are held to
+	style is resolved onto the shape it paints, and the two renderers are held to
 	differing over less than a tenth of the page.
 </p>
 <p>
 	Mermaid's own layout is in the bundle; the others are separate packages and none
 	is shipped. Asked for one of them Mermaid does not refuse — it lays the diagram
-	out its own way and says nothing, so a diagram arranged differently from the way
-	its author asked would be the only sign. One line under the drawing says which
+	out its own way and says nothing — so one line under the drawing says which
 	layout was asked for and what was drawn instead.
 </p>
 
@@ -54,29 +50,24 @@ og_description: A .puml, a .mmd and a .drawio open with the drawing beside the s
 	Not a viewer. The shapes are dragged in the tab, with draw.io's own palette and
 	its own stencils, and the document stays the app's: the tab's edited dot,
 	<kbd>⌘S</kbd>, the close-without-saving prompt, auto-save and the file watcher
-	all go on working with nothing added to them. Dirty state is immediate rather
-	than every second and a half, because the graph model's own change event is
-	what is listened to rather than draw.io's autosave timer — so the dot appears
-	when the shape is dropped.
+	all go on working. Dirty state is immediate, because the graph model's own
+	change event is what is listened to rather than draw.io's autosave timer.
 </p>
 <p>
 	<strong>The file is written back the way it came.</strong> A compressed document
-	stays compressed and a plain one stays plain; a diff full of noise is how people
-	stop trusting an editor. Undo stays draw.io's — <kbd>⌘Z</kbd> reaches the web
-	view and mxGraph's undo manager handles it — which is also why a
-	<code>.drawio</code> opens as the drawing with no source half at all.
+	stays compressed and a plain one stays plain. Undo stays draw.io's —
+	<kbd>⌘Z</kbd> reaches the web view and mxGraph's undo manager handles it — which
+	is also why a <code>.drawio</code> opens as the drawing with no source half at
+	all.
 </p>
 
 <h2>PlantUML</h2>
 <p>
 	A <code>.puml</code> is drawn by PlantUML, which is a JVM and is the one of the
 	three that needs something on the machine — installed, or out of an image the
-	project names. It is kept warm rather than started per diagram: a container and
-	a JVM per keystroke is a preview nobody waits for.
-</p>
-<p>
-	It is also served, by <code>plantuml-lsp</code>, so a <code>.puml</code> gets
-	completion and problems like any other file with a server behind it.
+	project names. It is kept warm rather than started per diagram. It is also
+	served, by <code>plantuml-lsp</code>, so a <code>.puml</code> gets completion and
+	problems like any other file with a server behind it.
 </p>
 
 <h2>Whatever is drawn, the same three rules</h2>
@@ -86,40 +77,33 @@ og_description: A .puml, a .mmd and a .drawio open with the drawing beside the s
 		<p>A diagram is drawn in the app's theme rather than in the tool's default
 		   white, so a dark window does not hold one white rectangle. A file that
 		   sets its own colours keeps them, and is told in one line under the
-		   drawing that it did — the same place, and the same kind of sentence, as
-		   the one about a missing layout.</p>
+		   drawing that it did.</p>
 	</div>
 	<div class="card">
 		<h3>Exported as SVG or PNG, and no more</h3>
-		<p>Two formats, because they are the two a menu can offer without becoming
-		   a dialogue: SVG for anything that will be looked at or scaled, PNG for
-		   anything pasted into something that cannot read a drawing. One menu
-		   across all three tools — in the preview and in the tree.</p>
+		<p>SVG for anything that will be looked at or scaled, PNG for anything
+		   pasted into something that cannot read a drawing. One menu across all
+		   three tools — in the preview and in the tree.</p>
 		<p>PlantUML never fails on a diagram: one it cannot parse comes back as a
 		   <em>picture of the complaint</em>. Right for a preview, and wrong for an
-		   export, which would otherwise write <code>diagram.png</code>, report
-		   success, and leave a picture of an error message in somebody's
-		   repository. So both routes are asked for the complaint as well as the
-		   picture.</p>
+		   export that would write <code>diagram.png</code>, report success, and
+		   leave a picture of an error message in somebody's repository. So both
+		   routes are asked for the complaint as well as the picture.</p>
 	</div>
 	<div class="card">
 		<h3>A pane with no picture says why</h3>
 		<p>A diagram pane is a picture or it is a sentence: nothing while a tool
 		   runs, nothing for a file with nothing drawable in it yet, nothing for a
 		   diagram the tool refuses. The message is wrapped rather than elided —
-		   what to install, or what the parser expected and on which line, is a
-		   sentence somebody wrote to be read — and the turning indicator sits
-		   above it rather than through it.</p>
+		   what to install, or what the parser expected and on which line.</p>
 	</div>
 </div>
 
 <h2>And in a markdown file</h2>
 <p>
 	A fenced block is drawn where it stands, by whichever of the three the fence
-	names, so a document explaining a thing shows the thing. The
-	<code>Export ▸</code> menu is offered over a markdown file only when there is
-	actually a diagram in it — an export beside every <code>.md</code> in a
-	repository is a menu item that is wrong far more often than right.
+	names. The <code>Export ▸</code> menu is offered over a markdown file only when
+	there is actually a diagram in it.
 </p>
 
 <p class="foot-note">
@@ -127,7 +111,5 @@ og_description: A .puml, a .mmd and a .drawio open with the drawing beside the s
 	draw.io, and PlantUML is the same jar it always was — what Abydos decides is
 	when to run them, what to do with what they hand back, and what to say when
 	they will not. The same division as
-	<a href="3d-modelling.html">the 3D modelling</a>, for the same reason: a
-	picture is worth having because the tool that made it is the one everybody
-	else's pictures came from.
+	<a href="3d-modelling.html">the 3D modelling</a>.
 </p>

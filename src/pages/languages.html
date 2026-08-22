@@ -61,18 +61,15 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 	<sup>1</sup> jdtls answers for <code>.java</code>. A Kotlin file is highlighted
 	and folded but not served, and its <code>main</code> functions are still found,
 	run and debugged — the JVM does not care which language produced the class.<br>
-	<sup>2</sup> A <code>pom.xml</code> or Gradle build file has no server, and its
-	grammar knows nothing about modules — so <kbd>⇧⌘O</kbd> over one is answered by
-	that build file's own parser: modules, plugins, dependencies, tasks.<br>
+	<sup>2</sup> A <code>pom.xml</code> or Gradle build file has no server, so
+	<kbd>⇧⌘O</kbd> over one is answered by that build file's own parser: modules,
+	plugins, dependencies, tasks.<br>
 	<sup>3</sup> Every language folds, by one of two routes. Where the grammar ships
 	a <code>folds.scm</code> — or one is written here, as Java's is — the fold points
 	are the ones that query names. Where it does not, they are derived from the parse
-	tree: any node spanning more than one line. The derived set is the larger of the
-	two and the named set is the tidier, which is a difference in taste rather than
-	in support.<br>
+	tree: any node spanning more than one line.<br>
 	<sup>4</sup> Two servers, and a project says which in <code>.abydos/tools.json</code>.
-	jdtls is the default and is type-aware: it reads the build file for the
-	classpath, so it knows a call has the wrong argument type — and importing a
+	jdtls is type-aware — it reads the build file for the classpath — and importing a
 	five-hundred-bundle reactor is minutes and gigabytes first. kmp-lsp indexes
 	source instead, with no JVM and no type checking at all. On Eclipse's
 	<code>eclipse.platform.ui</code> — 143 bundles, 7,566 files — it was answering
@@ -91,20 +88,10 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 	file offers comes out of the file, not out of the tool: a <code>BUILD</code>
 	file's <code>*_binary</code> and <code>*_test</code> rules are the targets, and
 	which Conan commands make sense follows from whether there is a
-	<code>conanfile.py</code> or only a <code>conanfile.txt</code> — a list of
-	dependencies has nothing to build, so it is not offered. <code>bazel query</code>
-	would be the more correct answer and is also a build-graph load that wants
-	Bazel present and can take a minute, which is too long to spend filling in a
-	menu. Neither recipe is executed to ask it what it contains. The commands are
-	the tools' own, so running one without the tool fails the way it always does,
-	rather than in a way this has to explain.
+	<code>conanfile.py</code> or only a <code>conanfile.txt</code>. Neither recipe is
+	executed to ask it what it contains, so running a command without its tool fails
+	the way it always does rather than in a way this has to explain.
 </p>
-
-<figure>
-	<img src="images/java.png" alt="Abydos with a Maven project open: the navigator on the left, a Java source file with syntax highlighting in the editor."
-	     loading="lazy">
-	<figcaption>A Maven project, opened as it comes.</figcaption>
-</figure>
 
 <h2>Java, in full</h2>
 <p>
@@ -120,9 +107,8 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 		<p>Or the other one. A repository that is five hundred bundles can say
 		   <code>{"languages": {"java": "kmp-lsp"}}</code> and get a syntactic server
 		   that has the whole thing navigable in seconds — no JVM, no reactor import,
-		   and no type checking at all. It is a trade, it is written down where the
-		   choice is made, and Debug still starts jdtls, because the classpath is
-		   only there.</p>
+		   and no type checking at all. Debug still starts jdtls, because the
+		   classpath is only there.</p>
 	</div>
 	<div class="card">
 		<h3>Maven and Gradle</h3>
@@ -143,6 +129,7 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 		   has done anything — which is the only way to debug a worker.</p>
 	</div>
 </div>
+
 <h2>Which server, and where from</h2>
 <p>
 	Where more than one server answers for a language, the project says which it
@@ -153,23 +140,17 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
   "kmp-lsp": "pharndt/abydos-kmp-lsp:dev"
 }</pre>
 <p>
-	Two questions and they stay two questions on the face of the file: <em>which
-	server</em>, and <em>where it comes from</em>. Settings say the same for one
-	person across every project, and the file wins where both speak — a checked-in
-	answer is a statement about the project, and a personal preference that quietly
-	overrode it would mean two people on one repository being answered by two
-	different programs.
+	Two questions, and they stay two on the face of the file: <em>which server</em>,
+	and <em>where it comes from</em>. Settings say the same for one person across
+	every project, and the file wins where both speak — a checked-in answer is a
+	statement about the project.
 </p>
 <p>
 	The footer at the bottom of the editor says which server actually answered and
-	what chose it, because half of what somebody needs when a choice turns out to be
-	wrong is which of the two files to go and edit. A server that is <em>here and
-	not ready</em> says so there too: a Swift package whose dependencies have not
-	been built publishes <code>No such module</code> about thirteen seconds in and
-	withdraws it a minute later, so for that minute the chip reads
-	<code>sourcekit-lsp — preparing</code>. Nothing is hidden while it says that —
-	the errors stay where they are — but a strip claiming the server cannot read the
-	project no longer appears about a server that will answer in thirty seconds.
+	what chose it. A server that is <em>here and not ready</em> says so there too: a
+	Swift package whose dependencies have not been built reads
+	<code>sourcekit-lsp — preparing</code> rather than claiming it cannot read the
+	project. Nothing is hidden while it says that — the errors stay where they are.
 </p>
 
 <h2>The toolchain the project says it wants</h2>
@@ -179,18 +160,17 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 		<p>A checkout carrying a <code>devcontainer.json</code> can have its
 		   language servers run <em>inside</em> that container, so the problems on
 		   screen are the problems from the build rather than from whatever this
-		   Mac happens to have installed. Asked for once per project, at the moment
-		   something needs it, and undone or moved to another of the project's
-		   containers from a pill beside the project's name.</p>
+		   Mac happens to have installed. Asked for once per project, and undone or
+		   moved to another of the project's containers from a pill beside the
+		   project's name.</p>
 	</div>
 	<div class="card">
 		<h3>Or out of an image the project names</h3>
 		<p><code>.abydos/tools.json</code> names an image per tool and is checked
-		   in, so what serves a language in a repository is that repository's
-		   business and a machine that never installed the tool gets the same
-		   answer as everybody else. An image that is not here is fetched before
-		   the tool is first used; one this app ships a recipe for is built on the
-		   machine rather than pulled.</p>
+		   in, so a machine that never installed the tool gets the same answer as
+		   everybody else. An image that is not here is fetched before the tool is
+		   first used; one this app ships a recipe for is built on the machine
+		   rather than pulled.</p>
 	</div>
 	<div class="card">
 		<h3>Pinned, and told before anything starts</h3>
@@ -204,11 +184,9 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 <p class="foot-note">
 	Highlighting and folding are <a href="editor.html">the editor page</a>, and the
 	build tools and debuggers behind the run and debug columns are
-	<a href="run-and-debug.html">the run and debug page</a>. PlantUML, Mermaid and
-	draw.io are not in the table because what there is to say about a diagram is
-	that it is drawn rather than that it is coloured — a <code>.puml</code> is
-	served by <code>plantuml-lsp</code> all the same, the way a <code>.scad</code>
-	is by <code>openscad-lsp</code>. Both have pages of their own:
+	<a href="run-and-debug.html">the run and debug page</a>. A <code>.puml</code> is
+	served by <code>plantuml-lsp</code> and a <code>.scad</code> by
+	<code>openscad-lsp</code>; both have pages of their own:
 	<a href="diagrams.html">diagrams</a> and
 	<a href="3d-modelling.html">3D modelling</a>.
 </p>

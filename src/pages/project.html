@@ -18,24 +18,21 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 	The titlebar is a capsule: which project on the left, which branch on the right,
 	a hairline between them, and <kbd>⇧⌘P</kbd> written on it. Press that and a
 	field opens underneath it, on the thing it is about. The shortcut is VS Code's
-	on purpose — a decade of it has taught everybody's hands where a palette lives,
-	and muscle memory is worth more than a free letter.
+	on purpose.
 </p>
 <div class="cards">
 	<div class="card">
 		<h3>Everything, in one list</h3>
 		<p>Typing searches projects, the branches of the repository that is open,
-		   and the commands. A project opens; a branch is checked out where the
-		   branch menu would have put it; a command runs. Projects are found on
-		   disk as well as in the recents, so the case a switcher exists for —
-		   opening something for the first time — is the case it handles.</p>
+		   and the commands. A project opens; a branch is checked out; a command
+		   runs. Projects are found on disk as well as in the recents, so opening
+		   something for the first time is a case the switcher handles.</p>
 	</div>
 	<div class="card">
 		<h3><code>&gt;</code> for commands, <code>:</code> for a line</h3>
 		<p>VS Code's prefixes, in the same field. <code>&gt;</code> narrows to
 		   commands; <code>:</code> takes a number and puts the caret on that line
-		   of whatever is open. The placeholder says so, because a prefix nobody
-		   knows about is a prefix nobody uses.</p>
+		   of whatever is open, and the placeholder says so.</p>
 	</div>
 	<div class="card">
 		<h3>The menu bar is the list</h3>
@@ -77,13 +74,10 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 	Gradle, Bazel and Conan.
 </p>
 <p>
-	Read off what is already on disk. No <code>cargo metadata</code>, no
-	<code>npm ls</code>, no <code>mvn dependency:list</code>, and not Gradle, which
-	was expected to be the kind that forced the rule and turned out to be the kind
-	that needs it least. A lock file that cannot be made sense of says so — a Conan
-	1 <code>conan.lock</code>, a <code>pnpm-lock.yaml</code> with no version — which
-	is a different sentence from a project that genuinely depends on nothing, and
-	both are better than an empty list.
+	Read off what is already on disk: no <code>cargo metadata</code>, no
+	<code>npm ls</code>, no <code>mvn dependency:list</code>. A lock file that cannot
+	be made sense of says so, which is a different sentence from a project that
+	genuinely depends on nothing.
 </p>
 
 <h2>Git, as the folders it changed</h2>
@@ -103,43 +97,28 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 </p>
 
 <h2>The terminal and the project follow each other</h2>
-<p>
-	The two halves of the window are tied together in both directions, and each
-	direction is one sentence with a good deal of care behind it.
-</p>
 <h3>The window follows the terminal</h3>
 <p>
 	<strong>Follow the terminal's project</strong>, in Settings, and off until it is
 	asked for: when the shell in the pane in front moves to another project, the
 	window changes to that project. New windows start the way the setting says, and
-	each window can still be switched by hand afterwards — so it is a default for
-	new windows rather than a rule about all of them.
+	each window can still be switched by hand afterwards.
 </p>
 <p>
 	What makes it bearable to leave switched on is what does <em>not</em> count as
-	moving. <code>cd Sources</code> is somebody going about their work rather than
-	somebody leaving, so a directory inside the project changes nothing — and
-	<em>inside the project</em> is not the same as inside the repository around it.
-	A project opened at a subdirectory of a checkout — a package in a monorepo, one
-	example in a folder of them — has a repository above it that answers for every
-	directory in it, including its own. Reading "which repository is this directory
-	in" as "where has the shell gone" made every such project throw itself away for
-	the checkout about a second after it was opened, for a shell sitting exactly
-	where the window had put it, and nothing said so.
-</p>
-<p>
-	So the question is asked about the project rather than the repository: a
-	directory inside it is not a move, only a directory outside it is, and a
-	directory belonging to no repository at all leaves the window where it is. A
-	shell that really walks out — <code>cd ..</code> into the checkout, or into
-	anything else — is followed, because that is a person navigating.
+	moving. <code>cd Sources</code> is somebody going about their work, so a
+	directory inside the project changes nothing — and <em>inside the project</em>
+	is not the same as inside the repository around it, since a project opened at a
+	subdirectory of a checkout has a repository above it that answers for every
+	directory in it. So the question is asked about the project: a directory outside
+	it is a move, a directory belonging to no repository at all leaves the window
+	where it is, and a shell that walks out into something else is followed.
 </p>
 <p>
 	And the window arrives with what that project had. A switch captures the editor
 	session, the terminals, the tmux window, which subproject was open, the selected
 	run configuration, where each Xcode scheme last went and the breakpoints — and
-	restores the same seven for the project being opened. Going and coming back is
-	not a reset.
+	restores the same seven for the project being opened.
 </p>
 <h3>The terminal reaches the window</h3>
 <p>
@@ -147,11 +126,9 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 	in the editor of <em>this</em> window and puts the keyboard in it. The pane's
 	own file descriptor is what says which window asked — nothing is installed, no
 	port is listened on, and no lock file is written — and
-	<a href="terminal.html">the terminal page</a> has the mechanism.
-</p>
-<p>
-	The backlog goes the same way: a card offers to open its item's worktree as a
-	project, or a shell already in it.
+	<a href="terminal.html">the terminal page</a> has the mechanism. The backlog
+	goes the same way: a card offers to open its item's worktree as a project, or a
+	shell already in it.
 </p>
 
 <h2>Lists you work through</h2>
@@ -163,9 +140,7 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 		   you look at them, several at a time, struck through where they stand
 		   while the heading counts off <code>2/3</code>.</p>
 		<p>It touches nothing on disk, <kbd>⌘Z</kbd> takes back the last marking,
-		   and a mark survives the search being run again — so a file that gains
-		   one new match comes back with that match under it rather than staying
-		   finished.</p>
+		   and a mark survives the search being run again.</p>
 	</div>
 	<div class="card">
 		<h3>And keep the keyboard</h3>
@@ -183,10 +158,9 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 		   moves the same files. No database and no server, so the three cannot
 		   disagree about where an item stands.</p>
 		<p>An item picked up gets a worktree of its own, and its card reads the
-		   checklist and the estimate out of <em>that</em> checkout —
-		   <code>3/6 in the worktree</code>. The card opens it as a project, or a
-		   shell in it. A project keeping <code>openspec/changes</code> instead is
-		   shown that, from the same button.</p>
+		   checklist out of <em>that</em> checkout — <code>3/6 in the
+		   worktree</code>. A project keeping <code>openspec/changes</code> instead
+		   is shown that, from the same button.</p>
 	</div>
 </div>
 

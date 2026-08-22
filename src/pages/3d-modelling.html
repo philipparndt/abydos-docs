@@ -8,19 +8,16 @@ og_description: A .scad, a Cadova model in Swift and a go3mf recipe, each shown 
 	<a class="back" href="index.html">← Abydos</a>
 	{{ include partials/icon.svg }}
 	<h1>3D Modelling</h1>
-	<p class="tagline">Some files are written in order to make something else. A
-	   <code>.puml</code> is written to make a diagram; a <code>.scad</code>, and the
-	   Swift in a Cadova model, are written to make a shape. For those the work is
-	   checking one against the other, so both halves are on screen from the moment
-	   the file opens and neither has to be asked for.</p>
+	<p class="tagline">A <code>.scad</code>, and the Swift in a Cadova model, are
+	   written in order to make a shape. The work is checking one against the
+	   other, so both halves are on screen from the moment the file opens.</p>
 </header>
 
 <p>
 	Nothing here is a format this app parses. A <code>.scad</code> is rendered by
 	OpenSCAD, a Cadova model by building and running the program it is, and a recipe
-	by <code>go3mf</code> — each by the tool whose file it is, so what you see is
-	what that tool makes and not this app's reading of it. What Abydos adds is when
-	to run them, where to put what they write, and what to show when they fail.
+	by <code>go3mf</code> — each by the tool whose file it is. What Abydos adds is
+	when to run them, where to put what they write, and what to show when they fail.
 </p>
 
 <h2>Four kinds of file</h2>
@@ -59,10 +56,10 @@ og_description: A .scad, a Cadova model in Swift and a go3mf recipe, each shown 
 </table>
 </div>
 <p>
-	Nearly always the name decides. Where it cannot, the file is not guessed at from
-	a distance: the one question that needs an answer is asked once, when the file is
-	opened, and everything afterwards is told rather than asked — so the tab bar's
-	control, the View menu and the editor cannot disagree about what a file is.
+	Nearly always the name decides. Where it cannot, the one question that needs an
+	answer is asked once, when the file is opened, and everything afterwards is told
+	rather than asked — so the tab bar's control, the View menu and the editor cannot
+	disagree about what a file is.
 </p>
 
 <figure>
@@ -70,58 +67,49 @@ og_description: A .scad, a Cadova model in Swift and a go3mf recipe, each shown 
 	     loading="lazy">
 	<figcaption>A <code>.scad</code> and what OpenSCAD makes of it, in one window.
 	   The footer names <code>openscad-lsp</code>, which is answering for the file
-	   on the left while OpenSCAD renders the shape on the right — two programs,
-	   neither of them this one.</figcaption>
+	   on the left while OpenSCAD renders the shape on the right.</figcaption>
 </figure>
 
 <h2>OpenSCAD</h2>
 <p>
 	A <code>.scad</code> opens split, model on the right, and re-renders when the
 	file is saved. <code>openscad-lsp</code> answers for it like any other language
-	server — completion, problems, and <kbd>⇧⌘O</kbd> over the file — which is worth
-	saying because OpenSCAD has no manifest to look for. A model is a file and a
-	project is a directory of them, so anywhere a <code>.scad</code> is opened is a
-	place that server can answer.
+	server — completion, problems, and <kbd>⇧⌘O</kbd> over the file. OpenSCAD has no
+	manifest to look for: a model is a file and a project is a directory of them, so
+	anywhere a <code>.scad</code> is opened is a place that server can answer.
 </p>
 
 <h2>Cadova</h2>
 <p>
 	<a href="https://github.com/tomasf/Cadova">Cadova</a> models are written in
-	Swift, and this is the one kind of file here whose question is not "what is in
-	it". Every other preview routes on a name — a <code>.puml</code> is a diagram, an
-	<code>.stl</code> is a mesh — and a <code>.swift</code> says nothing at all,
-	because nearly every <code>.swift</code> ever written is not a model.
-</p>
-<p>
-	So the signal is the manifest, which is the only place that says Cadova out loud,
-	and the unit is the target, which is what gets built and run: <strong>a
-	<code>.swift</code> is a model when the package above it declares an executable
-	target that depends on Cadova and this file is one of that target's
-	sources.</strong> Asking costs a walk up to <code>Package.swift</code> and one
-	read of it — no subprocess, and nothing at all for a file that is not in a
-	package.
+	Swift, and a <code>.swift</code> says nothing about what is in it — nearly every
+	one ever written is not a model. So the signal is the manifest, and the unit is
+	the target, which is what gets built and run: <strong>a <code>.swift</code> is a
+	model when the package above it declares an executable target that depends on
+	Cadova and this file is one of that target's sources.</strong> Asking costs a
+	walk up to <code>Package.swift</code> and one read of it — no subprocess, and
+	nothing at all for a file that is not in a package.
 </p>
 <div class="cards">
 	<div class="card">
 		<h3>The shape is run, not read</h3>
 		<p><code>swift run</code> in the package root writes a 3MF, and that is what
-		   the model half shows. Where it landed can only be learnt from the run —
-		   Cadova names the file after the model inside the code rather than after
-		   the target — so the pane reads the path out of what the run printed.</p>
+		   the model half shows. Cadova names the file after the model inside the
+		   code rather than after the target, so the pane reads the path out of what
+		   the run printed.</p>
 	</div>
 	<div class="card">
 		<h3>It says what it is doing</h3>
 		<p>A build takes seconds and can fail, so the pane carries the build's own
-		   last line while it goes — one line, truncated in the middle, with the
-		   indicator above it rather than through it — and shows what the compiler
-		   said in place of a shape that would not be the one the code describes.</p>
+		   last line while it goes, and shows what the compiler said in place of a
+		   shape that would not be the one the code describes.</p>
 	</div>
 	<div class="card">
 		<h3>Every source counts</h3>
 		<p>Running the target is what makes the shape, so a helper file changes it
 		   as much as the one with <code>Model("hexholder")</code> in it. The pane
-		   watches all of them, and watches them <em>on disk</em>, because the
-		   compiler reads the disk and an unsaved buffer would show the last save.</p>
+		   watches all of them <em>on disk</em>, because the compiler reads the disk
+		   and an unsaved buffer would show the last save.</p>
 	</div>
 	<div class="card">
 		<h3>A burst of saves is one rebuild</h3>
@@ -136,66 +124,45 @@ og_description: A .scad, a Cadova model in Swift and a go3mf recipe, each shown 
 		   leaves the view alone. Turning the part round to look at what changed is
 		   the work, and a viewer rebuilt from nothing would put the camera back.</p>
 	</div>
-	<div class="card">
-		<h3>And the Finder stays down</h3>
-		<p>Cadova reveals what it wrote when a build finishes, which is friendly
-		   from a terminal and hostile from a pane that rebuilds on every save. The
-		   run is given <code>CADOVA_REVEAL_FILES=0</code>, which is upstream's own
-		   switch — so a model from somebody else's repository previews quietly
-		   without having heard of this app.</p>
-	</div>
 </div>
 
 <figure>
 	<img src="images/cadova.png" alt="Abydos showing a Cadova model: the whole of coaster/main.swift on the left — a circle, extruded with a chamfer, with a second circle subtracted from it — and the rendered coaster on the right."
 	     loading="lazy">
-	<figcaption>The whole program, and the shape it makes. Four constants and three
-	   operations — a circle, extruded with a chamfered top, with a shallower circle
-	   subtracted out of it — and nothing in the project says this file is a model:
-	   the tree shows <code>Sources/coaster/main.swift</code> like any other source,
-	   and the manifest one level up is what decided it.</figcaption>
+	<figcaption>The whole program, and the shape it makes. Nothing in the project
+	   says this file is a model: the tree shows
+	   <code>Sources/coaster/main.swift</code> like any other source, and the
+	   manifest one level up is what decided it.</figcaption>
 </figure>
 
 <h2>go3mf recipes</h2>
 <p>
 	A recipe is YAML naming the parts of an assembly and the file they are built
-	into. It is the one 3D file here that does <em>not</em> open showing both halves,
-	and both reasons are about cost rather than taste. A recipe is an assembly, so
-	its model is every part's render and a <code>go3mf build</code> on top of them,
-	which is the slowest preview this program has. And whether the file is a recipe
-	at all was decided by reading the head of it — a default that starts that work
-	off the back of a guess is a default that makes opening YAML feel dangerous.
-</p>
-<p>
+	into. It is the one 3D file here that does <em>not</em> open showing both halves.
+	A recipe is an assembly, so its model is every part's render and a
+	<code>go3mf build</code> on top of them — the slowest preview this program has —
+	and whether the file is a recipe at all was decided by reading the head of it.
 	So a recipe opens as its text, with the model offered beside it rather than
 	drawn. What makes it a recipe is a top-level <code>output:</code> and a top-level
-	<code>objects:</code> in the first 8 KB; a repository's other YAML — workflows,
-	compose files, Helm charts — is text and is offered no model at all.
+	<code>objects:</code> in the first 8 KB; a repository's other YAML is text and is
+	offered no model at all.
 </p>
 <p>
 	<strong>Showing a file never modifies what it is showing.</strong> A recipe names
-	the file it produces, and rendering one therefore has somewhere it wants to put a
-	<code>.3mf</code> — beside the source, quite possibly on top of one made by hand.
-	The render happens in a build directory of the viewer's own instead, so the file
-	next to the recipe is left as it is. A recipe whose <code>output:</code> is an
-	absolute path, or climbs out with <code>..</code>, has no such directory that can
-	contain it: that one is not rendered, and the pane says why, rather than being
-	rendered somewhere it was not asked to go.
+	the file it produces, quite possibly on top of one made by hand, so the render
+	happens in a build directory of the viewer's own instead. A recipe whose
+	<code>output:</code> is an absolute path, or climbs out with <code>..</code>, has
+	no such directory that can contain it: that one is not rendered, and the pane
+	says why.
 </p>
 
 <h2>Nothing renders until somebody looks at it</h2>
 <p>
-	Rendering a model means running something — OpenSCAD for a <code>.scad</code>, a
-	whole package build for a Cadova model — and it is the tab in front that is worth
-	paying for. So a viewer is built, and any program it needs is started, when the
-	pane has been on screen long enough to mean it, and never merely because a tab
-	exists.
-</p>
-<p>
-	Walking a directory of twenty models from top to bottom renders none of them, and
-	pausing on one renders that one. Twenty opened together — from a search result,
-	or a session restored at launch — render one: the tab in front. A Cadova model
-	behind another tab starts no build and writes no model at all.
+	A viewer is built, and any program it needs is started, when the pane has been on
+	screen long enough to mean it. Walking a directory of twenty models from top to
+	bottom renders none of them, and pausing on one renders that one. Twenty opened
+	together — from a search result, or a session restored at launch — render one:
+	the tab in front.
 </p>
 
 <h2>A model that would not render shows no model</h2>
@@ -206,31 +173,18 @@ og_description: A .scad, a Cadova model in Swift and a go3mf recipe, each shown 
 	being installed is the command that installs it.
 </p>
 <p>
-	Nothing is a deliberate answer rather than an absence of one. The alternative was
-	a lit cube on the build plate, which is what this pane used to fall back to, and
-	it is worse than an empty pane in the one way that matters: somebody who did not
-	write the file cannot tell that the shape on screen is not the shape their code
-	describes. A message alone does not settle it either, because this pane is
-	captured through the viewer's own snapshot, which sees the scene and not the
-	layer above it — so in a screenshot, a bug report, or an agent checking its own
-	work, the shape is the only thing that says whether the load worked.
+	The alternative was a lit cube on the build plate, and somebody who did not write
+	the file cannot tell that such a shape is not the one their code describes.
 	<strong>A shape that is not the model is a lie a picture cannot correct.</strong>
-</p>
-<p>
-	The file is watched even though it never loaded, so the message is a promise the
-	program keeps: repair the source and the model appears where the message was. The
-	Cadova pane reaches the same answer from different code, and the two agree on
-	purpose — which half of the program draws a pane is not something anybody looking
-	at one should be able to tell from how a failure reads.
+	The file is watched even though it never loaded, so repairing the source makes
+	the model appear where the message was.
 </p>
 
 <p class="foot-note">
 	The viewer is <a href="https://github.com/philipparndt/gostl">GoSTL</a>, hosted
-	in an editor tab and pinned at a version rather than taken off whatever copy
-	happens to be on disk. Meshes, the OpenSCAD render and the recipe's assembly all
-	arrive in it, so a shape is looked at the same way however it was described.
-	Nothing here is bundled: OpenSCAD, <code>go3mf</code> and a Swift toolchain are
-	programs with opinions about your machine, and the ones already on it are the
-	right ones — what is missing is named in the pane, with the command that installs
-	it.
+	in an editor tab and pinned at a version. Meshes, the OpenSCAD render and the
+	recipe's assembly all arrive in it, so a shape is looked at the same way however
+	it was described. Nothing is bundled: OpenSCAD, <code>go3mf</code> and a Swift
+	toolchain are the ones already on your machine — what is missing is named in the
+	pane, with the command that installs it.
 </p>

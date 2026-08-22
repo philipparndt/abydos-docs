@@ -32,15 +32,14 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 		<h3>Highlighting scoped to the bytes on screen</h3>
 		<p>tree-sitter parses the file, and the query that turns a parse tree into
 		   colours is run over the viewport rather than the document. A 100,000-line
-		   file costs what eighty lines cost, because eighty lines is what is being
-		   looked at.</p>
+		   file costs what eighty lines cost.</p>
 	</div>
 	<div class="card">
 		<h3>A parser that may land a frame late</h3>
 		<p>It runs off the main thread and is allowed to arrive after the keystroke
 		   that caused it. <strong>The rope is authoritative for text and the parser
 		   only for colour</strong>, so the worst a late parse can do is colour a
-		   character the wrong way for one frame — and typing never waits for it.</p>
+		   character the wrong way for one frame.</p>
 	</div>
 </div>
 
@@ -65,13 +64,10 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 		<h3><kbd>⌘/</kbd> comments what is selected</h3>
 		<p>At the indent the lines share, blank lines neither commented nor
 		   counted, and the selection still covering the same text afterwards. It
-		   answers to <kbd>⌘/</kbd> on every keyboard layout rather than to
-		   whichever key happens to carry a slash.</p>
+		   answers to <kbd>⌘/</kbd> on every keyboard layout.</p>
 		<p>It uses the <em>file's</em> language and not the fence's: <kbd>⌘/</kbd>
 		   inside a Swift block in a markdown file refuses and says markdown has no
-		   line comment, rather than putting <code>//</code> in the prose. Which
-		   range is in which language is a question this editor cannot answer yet,
-		   and guessing is how <code>//</code> ends up in the middle of markup.</p>
+		   line comment, rather than putting <code>//</code> in the prose.</p>
 	</div>
 	<div class="card">
 		<h3>Completions arrive with their holes</h3>
@@ -86,16 +82,15 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 		<p>Through the language server, worked out in full before anything is
 		   written, across every file it touches — and undone by one
 		   <kbd>⌘Z</kbd>. Open documents are changed through the rope rather than
-		   on disk, so a tab does not reload underneath you, and a rename that
-		   cannot be offered is not offered.</p>
+		   on disk, so a tab does not reload underneath you.</p>
 	</div>
 	<div class="card">
 		<h3>The motions somebody's hands already know</h3>
 		<p><kbd>⌃B</kbd> and <kbd>⌃F</kbd> a character, <kbd>⌃A</kbd> and
 		   <kbd>⌃E</kbd> to the ends of the line, <kbd>⌃K</kbd> to the end of it,
 		   <kbd>⌃O</kbd> to open a line below. A character is a grapheme cluster,
-		   so the caret does not come to rest inside an accent that is written as
-		   two code points.</p>
+		   so the caret does not come to rest inside an accent written as two code
+		   points.</p>
 	</div>
 	<div class="card">
 		<h3>Find belongs to the tab it searched</h3>
@@ -106,12 +101,10 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 	</div>
 	<div class="card">
 		<h3>Folding, for every language</h3>
-		<p>By one of two routes. Where a grammar ships a <code>folds.scm</code> —
-		   or one is written here, as Java's is — the fold points are the ones that
-		   query names. Where it does not, they are derived from the parse tree:
-		   any node spanning more than one line. The derived set is larger and the
-		   named set tidier, which is a difference in taste rather than in
-		   support.</p>
+		<p>Where a grammar ships a <code>folds.scm</code> — or one is written here,
+		   as Java's is — the fold points are the ones that query names. Where it
+		   does not, they are derived from the parse tree: any node spanning more
+		   than one line.</p>
 	</div>
 </div>
 

@@ -3,10 +3,6 @@
 The website for [Abydos](https://philipparndt.github.io/abydos-docs/) — a
 terminal-first IDE for AI and cloud development, on macOS.
 
-A repository of its own because the program's was private when this was made,
-and GitHub Pages will not serve a site from a private repository without a paid
-plan. That repository is public now; the site stays here, where its history is.
-
 ## What is in it
 
     src/layout.html        the shell every page is poured into
@@ -30,11 +26,9 @@ make serve      # ...and serve it on http://localhost:8000
 make help       # everything else
 ```
 
-There is a build because there is more than one page. One page justified one
-file; pages sharing a palette, a header and a footer by having been copied are
-pages that drift, and the drift is always the one nobody edited. Nothing is installed
-to run it — `python3` is on macOS and on the runner, and there is no lockfile,
-no `node_modules` and nothing to keep current.
+There is a build because there is more than one page, and pages sharing a
+palette, a header and a footer by having been copied are pages that drift.
+Nothing is installed to run it — `python3` is on macOS and on the runner.
 
 The templating is three things and deliberately no more:
 
@@ -45,10 +39,9 @@ The templating is three things and deliberately no more:
 
 That last one is the reason the build is a program rather than a `cat`.
 Intrinsic dimensions stop the page from jumping as the pictures load, and a
-number typed by hand beside a file that a script regenerates is a number that is
-eventually wrong — as the old page's were, which is how this was noticed. It
-also means a page that names a picture that is not there fails the build instead
-of shipping a broken image.
+number typed by hand beside a file a script regenerates is eventually wrong. A
+page that names a picture that is not there fails the build instead of shipping
+a broken image.
 
 ## The pictures
 
@@ -59,22 +52,19 @@ make shots              # both
 make thumbs             # small copies of all of them, after either
 ```
 
-`make thumbs` is `sips`, which is macOS's own — the pictures need a Mac to make
-in the first place, so nothing is lost by the thumbnails needing one too. The
-front page shows nine at once, and nine full screenshots is four megabytes to
-look at a page of links.
+`make thumbs` is `sips`, which is macOS's own. The front page shows nine at
+once, and nine full screenshots is four megabytes to look at a page of links.
 
 Every picture is the app doing the thing the page claims, on a project from the
-examples repository that anybody can clone. Nothing is staged and nothing is a
-mockup.
+examples repository that anybody can clone.
 
 It needs both other checkouts beside this one:
 
     git clone https://github.com/philipparndt/abydos.git           ../abydos
     git clone https://github.com/philipparndt/abydos-examples.git  ../abydos-examples
 
-Both are public. A clone made before the rename still sits in a folder called
-the old thing, so each is looked for under both names and the new one wins:
+Both are public. Each is looked for under its old name as well, and the new one
+wins:
 
     ABYDOS=../abydos             or ../ideai
     EXAMPLES=../abydos-examples  or ../ideai-examples
@@ -87,59 +77,34 @@ THEME=light Scripts/screenshots.sh site   # the pages, in daylight
 ```
 
 `THEME` takes what Settings stores — `abydos`, `abydos-light`, `dark`, `light`,
-`dracula`, `dracula-light` — and defaults to `abydos`, so the pictures do not
-depend on whichever theme the machine taking them happens to be set to. It is
-checked against that list before the app is launched, because the app treats an
-unrecognised value as "follow the system": `--theme daylight` on a dark Mac
-quietly photographs dusk instead of failing, which cost an afternoon once.
+`dracula`, `dracula-light` — and defaults to `abydos`. It is checked against that
+list before the app is launched, because the app treats an unrecognised value as
+"follow the system": `--theme daylight` on a dark Mac quietly photographs dusk
+instead of failing.
 
 `themes.html` names the palettes — `abydos`, `abydos-light`, `dusk`, `daylight`,
-`dracula`, `dracula-light` — and the script maps between the two spellings. The
-stored value is one string holding both halves of what is asked as two questions
-in Settings: which theme, and how light. Three themes with a light and a dark
-each is six pictures; the three values that mean "follow the system" are not
-photographed, because they are not palettes.
-
-The page calls `dracula-light` **Alucard**, since that is upstream's own name
-for it, but the file keeps the setting's name. The mapping stays in one
-direction that way: what the app stores is what the picture is called.
+`dracula`, `dracula-light` — and the script maps between the two spellings. Three
+themes with a light and a dark each is six pictures; the three values that mean
+"follow the system" are not photographed.
 
 The captures are reproducible on purpose: the window is given a size, the panel
-is given a height, and the examples are cloned into a temporary directory first,
-because the window frame, the split position and which files were last open are
-all remembered per machine.
+is given a height, and the examples are cloned — not copied, since the titlebar
+says which branch — into a temporary directory first. The clone's `origin` is set
+to wherever the examples checkout points, so the rows the palette offers name
+GitHub rather than a directory in `/tmp`.
 
-A clone rather than a copy, since the titlebar says which project *and* which
-branch: a copied folder has no branch, so every capsule came out with half of
-itself missing. The clone's `origin` is set to wherever the examples checkout
-points, so the rows the palette offers name GitHub rather than a directory
-in `/tmp` that is deleted when the script exits.
-
-Four of them want a working environment rather than just the app. `debugger`
-needs Delve and a Go toolchain, and `terminal` needs `tmux` — and it will attach
-to a session that is already running, so a stale one gets photographed. Check
-what came out before committing it.
-
-`scad` needs OpenSCAD, `cadova` needs a Swift toolchain and the network once, and
-`diagram` needs nothing at all — it is Mermaid, which is inside the app, chosen
-over PlantUML for exactly that reason: no container runtime will start on this
-machine, so the one diagram anybody can reproduce is the one that needs no tool.
-`cadova` is also the slow one, at about three and a half minutes: `prepare` hands
-out a fresh clone for every shot, so the package resolves seven dependencies and
-compiles a C++ geometry kernel from cold every time. That is the honest cost of
-the picture — it is the app doing what the page says, and what the page says is
-that the model is built and run rather than read. A machine with no network
-photographs the pane saying what the build said, which is true and is not the
-picture wanted.
+Four shots want a working environment rather than just the app. `debugger` needs
+Delve and a Go toolchain; `terminal` needs `tmux`, and will attach to a session
+that is already running, so check what came out before committing it. `scad`
+needs OpenSCAD and `cadova` a Swift toolchain and the network once — it is also
+the slow one, at about three and a half minutes, since every shot gets a fresh
+clone and compiles a C++ geometry kernel from cold. `diagram` needs nothing: it
+is Mermaid, which is inside the app.
 
 `palette` photographs a popover, which is a window of its own and so is nowhere
 in the picture of the window it is over. The app writes it out beside the
 capture and the script moves it onto the name that was asked for, the same way
 `breakpoint` handles its sheet.
-
-`../abydos/Scripts/screenshots.sh` does the same job and predates this one; its
-output was copied here by hand. This is now the only copy the site depends on,
-so that one can go.
 
 ## Publishing
 
@@ -147,7 +112,7 @@ so that one can go.
 requests build without publishing; `main` builds and deploys; `workflow_dispatch`
 re-runs a deployment that stalled.
 
-Pages' own branch pipeline used to do this, until it started creating the
-artifact and then sitting at `deployment_in_progress` until the ten-minute
-default gave up. A workflow of our own is the same steps written down, which
-means they can be re-run, and read when they fail.
+Pages' own branch pipeline used to do this, until it started sitting at
+`deployment_in_progress` until the ten-minute default gave up. A workflow of our
+own is the same steps written down, so they can be re-run and read when they
+fail.
