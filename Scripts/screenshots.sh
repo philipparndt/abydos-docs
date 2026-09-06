@@ -45,16 +45,29 @@ find_checkout() {
 ABYDOS="${ABYDOS:-$(find_checkout app abydos ../abydos ../ideai)}"
 EXAMPLES="${EXAMPLES:-$(find_checkout examples abydos-examples ../abydos-examples ../ideai-examples)}"
 OUT="${OUT:-$DOCS/images}"
-SIZE="${SIZE:-1600x1000}"
-THEME="${THEME:-abydos}"
-APP="$ABYDOS/build/Abydos.app/Contents/MacOS/Abydos"
+SIZE="${SIZE:-1280x800}"
+THEME="${THEME:-dark}"
+# The binary, and the checkout, which are two things.
+#
+# Almost always the first is inside the second and this is one variable's worth
+# of arithmetic. They come apart for a long sweep: `all` takes over an hour, an
+# app rebuilt under it produces a set that disagrees with itself, and the way to
+# stop that is to copy the bundle somewhere of its own and point `APP` at the
+# copy. `ABYDOS` still has to be the repository, because the pull request shot
+# clones it — which is how this was found, an hour into a sweep, with `fatal:
+# repository '/private/tmp/abydos-shot' does not exist`.
+APP="${APP:-$ABYDOS/build/Abydos.app/Contents/MacOS/Abydos}"
 
 # The eight palettes — four themes with a light and a dark each — minus the four
 # values that mean "follow the system", which is not a palette but a deferral and
 # resolves to one of these.
 #
-# `setting:palette`, because those are two different names for the same thing
-# and the app answers to only one of them. `--theme` takes what Settings stores
+# `setting:directory`. The first is what Settings stores and what `--theme`
+# answers to; the second is the folder the pictures land in, spelled
+# `<family>-<lightness>` so that the switcher on the site can compose the path
+# to a picture from the two answers it already holds. The page's own names for
+# these — Dusk, Daylight, Alucard — are editorial and appear nowhere a program
+# has to agree about. `--theme` takes what Settings stores
 # — abydos, abydos-light, dark, light, dracula, dracula-light — while Theme.swift
 # calls the palettes abydos, abydos-light, dusk, daylight, dracula and
 # dracula-light, and the page uses those. Worth spelling out, because an
@@ -70,10 +83,10 @@ APP="$ABYDOS/build/Abydos.app/Contents/MacOS/Abydos"
 # The file is named for the setting rather than the heading, so the mapping stays
 # in one direction: what the app stores is what the picture is called.
 THEMES=(
-	abydos:abydos abydos-light:abydos-light
-	dark:dusk light:daylight
-	dracula:dracula dracula-light:dracula-light
-	gray:gray gray-light:gray-light
+	abydos:abydos-dark   abydos-light:abydos-light
+	dark:blue-dark       light:blue-light
+	dracula:dracula-dark dracula-light:dracula-light
+	gray:gray-dark       gray-light:gray-light
 )
 
 usage() { sed -n '2,23p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
@@ -102,7 +115,6 @@ if [ ! -x "$APP" ]; then
 fi
 test -x "$APP" || { echo "still no $APP" >&2; exit 1; }
 
-mkdir -p "$OUT" "$OUT/themes"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
@@ -148,10 +160,25 @@ wanted() {
 }
 
 # One capture. `path` is where it lands; everything after it is handed to the app.
+#
+# `--trust` on every one of them. A project is not trusted until somebody says
+# so, and an untrusted one wears a strip across the top saying that nothing in
+# it runs — which is correct, and is a sentence about a directory this script
+# made in /tmp thirty seconds ago rather than about anything a page here claims.
+# Every scene below is of somebody working in their own project, so the runs
+# start where a person would be after pressing Trust. A driven run does not
+# write that down, so it reaches nobody's real list.
+#
+# **Which is why no capture is earlier than ten seconds.** Trusting says so in
+# a toast, and a toast lives eight of them — so a shot taken at four seconds
+# came out with `Trusted go-service` sitting in the corner of it. The floor is
+# here rather than in each scene, because the next scene written would be
+# written at whatever delay its own content needs and would find this out
+# again.
 shoot() {
 	local path="$1" theme="$2"; shift 2
 	printf '  %-24s ' "${path#"$DOCS"/}"
-	"$APP" --window-size "$SIZE" --theme "$theme" --screenshot "$path" "$@" >/dev/null 2>&1 || true
+	"$APP" --window-size "$SIZE" --theme "$theme" --trust --screenshot "$path" "$@" >/dev/null 2>&1 || true
 	if [ -f "$path" ]; then
 		printf '%s\n' "$(du -h "$path" | cut -f1)"
 	else
@@ -161,23 +188,25 @@ shoot() {
 }
 
 # The editor and the navigator, on a project small enough to take in.
+# The devcontainer, out of a clone.
+#
+# go-service names one, and every picture of it therefore carries either a
+# question in the corner about starting a container or a strip saying the server
+# was not started — in scenes that are about the editor, the debugger and the
+# terminal. What a devcontainer does is a row in the table on the front page and
+# has nothing to prove in a picture of a breakpoint. The clone is thrown away
+# afterwards, and the project is then the one these scenes were built on.
+without_devcontainer() {
+	rm -rf "$1/.devcontainer"
+}
+
 shot_editor() {
 	local theme="$1" path="$2"
 	local go; go="$(prepare go-service go-service)"
-	# The devcontainer, out of the clone.
-	#
-	# This scene is the editor and the palette it is drawn in, eight times over
-	# on the themes page, and go-service has since gained a `devcontainer.json`
-	# — so every one of those pictures asks a question in the corner about
-	# starting a container, and answering `Not Now` only trades it for the strip
-	# saying the server was not started. Neither is what any of these pictures
-	# is about. Removed from the clone, which is thrown away afterwards, the
-	# project is the one this gallery was built on and its server starts here.
-	# What a devcontainer does is a row in the table on the front page and has
-	# nothing to prove in a picture of a colour scheme.
-	rm -rf "$go/.devcontainer"
-	shoot "$path" "$theme" --open "$go" --file "$go/main.go" --expand --panel-height 0 --delay 4
+	without_devcontainer "$go"
+	shoot "$path" "$theme" --open "$go" --file "$go/main.go" --expand --panel-height 0 --delay 10
 }
+
 
 # The claim that matters: stopped on a breakpoint. Started with the terminal
 # filling the window, because that is both the state people work in and the one
@@ -196,6 +225,7 @@ shot_editor() {
 shot_debugger() {
 	local theme="$1" path="$2"
 	local go; go="$(prepare go-service go-service)"
+	without_devcontainer "$go"
 	shoot "$path" "$theme" --open "$go" --file "$go/main.go" \
 		--maximize-terminal --breakpoint 25 --debug-line 18 --delay 40
 }
@@ -216,8 +246,9 @@ shot_debugger() {
 shot_terminal() {
 	local theme="$1" path="$2"
 	local go; go="$(prepare go-service go-service)"
+	without_devcontainer "$go"
 	tmux kill-session -t "$(basename "$go")" 2>/dev/null || true
-	shoot "$path" "$theme" --open "$go" --file "$go/main.go" --terminal --panel-height 420 \
+	shoot "$path" "$theme" --open "$go" --file "$go/main.go" --terminal --panel-height 336 \
 		--run "tmux new-window -n build -c '$go'" \
 		--send-bytes 'go build -v -o /dev/null ./... && go vet ./... && echo "  build ok"\r' \
 		--delay 16
@@ -229,39 +260,37 @@ shot_java() {
 	local theme="$1" path="$2"
 	local java; java="$(prepare java/maven-service maven-service)"
 	shoot "$path" "$theme" --open "$java" \
-		--file "$java/src/main/java/com/example/api/Server.java" --expand --panel-height 0 --delay 5
+		--file "$java/src/main/java/com/example/api/Server.java" --expand --panel-height 0 --delay 10
 }
 
-# What a breakpoint can be told to do. The values come from a session file,
-# which is also where anybody's would come from.
+# What a breakpoint can be told to do.
+#
+# **The values are flags, not a session file.** They used to be written into the
+# project's `.abydos/session.json`, which is where anybody's would come from —
+# and a driven run does not read one. `LaunchStore` says why: "a driven run
+# shows what it was given and nothing else", so that a capture cannot come out
+# holding the tabs and terminals somebody left open in a project of their own.
+# The shot was older than that rule and had been quietly photographing an empty
+# window ever since.
+#
+# `--file` for the same reason: `--bp-edit` acts on whatever is open, and
+# without a session there is nothing open to act on.
+#
+# The three fields are separated by tabs because each of them is an expression:
+# `a || b` and `f(x, y)` are what they look like, and a tab is the one character
+# none of them contains.
 shot_breakpoint() {
 	local theme="$1" path="$2"
 	local bp; bp="$(prepare go-service bp-options)"
-	mkdir -p "$bp/.abydos"
-	# Written by python rather than a heredoc plus sed: the path holds slashes,
-	# and the quoting around `sed -i ''` on macOS is one mistake away from an
-	# empty expression, which is what happened.
-	python3 - "$bp" <<-'PYTHON'
-		import json, sys
-		root = sys.argv[1]
-		main = f"{root}/main.go"
-		json.dump({
-			"files": [{"path": main, "line": 25}],
-			"active": main,
-			"breakpoints": [{
-				"path": main,
-				"line": 25,
-				"condition": 'stage == "local" && len(os.Args) > 1',
-				"hits": "> 5",
-				"log": "stage is {stage} after {time.Since(started)}",
-			}],
-		}, open(f"{root}/.abydos/session.json", "w"), indent=2)
-	PYTHON
+	without_devcontainer "$bp"
 	# The sheet is a window of its own, so it lands beside the capture under a
 	# name of its own, and is moved onto the one that was asked for.
 	local sheet="${path%.png}-sheet.png"
 	rm -f "$sheet"
-	shoot "$path" "$theme" --open "$bp" --panel-height 200 --bp-edit 25 --delay 8
+	shoot "$path" "$theme" --open "$bp" --file "$bp/main.go" --panel-height 160 \
+		--breakpoint 25 \
+		--bp-condition "$(printf 'stage == "local" && len(os.Args) > 1\t> 5\tstage is {stage} after {time.Since(started)}')" \
+		--bp-edit 25 --delay 12
 	[ -f "$sheet" ] && mv "$sheet" "$path"
 	return 0
 }
@@ -277,7 +306,7 @@ shot_breakpoint() {
 shot_scad() {
 	local theme="$1" path="$2"
 	local scad; scad="$(prepare openscad openscad)"
-	shoot "$path" "$theme" --open "$scad" --file "$scad/bracket.scad" \
+	shoot "$path" "$theme" --open "$scad" --file "$scad/adapter-feder.scad" \
 		--preview-mode split --panel-height 0 --delay 14
 }
 
@@ -299,13 +328,42 @@ shot_scad() {
 # operations that make it — so the claim the page makes, that the shape is beside
 # the code describing it, is a thing somebody can check in the picture rather
 # than take on trust.
+# The slow one, and the reason a full sweep is measured in hours rather than
+# minutes: the model is built by compiling a C++ geometry kernel, and a fresh
+# clone compiles it from cold.
+#
+# **Prepared once for the whole run**, unlike every other scene. `prepare` wipes
+# and re-clones, which is right where two shots of the same example want
+# different state — the breakpoint one writes a session file and the debugger one
+# must not find it — and is three and a half minutes of compiler for nothing when
+# the same picture is being taken in eight palettes. The second palette onwards
+# opens a package that is already built, and the delay comes down with it.
 shot_cadova() {
-	local theme="$1" path="$2"
-	local pkg; pkg="$(prepare cadova-models cadova)"
+	local theme="$1" path="$2" wait=260
+	local pkg="$WORK/cadova/cadova-models"
+	if [ -d "$pkg" ]; then
+		# Warm rather than instant: SwiftPM still relinks and the model is still
+		# run to produce the mesh. The picture is checked rather than assumed.
+		pkg="$(cd "$pkg" && pwd -P)"
+		wait=140
+	else
+		pkg="$(prepare cadova-models cadova)"
+	fi
+	# The target has to be in the clone, and a clone has only what is committed.
+	# Said here rather than found in the picture: what an absent target produces
+	# is a window with a source file and an empty pane beside it, which looks
+	# like a render that failed rather than like a target that is not there.
+	if [ ! -d "$pkg/Sources/high-speed-curve" ]; then
+		echo "no high-speed-curve target in the examples clone —" >&2
+		echo "  commit cadova-models/Sources/high-speed-curve and Package.swift" >&2
+		echo "  in $EXAMPLES, or this shot has nothing to render" >&2
+		return 1
+	fi
 	shoot "$path" "$theme" --open "$pkg" \
-		--file "$pkg/Sources/coaster/main.swift" \
-		--preview-mode split --panel-height 0 --delay 200
+		--file "$pkg/Sources/high-speed-curve/main.swift" \
+		--preview-mode split --panel-height 0 --delay "$wait"
 }
+
 
 # A diagram beside the text that makes it. Mermaid rather than PlantUML, and
 # not because it is the better tool: PlantUML is a JVM and wants a container or
@@ -341,7 +399,7 @@ shot_palette() {
 	local popover="${path%.png}-child0.png"
 	rm -f "$popover"
 	shoot "$path" "$theme" --open "$go" --file "$go/main.go" --panel-height 0 \
-		--switcher '>' --delay 9
+		--switcher '>' --delay 10
 	[ -f "$popover" ] && mv "$popover" "$path"
 	return 0
 }
@@ -397,7 +455,7 @@ shot_git() {
 		printf 'and this is still being written\n' >> "$repo/README.md"
 	fi
 	shoot "$path" "$theme" --open "$repo" --file "$repo/README.md" \
-		--sidebar branches --sidebar-width 330 --panel-height 0 --delay 7
+		--sidebar branches --sidebar-width 330 --panel-height 0 --delay 10
 }
 
 # The log page, on a history with something in it to draw: five commits, a tag,
@@ -405,7 +463,7 @@ shot_git() {
 shot_log() {
 	local theme="$1" path="$2"
 	local repo; repo="$(scenarios history)"
-	shoot "$path" "$theme" --open "$repo" --panel-height 0 --log-page "settle:2,file:0" --delay 9
+	shoot "$path" "$theme" --open "$repo" --panel-height 0 --log-page "settle:2,file:0" --delay 10
 }
 
 # The commit page, on the scenario that is staged, unstaged and untracked at
@@ -414,7 +472,7 @@ shot_commit() {
 	local theme="$1" path="$2"
 	local repo; repo="$(scenarios uncommitted)"
 	shoot "$path" "$theme" --open "$repo" --panel-height 0 \
-		--commit-page "settle:1,select:README.md" --delay 9
+		--commit-page "settle:1,select:README.md" --delay 10
 }
 
 # A merge stopped in the middle, which is the one state where the strip above
@@ -438,7 +496,7 @@ shot_conflict() {
 		git -C "$repo" merge theirs >/dev/null 2>&1 || true
 	fi
 	shoot "$path" "$theme" --open "$repo" --file "$repo/settings.yaml" \
-		--sidebar branches --sidebar-width 330 --panel-height 0 --delay 7
+		--sidebar branches --sidebar-width 330 --panel-height 0 --delay 10
 }
 
 # A pull request, which is the one picture on this site that is not of the
@@ -474,13 +532,21 @@ shot_pullrequest() {
 shot_sessions() {
 	local theme="$1" path="$2"
 	local project; project="$(prepare java/maven-service sessions)"
+	# The session is killed first, the way the terminal shot kills its own.
+	#
+	# tmux outlives the app, and `prepare` gives each palette a fresh clone at a
+	# new path — so the pane from the palette before is a shell sitting in a
+	# directory that has since been deleted, and what it prints is `fatal: Unable
+	# to read current working directory`, once per palette, stacking up. By the
+	# fifth the picture was a wall of red about nothing.
+	tmux kill-session -t "$(basename "$project")" 2>/dev/null || true
 	shoot "$path" "$theme" --open "$project" --file "$project/pom.xml" \
-		--terminal --panel-height 360 --send-bytes 'git status -sb\r' \
+		--terminal --panel-height 288 --send-bytes 'git status -sb\r' \
 		--claude-running "1a2b3c4d-0001-4000-8000-000000000001:working:sub2" \
 		--claude-running "1a2b3c4d-0002-4000-8000-000000000002:needs" \
 		--claude-running "1a2b3c4d-0003-4000-8000-000000000003:working" \
 		--claude-running "1a2b3c4d-0004-4000-8000-000000000004:done" \
-		--delay 8
+		--delay 10
 }
 
 # The same register on ⇧⌘A, which is a panel of its own and so lands beside the
@@ -495,7 +561,7 @@ shot_sessionlist() {
 		--claude-running "1a2b3c4d-0002-4000-8000-000000000002:needs" \
 		--claude-running "1a2b3c4d-0003-4000-8000-000000000003:working" \
 		--claude-running "1a2b3c4d-0004-4000-8000-000000000004:done" \
-		--running-sessions-palette 6 --delay 9
+		--running-sessions-palette 6 --delay 10
 	[ -f "$popover" ] && mv "$popover" "$path"
 	return 0
 }
@@ -525,7 +591,7 @@ export SENTRY_DSN=https://not-a-dsn@only.a.picture/6318
 SMTP_PASSWORD=
 # An empty value is not a secret, so it is left as it is.
 ENV
-	shoot "$path" "$theme" --open "$go" --file "$go/.env" --panel-height 0 --delay 6
+	shoot "$path" "$theme" --open "$go" --file "$go/.env" --panel-height 0 --delay 10
 }
 
 # A SOPS file, decrypted in place from the chip beside the lock. The key is made
@@ -535,7 +601,9 @@ shot_sops() {
 	local theme="$1" path="$2"
 	local go; go="$(prepare java/maven-service sops)"
 	local keys="$WORK/age.txt"
-	age-keygen -o "$keys" >/dev/null 2>&1
+	# Once per run, not once per palette: `age-keygen -o` refuses a file that is
+	# already there, and under `set -e` the second palette would end the sweep.
+	[ -f "$keys" ] || age-keygen -o "$keys" >/dev/null 2>&1
 	local recipient; recipient="$(grep -o 'age1[0-9a-z]*' "$keys" | head -1)"
 	cat > "$go/.sops.yaml" <<RULES
 creation_rules:
@@ -554,7 +622,7 @@ VALUES
 	( cd "$go" && SOPS_AGE_KEY_FILE="$keys" sops --encrypt --in-place secrets/dev.yaml )
 	SOPS_AGE_KEY_FILE="$keys" \
 		shoot "$path" "$theme" --open "$go" --file "$go/secrets/dev.yaml" \
-			--panel-height 0 --sops "settle:1,decrypt" --delay 8
+			--panel-height 0 --sops "settle:1,decrypt" --delay 10
 }
 
 SITE_SHOTS=(
@@ -562,23 +630,47 @@ SITE_SHOTS=(
 	git log commit conflict pullrequest sessions sessionlist secrets sops
 )
 
-if [ "$SET" = site ] || [ "$SET" = all ]; then
-	echo "==> The pages' pictures, in $THEME ($SIZE) → ${OUT#"$DOCS"/}"
+# One palette's worth. The pictures live under the palette they were taken in,
+# because the site wears the app's themes and its screenshots follow: a page in
+# daylight showing eight windows at midnight is the one thing the switcher must
+# not do.
+one_palette() {
+	local setting="$1" palette="$2"
+	local out="$DOCS/images/$palette"
+	mkdir -p "$out"
+	echo "==> $palette ($SIZE) → images/$palette"
 	for name in "${SITE_SHOTS[@]}"; do
 		wanted "$name" || continue
-		"shot_$name" "$THEME" "$OUT/$name.png"
+		"shot_$name" "$setting" "$out/$name.png"
 	done
-fi
+}
 
-# One scene, eight palettes. The same shot every time on purpose: a gallery where
-# each picture also shows a different file is a gallery about the files.
-if [ "$SET" = themes ] || [ "$SET" = all ]; then
-	echo "==> One scene in each palette ($SIZE) → ${OUT#"$DOCS"/}/themes"
-	for pair in "${THEMES[@]}"; do
-		setting="${pair%%:*}" palette="${pair#*:}"
-		wanted "$palette" || continue
-		shot_editor "$setting" "$OUT/themes/$palette.png"
-	done
-fi
+case "$SET" in
+	site)
+		# The one palette named by THEME, which defaults to the app's own
+		# default family after dark.
+		for pair in "${THEMES[@]}"; do
+			# `if` rather than `&&`: under `set -e` a test that fails is the
+			# last command in the loop body, and the script ends there.
+			if [ "${pair%%:*}" = "$THEME" ]; then
+				one_palette "$THEME" "${pair#*:}"
+			fi
+		done
+		;;
+	themes)
+		# The gallery under each palette's own heading, which is the editor shot
+		# and nothing else — the same picture the site shows when it is wearing
+		# that palette, rather than a second copy of it.
+		ONLY=(editor)
+		for pair in "${THEMES[@]}"; do
+			one_palette "${pair%%:*}" "${pair#*:}"
+		done
+		;;
+	all)
+		for pair in "${THEMES[@]}"; do
+			one_palette "${pair%%:*}" "${pair#*:}"
+		done
+		;;
+esac
 
-echo "==> Done."
+echo '==> Done. Scripts/thumbs.sh next, then Scripts/webp.sh.' 

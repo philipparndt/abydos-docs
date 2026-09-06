@@ -14,7 +14,7 @@ og_description: Makefile goals, Maven, Gradle, Bazel, Conan, Swift packages and 
 </header>
 
 <figure>
-	<img src="images/debugger.png" alt="Abydos stopped on a breakpoint: the editor showing the stopped line, and the panel below it showing the call stack and the local variables."
+	<img src="images/blue-dark/debugger@2x.webp" alt="Abydos stopped on a breakpoint: the editor showing the stopped line, and the panel below it showing the call stack and the local variables."
 	     loading="lazy">
 	<figcaption>Stopped on a breakpoint. The terminal had the whole window a moment
 	   earlier; stopping gives it back and shows the variables, because that is what
@@ -34,19 +34,17 @@ og_description: Makefile goals, Maven, Gradle, Bazel, Conan, Swift packages and 
 <p>
 	<strong>And every one of them is read rather than run.</strong>
 	<code>bazel query</code> is the more correct way to ask what targets exist, and
-	it is also a build-graph load that wants Bazel installed and can take a minute —
-	too long to spend filling in a menu. A <code>conanfile.py</code> is a Python
-	program and a <code>Package.swift</code> is a Swift one; asking either means
-	compiling and running somebody's build script to draw a menu, and
-	<code>swift package dump-package</code> writes a <code>.build</code> directory
-	into the project as a side effect. So the text is read, and what reading cannot
-	see — an executable whose name is computed rather than written — is an entry
-	missing rather than an entry that does not work.
+	it is also a build-graph load that can take a minute — too long to spend filling
+	in a menu. A <code>conanfile.py</code> is a Python program and a
+	<code>Package.swift</code> is a Swift one: asking either means running somebody's
+	build script to draw a menu. So the text is read, and what reading cannot see —
+	an executable whose name is computed rather than written — is an entry missing
+	rather than an entry that does not work.
 </p>
 
 <h2>Breakpoints that are more than a place</h2>
 <figure>
-	<img src="images/breakpoint.png" alt="Abydos's breakpoint options: a condition, a hit count and a log message, each written in a field that colours the expression as code."
+	<img src="images/blue-dark/breakpoint@2x.webp" alt="Abydos's breakpoint options: a condition, a hit count and a log message, each written in a field that colours the expression as code."
 	     loading="lazy">
 	<figcaption>The condition, the hit count and the message are code, and are
 	   coloured by the grammar of the file the breakpoint is in —

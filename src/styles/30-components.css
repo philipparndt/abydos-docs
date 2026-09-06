@@ -49,7 +49,7 @@ figcaption { color: var(--dim); font-size: .88rem; margin-top: .5rem; text-align
 
    The pictures are `images/thumbs/`, made by `make thumbs` at a quarter of the
    width. Eight full screenshots is four megabytes to look at a page of links,
-   and a tile is never read at 1600 wide. */
+   and a tile is never read at 1280 wide. */
 .tiles {
 	display: grid;
 	gap: 1.25rem;
@@ -76,7 +76,7 @@ figcaption { color: var(--dim); font-size: .88rem; margin-top: .5rem; text-align
 	background: var(--bg);
 	border-bottom: 1px solid var(--line);
 	/* One shape for every tile, whatever shape the picture is. Eight of these
-	   are a 1600x1000 window and the ninth is a popover, 400x539 — left to its
+	   are a 1280x800 window and one of them is a popover, far narrower — left to its
 	   own dimensions that tile is twice the height of the others and the grid
 	   reads as broken.
 

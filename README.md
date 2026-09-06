@@ -74,14 +74,55 @@ following the display — the palette the app itself used to open in.
 ## The pictures
 
 ```sh
-make screenshots        # the seventeen the pages use, in the app's own theme
-make theme-shots        # one scene in each palette, for themes.html
-make shots              # both
-make thumbs             # small copies of all of them, after either
+make pictures           # all three below, in the order they have to run
+make shots              # every picture in every palette — over an hour
+make thumbs             # small copies, for the grid on the front page
+make webp               # lossless WebP, and the PNGs removed
 ```
 
-`make thumbs` is `sips`, which is macOS's own. The front page shows eleven at
-once, and eleven full screenshots is five megabytes to look at a page of links.
+**Every picture exists in all eight palettes**, under `images/<family>-<light|dark>/`,
+because the switcher at the top of the page moves the screenshots with the
+colours: a page in daylight showing eight windows at midnight would be a
+demonstration of the opposite of what it claims. The site's own script composes
+the path from the two answers it already holds, which is why the folders are
+named for the family and the lightness rather than for the names the themes page
+gives them.
+
+That is eighteen shots times eight, and it is why the pictures are WebP. A window
+shot of flat interface colours is 337 KB as a PNG and 76 KB as lossless WebP —
+the same pixels — so the whole set, thumbnails and all, is seventeen megabytes
+rather than sixty, in a repository whose pictures are re-taken often enough that
+every re-take lands in the history at whatever it weighs. `cwebp` is the one tool
+here that is not already on a Mac: `brew install webp`.
+
+**The scale is in the name.** A retina capture is twice the picture it is meant
+to be shown as; a PNG says so in a `pHYs` chunk, and an encoder has no reason to
+carry that across — so `name@2x.webp`, which `Scripts/build.py` reads. Without it
+anything narrower than the column is stretched to it and goes soft.
+
+**The runs trust the project they open.** A project is not trusted until somebody
+says so, and an untrusted one wears a strip saying nothing in it runs — true, and
+a sentence about a directory the script made in /tmp thirty seconds ago rather
+than about anything a page here claims. So every capture passes `--trust`, and no
+capture is earlier than ten seconds, because trusting says so in a toast and a
+toast lives eight of them.
+
+**A long sweep wants an app that holds still.** `make shots` takes over an hour,
+and an app rebuilt under it produces a set that disagrees with itself — the first
+palettes from one binary and the last from another. Copy the bundle somewhere of
+its own and point at that:
+
+```sh
+cp -R ../abydos/build/Abydos.app /tmp/frozen.app
+APP=/tmp/frozen.app/Contents/MacOS/Abydos make shots
+```
+
+`APP` and not `ABYDOS`: the checkout is still wanted, because the pull request
+shot clones it.
+
+`make thumbs` is `sips`, which is macOS's own and reads PNG, which is why it runs
+before the WebP step rather than after it. The front page shows eleven pictures at
+once, and eleven full screenshots is megabytes to look at a page of links.
 
 Every picture is the app doing the thing the page claims, on a project from the
 examples repository that anybody can clone — including the nine repositories

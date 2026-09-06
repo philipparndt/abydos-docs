@@ -1,20 +1,25 @@
-/* The palette switcher, at the foot of every page.
+/* The palette switcher, at the top of every page.
 
-   At the foot rather than pinned to a corner: it is a demonstration and not a
-   setting somebody came here to change, and a floating control over a page of
-   screenshots is a control in front of the thing it is advertising. Somebody who
-   wants it can reach it from any page in one scroll, and it says what it is
-   rather than being a paintbrush glyph. */
+   At the top because it is the first thing this site is claiming — the pictures
+   and the page itself are in whichever palette is chosen — and a demonstration
+   somebody has to scroll to the end to find is one most readers never see. Not
+   pinned or floating: it belongs to the page rather than hovering over the
+   screenshots it is about.
+
+   Trailing edge, so the eye reaches the heading first. On a narrow screen the
+   rows wrap under the label and it reads as a form, which is what it is. */
 .picker {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	justify-content: flex-end;
 	gap: .5rem .9rem;
-	margin: 3rem 0 1.25rem;
-	padding-top: 1.5rem;
-	border-top: 1px solid var(--line);
-	font-size: .85rem;
+	margin: 0 0 .5rem;
+	padding: 1rem 0 .9rem;
+	border-bottom: 1px solid var(--line);
+	font-size: .82rem;
 }
+.picker-label { margin-right: auto; }
 .picker-label { color: var(--dim); }
 .picker-set { display: flex; flex-wrap: wrap; gap: .3rem; }
 

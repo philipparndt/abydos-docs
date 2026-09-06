@@ -11,7 +11,7 @@ Three things it does, and nothing else:
 
   {{ include partials/x.html }}   splices a file in, recursively
   {{ title }}                     substitutes a value from the page's front matter
-  <img src="images/x.png">        gets `width` and `height` read from the PNG
+  <img src="images/x.webp">       gets `width` and `height` read from the file
 
 The last one is why this is Python rather than `cat`. Intrinsic dimensions stop
 the page from jumping while the pictures load, and a number typed by hand beside
@@ -103,12 +103,7 @@ def png_info(path: Path) -> tuple[int, int, int]:
 	IHDR is always first and carries the two dimensions as big-endian 32-bit
 	integers. pHYs, if it is there at all, carries pixels per metre — 5669 of
 	them is 144 dpi, which is a retina capture and means the picture is meant to
-	be shown at half its pixel size. A file without pHYs is taken to be 1x,
-	which is what the older shots here are.
-
-	The density matters because without it a small picture gets stretched to the
-	width of the column and goes soft, which is what happened to the breakpoint
-	sheet.
+	be shown at half its pixel size. A file without pHYs is taken to be 1x.
 	"""
 	data = path.read_bytes()
 	if data[:8] != b"\x89PNG\r\n\x1a\n":
@@ -139,6 +134,60 @@ def png_info(path: Path) -> tuple[int, int, int]:
 	return width, height, density
 
 
+def webp_size(path: Path) -> tuple[int, int]:
+	"""Width and height out of a WebP's first chunk.
+
+	Three encodings and all three are here, because `cwebp` chooses between them
+	on the picture rather than on a flag: `VP8L` for the lossless one these
+	shots are, `VP8 ` for a lossy one, and `VP8X` when the file carries an alpha
+	channel or metadata as well. A reader that knew only the first would fail on
+	the day somebody converted a picture with transparency in it, and it would
+	fail as `not a WebP`, which names the wrong thing.
+	"""
+	data = path.read_bytes()
+	if data[:4] != b"RIFF" or data[8:12] != b"WEBP":
+		raise BuildError(f"{path}: not a WebP")
+
+	kind = data[12:16]
+	if kind == b"VP8X":
+		width = int.from_bytes(data[24:27], "little") + 1
+		height = int.from_bytes(data[27:30], "little") + 1
+		return width, height
+	if kind == b"VP8L":
+		bits = int.from_bytes(data[21:25], "little")
+		return (bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1
+	if kind == b"VP8 ":
+		return (
+			struct.unpack("<H", data[26:28])[0] & 0x3FFF,
+			struct.unpack("<H", data[28:30])[0] & 0x3FFF,
+		)
+	raise BuildError(f"{path}: a WebP whose first chunk is {kind!r}")
+
+
+# `name@2x.webp`, the convention every asset pipeline already spells this way.
+SCALE = re.compile(r"@(?P<scale>[1-9])x\Z")
+
+
+def picture_info(path: Path) -> tuple[int, int, int]:
+	"""Width, height and density, whichever of the two formats it is.
+
+	**The density is in the name for a WebP**, and it has to be. A retina capture
+	is twice the picture it is meant to be shown as, and a PNG says so in a pHYs
+	chunk — which is exactly what an encoder has no reason to carry across, so a
+	converted file arrives claiming to be a 3200-point-wide picture. Left at
+	that, anything narrower than the column is stretched to it and goes soft,
+	which is what happened to the breakpoint sheet the first time. `@2x` before
+	the extension is the answer the rest of the world already uses.
+	"""
+	if path.suffix == ".png":
+		return png_info(path)
+	if path.suffix == ".webp":
+		width, height = webp_size(path)
+		found = SCALE.search(path.stem)
+		return width, height, int(found.group("scale")) if found else 1
+	raise BuildError(f"{path}: not a picture this reads — {path.suffix}")
+
+
 def size_images(html: str, root: Path, where: str) -> str:
 	"""Gives every local <img> its display size, so the layout does not jump.
 
@@ -161,7 +210,7 @@ def size_images(html: str, root: Path, where: str) -> str:
 		if not path.is_file():
 			raise BuildError(f"{where}: <img> names a file that is not there — {source}")
 
-		width, height, density = png_info(path)
+		width, height, density = picture_info(path)
 		attributes = f' width="{width // density}" height="{height // density}"'
 		if density > 1:
 			attributes += f' srcset="{source} {density}x"'

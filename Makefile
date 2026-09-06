@@ -28,16 +28,23 @@ palettes: ## Write the site's palettes out of the app's own scheme files
 	@$(PYTHON) Scripts/palettes.py
 
 .PHONY: screenshots
-screenshots: ## Photograph the app for the pages (THEME=abydos, SHOT=one)
+screenshots: ## Photograph the app in one palette (THEME=dark, SHOT=one)
 	@Scripts/screenshots.sh site $(SHOT)
 
 .PHONY: theme-shots
-theme-shots: ## Photograph one scene in each palette, for themes.html
+theme-shots: ## Just the gallery scene, in each palette
 	@Scripts/screenshots.sh themes
 
 .PHONY: shots
-shots: ## Both sets
+shots: ## Every picture in every palette — over an hour
 	@Scripts/screenshots.sh all
+
+.PHONY: webp
+webp: ## Convert the captures to lossless WebP, removing the PNGs
+	@Scripts/webp.sh
+
+.PHONY: pictures
+pictures: shots thumbs webp ## All three, in the order they have to run
 
 .PHONY: thumbs
 thumbs: ## Small copies of the pictures, for the grid on the front page

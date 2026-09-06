@@ -53,9 +53,20 @@ ROLES = {
 	"red":   ("gitConflict", None),
 }
 
-# The order the settings window lists them in, which is the order the switcher
-# offers them in. Read from each file's own `order` rather than written here.
 HEX = re.compile(r"\A#[0-9A-Fa-f]{6}\Z")
+# `public static let defaultFamily = "blue"`, which is a fact about the app's
+# history rather than something a scheme file claims, so it is read from the
+# source that states it. A site that opened in a palette the app does not is a
+# demonstration of nothing.
+DEFAULT = re.compile(r'defaultFamily\s*=\s*"(?P<family>[a-z0-9-]+)"')
+
+
+def default_family(root: Path) -> str:
+	path = root / "Sources/AbydosKit/Settings/Appearance.swift"
+	found = DEFAULT.search(path.read_text()) if path.is_file() else None
+	if not found:
+		raise Error(f"{path}: no `defaultFamily` to read")
+	return found.group("family")
 
 
 class Error(Exception):
@@ -103,6 +114,7 @@ def main() -> int:
 		print(f"no schemes under {root} — clone the app beside this checkout", file=sys.stderr)
 		return 1
 
+	fallback = default_family(root)
 	found = []
 	for path in schemes:
 		scheme = json.loads(path.read_text())
@@ -128,13 +140,26 @@ def main() -> int:
    query for everybody who has not overruled it, and both again for the two
    answers that do. */''']
 
+	if fallback not in [ident for _, ident, _, _, _ in found]:
+		raise Error(f"the app's default family is `{fallback}` and no scheme has that id")
+
 	for _, ident, title, scheme, filename in found:
 		where = filename
 		out.append(f"\n/* {title} — {filename} */")
-		out.append(f':root[data-family="{ident}"] {{\n{variables(scheme, where, 1)}\n}}')
+		# The default family answers for a page that has not been told which
+		# palette to be — a page with JavaScript switched off, and the first
+		# paint of every other one.
+		base = f':root[data-family="{ident}"]'
+		if ident == fallback:
+			base = f':root:not([data-family]),\n{base}'
+		out.append(f'{base} {{\n{variables(scheme, where, 1)}\n}}')
+		opens = (
+			(f'\t:root:not([data-family]):not([data-mode="dark"]),\n' if ident == fallback else "")
+			+ f'\t:root[data-family="{ident}"]:not([data-mode="dark"]) {{\n'
+		)
 		out.append(
 			"@media (prefers-color-scheme: light) {\n"
-			f'\t:root[data-family="{ident}"]:not([data-mode="dark"]) {{\n'
+			+ opens
 			+ "\n".join("\t" + line for line in variables(scheme, where, 0).splitlines())
 			+ "\n\t}\n}"
 		)

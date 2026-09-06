@@ -15,7 +15,7 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 </header>
 
 <figure>
-	<img src="images/java.png" alt="Abydos with a Maven project open: the navigator on the left, a Java source file with syntax highlighting in the editor."
+	<img src="images/blue-dark/java@2x.webp" alt="Abydos with a Maven project open: the navigator on the left, a Java source file with syntax highlighting in the editor."
 	     loading="lazy">
 	<figcaption>A Maven project, opened as it comes.</figcaption>
 </figure>
@@ -57,26 +57,28 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 	</tbody>
 </table>
 </div>
-<p class="foot-note">
-	<sup>1</sup> jdtls answers for <code>.java</code>. A Kotlin file is highlighted
-	and folded but not served, and its <code>main</code> functions are still found,
-	run and debugged — the JVM does not care which language produced the class.<br>
-	<sup>2</sup> A <code>pom.xml</code> or Gradle build file has no server, so
-	<kbd>⇧⌘O</kbd> over one is answered by that build file's own parser: modules,
-	plugins, dependencies, tasks.<br>
-	<sup>3</sup> Every language folds, by one of two routes. Where the grammar ships
-	a <code>folds.scm</code> — or one is written here, as Java's is — the fold points
-	are the ones that query names. Where it does not, they are derived from the parse
-	tree: any node spanning more than one line.<br>
-	<sup>4</sup> Two servers, and a project says which in <code>.abydos/tools.json</code>.
-	jdtls is type-aware — it reads the build file for the classpath — and importing a
-	five-hundred-bundle reactor is minutes and gigabytes first. kmp-lsp indexes
-	source instead, with no JVM and no type checking at all. On Eclipse's
-	<code>eclipse.platform.ui</code> — 143 bundles, 7,566 files — it was answering
-	go-to-definition across bundles at 2.6 seconds, where jdtls on the same symbol
-	was still silent at ten minutes holding 3.97 GB. Debugging works either way:
-	jdtls is started for the debugger alone when you press Debug.
-</p>
+<ul class="foot-note">
+	<li><sup>1</sup> jdtls answers for <code>.java</code>. A Kotlin file is
+	    highlighted and folded but not served, and its <code>main</code> functions
+	    are still found, run and debugged — the JVM does not care which language
+	    produced the class.</li>
+	<li><sup>2</sup> A <code>pom.xml</code> or Gradle build file has no server, so
+	    <kbd>⇧⌘O</kbd> over one is answered by that build file's own parser:
+	    modules, plugins, dependencies, tasks.</li>
+	<li><sup>3</sup> Every language folds. Where the grammar ships a
+	    <code>folds.scm</code> — or one is written here, as Java's is — the fold
+	    points are the ones that query names; where it does not, they are any node
+	    spanning more than one line.</li>
+	<li><sup>4</sup> Two servers, and a project says which in
+	    <code>.abydos/tools.json</code>. jdtls is type-aware and reads the build
+	    file for the classpath, so importing a five-hundred-bundle reactor is
+	    minutes and gigabytes first. kmp-lsp indexes source instead, with no JVM and
+	    no type checking at all — on Eclipse's <code>eclipse.platform.ui</code>, 143
+	    bundles and 7,566 files, it answered go-to-definition across bundles in
+	    2.6 seconds where jdtls was still silent at ten minutes holding 3.97 GB.
+	    Debugging works either way: jdtls is started for the debugger alone when you
+	    press Debug.</li>
+</ul>
 <p>
 	Nothing is bundled. A language server, a debugger and a build tool each have
 	opinions about your toolchain, and the ones already on your machine are the
@@ -85,12 +87,12 @@ og_description: Twenty-four languages highlighted and folded; which of them are 
 </p>
 <p>
 	And nothing has to be installed for a project to be <em>read</em>. What a build
-	file offers comes out of the file, not out of the tool: a <code>BUILD</code>
-	file's <code>*_binary</code> and <code>*_test</code> rules are the targets, and
-	which Conan commands make sense follows from whether there is a
-	<code>conanfile.py</code> or only a <code>conanfile.txt</code>. Neither recipe is
-	executed to ask it what it contains, so running a command without its tool fails
-	the way it always does rather than in a way this has to explain.
+	file offers comes out of the file rather than out of the tool: a
+	<code>BUILD</code> file's <code>*_binary</code> and <code>*_test</code> rules are
+	the targets, and which Conan commands make sense follows from whether there is a
+	<code>conanfile.py</code> or only a <code>conanfile.txt</code>. Running a command
+	without its tool then fails the way it always does, rather than in a way this has
+	to explain.
 </p>
 
 <h2>Java, in full</h2>

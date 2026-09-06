@@ -15,7 +15,7 @@ og_description: A .puml, a .mmd and a .drawio open with the drawing beside the s
 </header>
 
 <figure>
-	<img src="images/diagram.png" alt="Abydos showing project.mmd: the Mermaid source of an entity-relationship diagram on the left, and the diagram itself drawn on the right."
+	<img src="images/blue-dark/diagram@2x.webp" alt="Abydos showing project.mmd: the Mermaid source of an entity-relationship diagram on the left, and the diagram itself drawn on the right."
 	     loading="lazy">
 	<figcaption>Mermaid, drawn in the app — in the app's own colours rather than
 	   Mermaid's default white.</figcaption>
@@ -30,10 +30,9 @@ og_description: A .puml, a .mmd and a .drawio open with the drawing beside the s
 </p>
 <p>
 	<strong>What it hands back is flattened before it is shown or written.</strong>
-	Mermaid's output is written for a browser: a stylesheet with some shapes
-	attached, labels in HTML, arrowheads as references to shapes a renderer is
-	expected to place. The pane draws through CoreSVG and the exported PNG is
-	rasterised by WebKit, so anything left in the file that needs a browser draws
+	Mermaid's output is written for a browser — a stylesheet with shapes attached,
+	labels in HTML, arrowheads as references. The pane draws through CoreSVG and the
+	exported PNG is rasterised by WebKit, so anything left needing a browser draws
 	one picture on screen and a different one in the file somebody sends on. Every
 	style is resolved onto the shape it paints, and the two renderers are held to
 	differing over less than a tenth of the page.

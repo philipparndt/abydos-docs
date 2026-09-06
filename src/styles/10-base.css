@@ -52,6 +52,9 @@ li::marker { color: var(--dim); }
 
 sup { font-size: .7em; }
 .foot-note { color: var(--dim); font-size: .9rem; }
+/* A run of footnotes is a list of them: four numbered notes in one paragraph is
+   the thing the numbers were supposed to save the reader from. */
+ul.foot-note li { margin: .5rem 0; }
 
 footer {
 	border-top: 1px solid var(--line);

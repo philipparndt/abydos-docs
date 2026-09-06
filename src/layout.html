@@ -23,16 +23,18 @@ try {
 	// A palette written onto the page wins: nothing here does that, and a
 	// driven run that photographs the site in each of them has to be able to.
 	if (!page.dataset.family) {
-		page.dataset.family = localStorage.getItem("palette") || "abydos";
+		page.dataset.family = localStorage.getItem("palette") || "blue";
 		page.dataset.mode = localStorage.getItem("lightness") || "system";
 	}
 } catch (error) {
-	document.documentElement.dataset.family = "abydos";
+	document.documentElement.dataset.family = "blue";
 }
 </script>
 </head>
 <body>
 <main>
+
+{{ include partials/picker.html }}
 
 {{ body }}
 
