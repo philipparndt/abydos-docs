@@ -63,25 +63,26 @@ og_description: Makefile goals, Maven, Gradle, Bazel, Conan, Swift packages and 
 
 <h2>A Java edit reaches the JVM that is already running</h2>
 <p>
-	Change a method body while a program is being debugged, press <kbd>⌘S</kbd>, and
-	the running JVM takes the new code. The process is not restarted: whatever state
-	it had built up is still there, the breakpoint you spent minutes reaching is
-	still where it was, and for a service in a pod the port-forward is still open.
-	The same works against a JVM you attached to — redefinition is the JVM's own, so
-	where it is running has nothing to do with whether it works.
+	Change a method body during a debug session, press <kbd>⌘S</kbd>, and the running
+	JVM takes the new code. Nothing restarts: the state it had built up is still
+	there, the breakpoint you spent minutes reaching is still where it was, and for a
+	service in a pod the port-forward is still open. The same works against a JVM you
+	attached to.
 </p>
 <p>
 	<strong>Most edits will be refused, and that is the JVM rather than a fault.</strong>
-	HotSpot replaces method bodies and nothing else: adding or removing a method,
-	changing a signature, adding a field and changing what a class extends are all
-	refused, and that is most of what editing feels like. When it happens you get the
-	JVM's own sentence about what it would not take, naming the class, with a restart
-	one press away. Nothing restarts on its own — a debug session holds a stack that
-	was expensive to reach, and for an attached session a restart is somebody's
-	service going down. A method affected by a swap is dropped to and entered again,
-	so if you were stopped inside the one you just edited you end up at the top of its
-	new body; that is the Eclipse debugger's behaviour, and it is said out loud,
-	because unexplained it reads as the debugger losing its place.
+	HotSpot replaces method bodies and nothing else — adding a method, changing a
+	signature, adding a field are all refused, and that is most of what editing feels
+	like. You get the JVM's own sentence about what it would not take, with a restart
+	one press away.
+</p>
+<p>
+	Nothing restarts on its own: a debug session holds a stack that was expensive to
+	reach, and for an attached session a restart is somebody's service going down. A
+	swapped method is dropped to and entered again, so if you were stopped inside the
+	one you just edited you land at the top of its new body. That is the Eclipse
+	debugger's behaviour, and it is said out loud — unexplained it reads as the
+	debugger losing its place.
 </p>
 
 <h2>Where the program actually runs</h2>

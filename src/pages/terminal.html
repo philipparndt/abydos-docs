@@ -37,10 +37,9 @@ og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux window
 </p>
 <p>
 	<kbd>⌘⇧]</kbd> and <kbd>⌘⇧[</kbd> move along the strip of whatever column the
-	keyboard is in, so pressed in a terminal they walk the terminal's tabs rather
-	than changing the file behind the panel. And a pane has a pager: this one runs
-	vim, htop, an agent's own full-screen interface and tmux, so <code>git log</code>
-	opens <code>less</code> here as it does in every other terminal on the machine.
+	keyboard is in, so pressed in a terminal they walk the terminal's tabs. And a
+	pane has a pager: this one runs vim, htop and tmux, so <code>git log</code>
+	opens <code>less</code> here as it does in every other terminal.
 </p>
 
 <h2>tmux's windows as the panel's tabs</h2>
@@ -93,10 +92,9 @@ og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux window
 <h2>What is running, everywhere</h2>
 <p>
 	Every agent session on this machine already told the app what it was doing: the
-	hook posts an event for each of them, the tmux tabs wear a badge for the session
-	in them, a toast says a line when one in another tab speaks. What none of that
-	answered is the question asked from across the room — <em>is anything waiting for
-	me, and where?</em>
+	hook posts an event for each, and the tmux tabs wear a badge. What none of that
+	answered is the question asked from across the room — <em>is anything waiting
+	for me, and where?</em>
 </p>
 <figure>
 	<img src="images/sessions.png" alt="Abydos with the terminal panel open, and a pill on the panel's title bar showing two counts beside the tmux session tag."
@@ -106,12 +104,11 @@ og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux window
 	   the same two states.</figcaption>
 </figure>
 <p>
-	A finished session is not counted, because it waits quietly. A working session
-	that has said nothing for ten minutes is not believed, and one that has said
-	nothing for an hour is forgotten outright — the clock is the last hook event, and
-	hook events bracket a tool call, so a <code>make test</code> is ninety seconds
-	with nothing in between. When nothing is running there is no pill at all, so an
-	idle panel looks as it did.
+	A finished session is not counted, because it waits quietly. One that has said
+	nothing for ten minutes is not believed, and one silent for an hour is forgotten
+	— the clock is the last hook event, and hook events bracket a tool call, so a
+	<code>make test</code> is ninety seconds with nothing in between. With nothing
+	running there is no pill at all.
 </p>
 <figure>
 	<img src="images/sessionlist.png" alt="The Abydos running-sessions list: a filter field, a heading naming the project, four session rows each with a status glyph, one of them saying two subagents, and a footer counting the sessions on this machine."
@@ -126,12 +123,10 @@ og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux window
 		<h3>A row reaches the terminal it is in</h3>
 		<p>Every terminal the panel starts tells its shell which tab it is, and the
 		   hook passes that on — or, inside tmux, the pane's own id. So a row opens
-		   the tab the session named, in this window or another, or the window and
-		   pane of the mirrored tmux session, or switches this panel's client to
-		   another tmux session. One the app cannot reach is drawn dimmed and
-		   marked <em>elsewhere</em> before it is clicked, and clicking it copies
-		   <code>claude --resume &lt;id&gt;</code> — the one thing the app can offer
-		   for a session it does not hold.</p>
+		   the tab the session named, in this window or another, or the window of
+		   the mirrored tmux session. One the app cannot reach is drawn dimmed and
+		   marked <em>elsewhere</em>, and clicking it copies
+		   <code>claude --resume &lt;id&gt;</code>.</p>
 	</div>
 	<div class="card">
 		<h3>And says how many subagents are out</h3>

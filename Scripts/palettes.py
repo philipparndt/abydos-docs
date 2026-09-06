@@ -1,0 +1,163 @@
+#!/usr/bin/env python3
+"""Writes the site's palettes out of the app's own scheme files.
+
+The themes page names eight palettes and shows a photograph of each. The page
+itself was drawn in one of them, which is a page about colour asking to be taken
+on trust — so the site wears them too, and the switcher in the footer is the
+demonstration.
+
+Where the numbers come from matters more than that they are here. A palette
+copied into a stylesheet by hand is a palette that is right on the day it is
+copied: the app's schemes are edited, and nothing would have said so. So this
+reads `Sources/AbydosKit/Settings/Schemes/*.json` from the app checkout and
+writes `src/styles/50-palettes.css`, which is committed — the runner that builds
+this site has no app beside it, exactly as it has no Mac to take a screenshot
+with. Both are generated here and checked in for the same reason.
+
+    Scripts/palettes.py [--abydos ../abydos] [--out src/styles/50-palettes.css]
+
+It writes `src/partials/palettes.js` beside it — the same list of families, by
+id and title, for the switcher to draw its buttons from. One generator so the
+buttons and the colours cannot come to disagree about which palettes exist.
+
+`make palettes` after the app's colours change, and the diff says what moved.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+
+# What the page needs, and which role in a scheme answers for it.
+#
+# Ten of the eleven: `--mono` is a font stack and belongs to the page rather
+# than to any palette. The two that are not a straight lift are worth saying:
+# `dim` is the comment colour, because a comment is exactly the thing a palette
+# has already had to make quiet and still readable; and `blue` — the link
+# colour, named for what it is in the palette this site started in — is the
+# colour of a call, which is the most saturated thing a scheme trusts on its own
+# background.
+ROLES = {
+	"bg":    ("windowBackground", None),
+	"panel": ("sidebarBackground", None),
+	"line":  ("separator", None),
+	"text":  ("editorText", None),
+	"head":  ("sidebarHeaderText", None),
+	"dim":   ("syntax", "comment"),
+	"blue":  ("syntax", "function"),
+	"amber": ("syntax", "keyword"),
+	"green": ("gitAdded", None),
+	"red":   ("gitConflict", None),
+}
+
+# The order the settings window lists them in, which is the order the switcher
+# offers them in. Read from each file's own `order` rather than written here.
+HEX = re.compile(r"\A#[0-9A-Fa-f]{6}\Z")
+
+
+class Error(Exception):
+	pass
+
+
+def pair(scheme: dict, name: str, key: str | None, where: str) -> tuple[str, str]:
+	block = scheme.get("app", {}).get(name)
+	if block is None:
+		raise Error(f"{where}: no `{name}` in the app section")
+	if key is not None:
+		block = block.get(key)
+		if block is None:
+			raise Error(f"{where}: no `{name}.{key}`")
+	light, dark = block.get("light"), block.get("dark")
+	for value in (light, dark):
+		# A scheme the app would refuse to load must not reach the stylesheet as
+		# `undefined`, which is a page with no colours and no error.
+		if not isinstance(value, str) or not HEX.match(value):
+			raise Error(f"{where}: `{name}{'.' + key if key else ''}` is not a #RRGGBB pair")
+	return light, dark
+
+
+def variables(scheme: dict, where: str, lightness: int) -> str:
+	lines = []
+	for variable, (name, key) in ROLES.items():
+		lines.append(f"\t--{variable}: {pair(scheme, name, key, where)[lightness]};")
+	lines.append(f"\tcolor-scheme: {'light' if lightness == 0 else 'dark'};")
+	return "\n".join(lines)
+
+
+def main() -> int:
+	parser = argparse.ArgumentParser()
+	parser.add_argument("--abydos", default="../abydos")
+	parser.add_argument("--out", default="src/styles/50-palettes.css")
+	parser.add_argument("--list", default="src/partials/palettes.js")
+	arguments = parser.parse_args()
+
+	root = Path(arguments.abydos)
+	if not root.is_dir():
+		# The old name, the way the screenshot script tries it.
+		root = Path("../ideai")
+	schemes = sorted((root / "Sources/AbydosKit/Settings/Schemes").glob("*.json"))
+	if not schemes:
+		print(f"no schemes under {root} — clone the app beside this checkout", file=sys.stderr)
+		return 1
+
+	found = []
+	for path in schemes:
+		scheme = json.loads(path.read_text())
+		# `editor.json` is a set of colours the *terminal* can be dressed in and
+		# not a palette for a window: it has an `order`, like the rest, and no
+		# `app` section at all. Which is the test the app itself applies when it
+		# lists the families, so it is the test here.
+		if "app" not in scheme:
+			continue
+		found.append((scheme["order"], scheme["id"], scheme.get("title", scheme["id"]), scheme, path.name))
+	found.sort()
+
+	out = ['''/* The palettes, generated — see `Scripts/palettes.py` and `make palettes`.
+
+   Every number here is lifted out of the app's own scheme files, because a
+   palette copied by hand is a palette that is right on the day it is copied.
+   Do not edit this file; edit the scheme and generate it again.
+
+   Two questions rather than one list, which is how the app asks it: which
+   palette, on `data-family`, and how light, on `data-mode`. A `data-mode` that
+   is absent or `system` follows the display, which is why each family is
+   written three times — the dark one as the base, the light one under the media
+   query for everybody who has not overruled it, and both again for the two
+   answers that do. */''']
+
+	for _, ident, title, scheme, filename in found:
+		where = filename
+		out.append(f"\n/* {title} — {filename} */")
+		out.append(f':root[data-family="{ident}"] {{\n{variables(scheme, where, 1)}\n}}')
+		out.append(
+			"@media (prefers-color-scheme: light) {\n"
+			f'\t:root[data-family="{ident}"]:not([data-mode="dark"]) {{\n'
+			+ "\n".join("\t" + line for line in variables(scheme, where, 0).splitlines())
+			+ "\n\t}\n}"
+		)
+		out.append(f':root[data-family="{ident}"][data-mode="light"] {{\n{variables(scheme, where, 0)}\n}}')
+		out.append(f':root[data-family="{ident}"][data-mode="dark"] {{\n{variables(scheme, where, 1)}\n}}')
+
+	Path(arguments.out).write_text("\n".join(out) + "\n")
+
+	families = ", ".join(f'["{ident}", "{title}"]' for _, ident, title, _, _ in found)
+	Path(arguments.list).write_text(
+		"/* Generated by Scripts/palettes.py — the families, in the order the\n"
+		"   settings window lists them. Do not edit. */\n"
+		f"var PALETTES = [{families}];\n"
+	)
+	print(f"==> {len(found)} palettes into {arguments.out}")
+	for _, ident, title, _, _ in found:
+		print(f"    {ident:<10} {title}")
+	return 0
+
+
+if __name__ == "__main__":
+	try:
+		sys.exit(main())
+	except Error as error:
+		print(f"error: {error}", file=sys.stderr)
+		sys.exit(1)

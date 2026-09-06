@@ -124,31 +124,26 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 
 <h2>What the gutter says</h2>
 <p>
-	A file open in the editor used to say nothing about what git thought of it. The
-	question asked far more often than any other — <em>which of these lines have I
-	changed since HEAD?</em> — had no answer short of the commit page or a terminal,
-	and then mapping hunk numbers back to the window by hand.
+	<em>Which of these lines have I changed since HEAD?</em> is the question asked
+	most often about an open file, and it had no answer here short of the commit
+	page or a terminal.
 </p>
-<p>
-	Open files mark their changes: a bar beside added and modified lines, and a wedge
-	on the boundary that deleted lines vanished from. Staged and unstaged alike, so
-	the marks answer <em>since HEAD</em> rather than <em>since the index</em>. They
-	are anchored the way breakpoints are, so they stay on their lines while somebody
-	types, and they are swept once per repository change across every open tab —
-	commit, checkout, stage — as well as on save and reload. One <code>git diff</code>
-	per file per event, off the main thread, never per keystroke. An untracked file
-	shows nothing: one that is entirely new would be entirely coloured, which says
-	nothing at all.
-</p>
-<p>
-	The gutter has a menu of its own — <em>Show Blame</em> or <em>Hide Blame</em>,
-	the title saying which state it is in, walking the responder chain to the one
-	toggle <kbd>⌥⌘B</kbd> and the View menu already share. Right-clicking the line
-	numbers used to open the <em>text</em> area's menu, which is how blame came to be
-	reported as a missing feature after months of shipping. And a breakpoint outlives
-	the session it was set for, which is most of what makes it a breakpoint rather
-	than a command.
-</p>
+<ul>
+	<li>A bar beside added and modified lines, and a wedge where deleted lines
+	    vanished from. Staged and unstaged alike, so the marks answer <em>since
+	    HEAD</em> rather than <em>since the index</em>.</li>
+	<li>Anchored the way breakpoints are, so they stay put while somebody types.
+	    One <code>git diff</code> per file per save, reload or repository change —
+	    never per keystroke.</li>
+	<li>Nothing on an untracked file: one that is entirely new would be entirely
+	    coloured, which says nothing at all.</li>
+	<li><em>Show Blame</em> is in the gutter's own menu, on the toggle
+	    <kbd>⌥⌘B</kbd> already shares. Right-clicking the line numbers used to open
+	    the <em>text</em> area's menu, which is how blame came to be reported as
+	    missing after months of shipping.</li>
+	<li>A breakpoint outlives the session it was set for, which is most of what
+	    makes it a breakpoint rather than a command.</li>
+</ul>
 
 <h2>What a tab can be</h2>
 <p>
@@ -158,45 +153,35 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 	A file dropped on the editor opens in it.
 </p>
 <p>
-	Files with no readable source open as what they are: a picture at the size it
-	was taken, zooming to the pixels rather than zooming the window around it; an
-	SVG drawn rather than shown as markup; a PDF as a PDF. A binary or an oversized
-	file opens as a tab explaining itself, over a hex viewer that memory-maps the
-	file and draws only the rows on screen, so a 100 MB mesh opens instantly — and it
-	is called binary whatever its size, rather than told it is too large to open as
-	text, which is a statement about text made about something that was never text.
-	<a href="diagrams.html">Diagrams</a> and
+	Files with no readable source open as what they are: a picture at the size it was
+	taken, zooming to the pixels; an SVG drawn rather than shown as markup; a PDF as
+	a PDF. A binary or oversized file opens as a tab explaining itself, over a hex
+	viewer that memory-maps the file and draws only the rows on screen — and it is
+	called binary whatever its size, rather than told it is too large to open as
+	text. <a href="diagrams.html">Diagrams</a> and
 	<a href="3d-modelling.html">3D models</a> have pages of their own.
 </p>
 <p>
-	<strong>A video plays in a tab</strong> — the last rendered form still being
-	handed to a floating panel that covers the editor and closes on a keypress. An
-	<code>.mp4</code>, <code>.mov</code> or <code>.m4v</code> opens as a tab shaped
-	like a picture's, with the system's own transport controls. It never speaks
-	uninvited: it opens paused on its first frame, because an editor tab is often
-	opened mid-meeting; switching away pauses it, and coming back does <em>not</em>
-	resume. Only the containers that decode natively are claimed — a
-	<code>.webm</code> keeps the notice and its Quick Look button, because a player
-	spinning over a black rectangle is worse than a notice that is honest about it.
+	<strong>A video plays in a tab.</strong> An <code>.mp4</code>,
+	<code>.mov</code> or <code>.m4v</code> opens shaped like a picture's tab, with
+	the system's transport controls. It never speaks uninvited: paused on its first
+	frame, paused again when you switch away, and it does not resume when you come
+	back. A <code>.webm</code> keeps the old notice, because a player spinning over
+	a black rectangle is worse than a notice that is honest.
 </p>
 <p>
-	<kbd>Space</kbd> opens Quick Look for the kinds the system genuinely previews —
-	an image, a video, a PDF — because that is what Space does everywhere else on
-	this machine. Everything else keeps the provisional open, which is what Space is
-	for in a tree of source files. The panel is fed the selection, so four rows with
-	two images in them is a panel of two the arrow keys walk through.
+	<kbd>Space</kbd> opens Quick Look for what the system genuinely previews — an
+	image, a video, a PDF — as it does everywhere else on this machine. Everything
+	else keeps the provisional open, which is what Space is for in a tree of source
+	files.
 </p>
 <p>
-	<strong>And a picture on the clipboard pastes as a file.</strong> <kbd>⌘V</kbd>
-	in the project tree writes a board that carries pixels and no file as a PNG where
-	a pasted file would land, under the first free <code>picture-&lt;n&gt;.png</code>,
-	with the row open for renaming and the stem selected. <kbd>⌘V</kbd> over a picture
-	in a Markdown or HTML document writes it into <code>images/</code> beside the
-	document, named for the document, and puts a reference at the caret with the
-	caret inside the empty description so the next thing typed is the alt text. Text
-	on the board still pastes as text; a language with no picture syntax pastes
-	nothing and greys Paste out, since a file written into the source tree that
-	nothing references is a stray screenshot in the repository.
+	<strong>And a picture on the clipboard pastes as a file.</strong> In the tree it
+	lands where a pasted file would, with the row open for renaming. Over a Markdown
+	or HTML document it goes into <code>images/</code> beside the document and puts
+	a reference at the caret, the caret inside the empty description so the next
+	thing typed is the alt text. Text on the board still pastes as text, and a
+	language with no picture syntax pastes nothing.
 </p>
 
 <p class="foot-note">

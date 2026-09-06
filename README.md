@@ -7,9 +7,12 @@ terminal-first IDE for AI and cloud development, on macOS.
 
     src/layout.html        the shell every page is poured into
     src/styles/*.css       concatenated, in name order, into one stylesheet
-    src/partials/          the icon and the footer, included by name
+    src/styles/50-palettes.css   generated — the app's own schemes, as CSS
+    src/partials/          the icon, the footer and the switcher, by name
+    src/partials/palettes.js     generated beside the stylesheet above
     src/pages/*.html       one file per page, with its title in front matter
     Scripts/build.py       assembles src/ into dist/
+    Scripts/palettes.py    writes the palettes out of the app's scheme files
     Scripts/screenshots.sh drives the app and photographs it into images/
     Scripts/thumbs.sh      small copies of those, for the grid on the front page
     images/                the pictures, committed — they need a Mac to make
@@ -42,6 +45,31 @@ Intrinsic dimensions stop the page from jumping as the pictures load, and a
 number typed by hand beside a file a script regenerates is eventually wrong. A
 page that names a picture that is not there fails the build instead of shipping
 a broken image.
+
+## The palettes
+
+The site wears the app's own themes, and the switcher at the foot of every page
+is the demonstration — a page about colour asking to be taken on trust is a page
+that could have said anything.
+
+```sh
+make palettes   # after the app's colours change
+```
+
+It reads `Sources/AbydosKit/Settings/Schemes/*.json` from the app checkout and
+writes `src/styles/50-palettes.css` and `src/partials/palettes.js`, both
+committed. Generated rather than typed, for the reason the screenshots are
+generated: a palette copied into a stylesheet by hand is right on the day it is
+copied, and nothing would say when it stopped being. Committed rather than built
+on the runner, for the reason the pictures are committed: the runner has no app
+checkout beside this one, and no Mac to photograph one with.
+
+Two questions rather than one list, which is how the app asks it: the family on
+`data-family`, how light on `data-mode`, both kept in `localStorage` so the
+answer survives following a link. A palette written onto the page in the markup
+wins over the stored one, which is how a driven run photographs the site in each
+of them. Without JavaScript the page is `00-palette.css`, which is Abydos
+following the display — the palette the app itself used to open in.
 
 ## The pictures
 

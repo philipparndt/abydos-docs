@@ -1,3 +1,11 @@
+<!-- The picker is hidden until the script unhides it. A row of buttons that do
+     nothing is worse than no row: without JavaScript the page is the palette
+     `00-palette.css` sets, which is the same one the app opens in. -->
+<div class="picker" id="picker" hidden>
+	<span class="picker-label">This page, in the app's own palettes</span>
+	<div class="picker-set" id="picker-family" role="group" aria-label="Palette"></div>
+	<div class="picker-set" id="picker-mode" role="group" aria-label="Light or dark"></div>
+</div>
 <footer>
 	<a href="index.html">Home</a> ·
 	<a href="https://github.com/philipparndt/abydos">GitHub</a> ·

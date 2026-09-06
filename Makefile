@@ -23,6 +23,10 @@ serve: build ## Build, then serve dist/ on http://localhost:$(PORT)
 	@echo "==> http://localhost:$(PORT)"
 	@$(PYTHON) -m http.server $(PORT) --directory dist
 
+.PHONY: palettes
+palettes: ## Write the site's palettes out of the app's own scheme files
+	@$(PYTHON) Scripts/palettes.py
+
 .PHONY: screenshots
 screenshots: ## Photograph the app for the pages (THEME=abydos, SHOT=one)
 	@Scripts/screenshots.sh site $(SHOT)

@@ -13,6 +13,23 @@
      same shapes appear at full size in partials/icon.svg. -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='230' fill='%23151210'/%3E%3Cpath d='M226 636a286 286 0 0 1 572 0z' fill='%23F7B44E'/%3E%3Crect y='632' width='1024' height='392' fill='%230d0b09'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="{{ stylesheet }}">
+<!-- Before the stylesheet paints anything, so a page chosen in one palette does
+     not arrive in another and change under the reader. Wrapped, because reading
+     localStorage throws outright in a private window rather than returning
+     nothing, and a page with no colours is a worse answer than the default. -->
+<script>
+try {
+	var page = document.documentElement;
+	// A palette written onto the page wins: nothing here does that, and a
+	// driven run that photographs the site in each of them has to be able to.
+	if (!page.dataset.family) {
+		page.dataset.family = localStorage.getItem("palette") || "abydos";
+		page.dataset.mode = localStorage.getItem("lightness") || "system";
+	}
+} catch (error) {
+	document.documentElement.dataset.family = "abydos";
+}
+</script>
 </head>
 <body>
 <main>
@@ -22,5 +39,9 @@
 {{ include partials/footer.html }}
 
 </main>
+<script>
+{{ include partials/palettes.js }}
+{{ include partials/theming.js }}
+</script>
 </body>
 </html>

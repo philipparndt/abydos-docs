@@ -1,0 +1,59 @@
+/* The palette switcher, at the foot of every page.
+
+   At the foot rather than pinned to a corner: it is a demonstration and not a
+   setting somebody came here to change, and a floating control over a page of
+   screenshots is a control in front of the thing it is advertising. Somebody who
+   wants it can reach it from any page in one scroll, and it says what it is
+   rather than being a paintbrush glyph. */
+.picker {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .5rem .9rem;
+	margin: 3rem 0 1.25rem;
+	padding-top: 1.5rem;
+	border-top: 1px solid var(--line);
+	font-size: .85rem;
+}
+.picker-label { color: var(--dim); }
+.picker-set { display: flex; flex-wrap: wrap; gap: .3rem; }
+
+/* One shape for both rows. The lightness row is the same control as the palette
+   row because they are the same kind of choice — the app asks them as two
+   questions side by side rather than as one list, and so does this. */
+.picker button {
+	font: inherit;
+	color: var(--text);
+	background: var(--panel);
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	padding: .3rem .65rem;
+	cursor: pointer;
+	transition: border-color .15s ease, color .15s ease;
+}
+.picker button:hover { border-color: var(--blue); }
+.picker button[aria-pressed="true"] {
+	color: var(--head);
+	border-color: var(--blue);
+	/* The chosen one is named by its own accent rather than filled: a filled
+	   button in a row of eight is the loudest thing on a page whose subject is
+	   how quiet the chrome should be. */
+	box-shadow: inset 0 0 0 1px var(--blue);
+}
+.picker button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* The button under each palette on the themes page, which sets both halves at
+   once: this palette, and the lightness the section is showing. */
+.try {
+	font: inherit;
+	font-size: .88rem;
+	color: var(--blue);
+	background: none;
+	border: 1px solid var(--line);
+	border-radius: 7px;
+	padding: .2rem .6rem;
+	cursor: pointer;
+}
+.try:hover { border-color: var(--blue); }
+.try:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.try[hidden] { display: none; }

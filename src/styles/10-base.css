@@ -44,6 +44,12 @@ pre {
 }
 pre .c { color: var(--dim); }
 
+/* Lists, which are what a paragraph turns into when it has started listing.
+   The marker is dimmed: it is punctuation, and the words are the content. */
+ul { margin: 1rem 0; padding-left: 1.2rem; }
+li { margin: .4rem 0; }
+li::marker { color: var(--dim); }
+
 sup { font-size: .7em; }
 .foot-note { color: var(--dim); font-size: .9rem; }
 
