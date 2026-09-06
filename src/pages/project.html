@@ -60,8 +60,20 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 	<code>git checkout</code> in a terminal recolours it. Files are made, renamed,
 	dragged, copied and thrown away in the tree itself — named on the row rather
 	than in a dialog, with <kbd>⌘Z</kbd> taking any of it back, including out of the
-	trash. <em>New</em> is a submenu of the kinds of file this project actually has,
-	so the extension is not typed out again every time.
+	trash. A trashed row goes in the same event as the key, before the trash is even
+	asked, because a row that stays put for a cross-process round trip is one somebody
+	presses again. <em>New</em> is a submenu of the kinds of file this project actually
+	has, so the extension is not typed out again every time.
+</p>
+<p>
+	A row with a version-control state carries a dot at its trailing edge in that
+	state's colour, files and folders alike — a colour on the name alone is only
+	legible against the names beside it, so a run of untracked files reads as a tree
+	of green text and one modified file among forty is a word in a slightly different
+	colour. A folder's state is already the roll-up of what is under it, which is what
+	makes the mark worth having on a collapsed one. Nothing is drawn for unmodified or
+	ignored rows: in a project with a build directory those outnumber everything else,
+	and a mark on nearly every row is furniture.
 </p>
 
 <h2>What the project depends on</h2>
@@ -80,20 +92,15 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 	genuinely depends on nothing.
 </p>
 
-<h2>Git, as the folders it changed</h2>
-<p>
-	Status, changes, history, blame, branches, worktrees, stash and push. The working
-	copy is shown as the folders it changed rather than as a flat list of paths: a
-	folder stages everything under it, and says how much of itself is on this side
-	of the index. Changes are thrown away from the unstaged side only, and the sheet
-	says how much it is about to take and which of it is a deletion rather than a
-	revert.
-</p>
+<h2>Git, from the titlebar</h2>
 <p>
 	The branch is in the titlebar, and a worktree keeps the repository's name and
 	gains a chip beside it — asked of git rather than read off the path, since a
 	worktree can be made anywhere. The repository's other checkouts are in that same
-	control, and choosing one opens it as a project.
+	control, and choosing one opens it as a project. Everything the app does with a
+	repository is behind <kbd>⌘2</kbd> and has <a href="git.html">a page of its
+	own</a>: one tree, two pages, and a real branch left behind before anything
+	destructive runs.
 </p>
 
 <h2>The terminal and the project follow each other</h2>
@@ -115,10 +122,33 @@ og_description: ⇧⌘P over projects, branches and the menu bar. A Dependencies
 	where it is, and a shell that walks out into something else is followed.
 </p>
 <p>
+	The switch itself is remembered now, wherever it is flipped: the control on the
+	panel used to change the window's own copy and never write the preference, so
+	every launch read the stored <code>false</code> and a new version was simply the
+	launch somebody noticed. And a window follows the <em>shell's</em> own directory,
+	which is why a script that changes directory several times over one install no
+	longer drags the window through every one of them: <code>cd</code> is a builtin,
+	so a typed one always moves the shell and a running command never does.
+</p>
+<p>
 	And the window arrives with what that project had. A switch captures the editor
-	session, the terminals, the tmux window, which subproject was open, the selected
-	run configuration, where each Xcode scheme last went and the breakpoints — and
-	restores the same seven for the project being opened.
+	session, the terminals and which of them was in front, the tmux window, which
+	subproject was open, the selected run configuration, where each Xcode scheme last
+	went, the breakpoints, which sidebar tool was showing, what was folded in each of
+	the trees, any log, commit or stash page that was open — and the commit message
+	somebody was halfway through typing.
+</p>
+<p>
+	Every one of those was lost for a reason worth stating: a fold set lived on the
+	view that drew it, and the sidebar is thrown away and rebuilt on a project switch,
+	a second or two after a window opens, and when a tool shown over the terminal is
+	put away — so the working copy re-folded under somebody who had unfolded it thirty
+	seconds earlier. The folds travel as two lists per tree rather than one, because
+	the trees disagree about what an absent key means: a refs tree arrives open and
+	records what was <em>shut</em>, while <code>origin</code> and <code>Tags</code>
+	arrive shut and record what was <em>opened</em>. A stash page is remembered by its
+	commit and not by its index, since <code>stash@{0}</code> is a different commit
+	after one <code>git stash push</code>.
 </p>
 <h3>The terminal reaches the window</h3>
 <p>

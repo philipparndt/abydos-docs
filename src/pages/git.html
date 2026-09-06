@@ -1,0 +1,378 @@
+---
+title: Git — Abydos
+description: Git in Abydos is one tree and two pages: the working copy, the stashes and every ref under one button, a log and a commit view that open at the size they are given, and nothing destroyed without a real branch left behind first.
+og_title: Git in Abydos
+og_description: One tree on ⌘2 — working copy, stashes, branches, remotes, tags, worktrees. ⇧⌘L for the log, ⇧⌘K for the commit. A backup branch before anything destructive, conflicts as rows, and an estate of three hundred submodules as one working copy.
+---
+<header class="inner">
+	<a class="back" href="index.html">← Abydos</a>
+	{{ include partials/icon.svg }}
+	<h1>Git</h1>
+	<p class="tagline">One button, one tree, and two pages that open at the size
+	   they are given. Every verb sits on the row that draws the thing it acts
+	   on — which is the rule that says what belongs here and what does not.</p>
+</header>
+
+<figure>
+	<img src="images/git.png" alt="The Abydos git tree: a repository row saying one commit ahead with Push and Fetch beside it, the working copy offering to review two changes, and local branches folded into feature, fix, chore and release folders, with origin and tags shut beneath them."
+	     loading="lazy">
+	<figcaption>The pane is a list from its top edge. The first row is the
+	   repository, and it does not scroll away.</figcaption>
+</figure>
+
+<h2>One tree</h2>
+<p>
+	<kbd>⌘2</kbd>: the working copy, the stashes, local branches, each remote, the
+	tags, the worktrees and the submodules. Branch names fold on <code>/</code>, so
+	<code>feature/lights</code> and <code>feature/blinds</code> sit under one row —
+	and a slash is always a folder, even holding a single branch, because a tree
+	that changes shape with the count is one you have to look at twice. Typing into
+	the filter (<kbd>⌘F</kbd>) flattens the whole thing: a tree you have to expand
+	to reach a name you have just typed is worse than no tree.
+</p>
+<p>
+	The working copy arrives shut, and <code>origin</code> and <code>Tags</code>
+	arrive shut with it. Every change unrolled under the first row pushes the
+	branches off the bottom of a column, and the question the tree is usually asked
+	is <em>where am I</em> rather than <em>what have I changed</em> — which is what
+	the commit page is for. The remote's branches and every release there has ever
+	been are somebody else's account of things, and unrolled they are the bulk of
+	the pane.
+</p>
+<p>
+	<strong>The repository is the first row, and it is the button.</strong> It says
+	how far the branch you are on is from its upstream — <code>2 behind · 1
+	ahead</code>, <code>level</code>, <code>upstream gone</code>,
+	<code>detached at 8d9ac24b</code> — and does the verb that follows from that:
+	fetch when level, pull when behind, push when ahead, with a
+	<code>Fetch</code> beside it whenever there is a remote, since fetching is the
+	one thing you want exactly when the state on the row is stale. It says when the
+	remote was last asked, which is one <code>stat</code> of
+	<code>.git/FETCH_HEAD</code> and no subprocess. And it stays put while the rest
+	of the tree scrolls: how far you are from the remote is state, and state that
+	scrolls behind forty branches is state nobody reads.
+</p>
+
+<h2>What a branch row says</h2>
+<p>
+	The end of every row is one right-aligned column, and what sits in it is either
+	news or a standing fact.
+</p>
+<pre>main ✓            ↑2 ↓1     two to push, one to pull
+feature/api          ↑3 ☁︎↑  three commits of its own, never published
+old-thing              ☁︎✗   its remote branch was deleted
+shipped                 ✓    already merged — the row is dimmed too</pre>
+<div class="cards">
+	<div class="card">
+		<h3>A merged branch is dimmed, not moved</h3>
+		<p>Where a branch sits in the list is how it is found, so one that moves
+		   when it merges is one you hunt for, and one that disappears vanishes at
+		   the moment it becomes safe to delete. The tick keeps its colour: it is
+		   the reason the row is grey, and fading the answer along with the
+		   question leaves nothing on the row saying why.</p>
+	</div>
+	<div class="card">
+		<h3>An unpublished branch says how much is on it</h3>
+		<p>Its upstream counts are nought and nought, which is exactly what a
+		   branch <em>in step</em> with a remote reads — so it is measured against
+		   the default branch instead. Only the ahead half is drawn: <code>↓</code>
+		   on this pane means <em>waiting to come down</em>, and borrowing it to
+		   say "main has moved on" would read as the first thing on every other
+		   row. That figure is in the tooltip, in words.</p>
+	</div>
+	<div class="card">
+		<h3>Order, and one order</h3>
+		<p>The branch you are on and the repository's default are pinned on top,
+		   then branches in no folder, then a section each. Tags come newest
+		   first, because alphabetical order lies about versions —
+		   <code>v1.10</code> before <code>v1.9</code>. Right-clicking a section
+		   header offers the orders and remembers the choice. The titlebar's
+		   branch pill follows the same one: two lists of the same branches in one
+		   window do not get to disagree.</p>
+	</div>
+	<div class="card">
+		<h3>And a branch can become a pull request</h3>
+		<p><em>Publish and Open Pull Request…</em> on a branch the host does not
+		   have, <em>Open Pull Request…</em> on one it does — two steps as one
+		   verb, because having to know that the push comes first is what makes
+		   this the part of the job people leave the app to do.
+		   <a href="pull-requests.html">Reviewing one</a> is a page of its
+		   own.</p>
+	</div>
+</div>
+<p>
+	Several branches can be selected and deleted at once, under one dialog written
+	from what was found rather than from what was asked — <em>already on main,
+	nothing would be lost</em>, or <em>not on main, these would lose commits</em>,
+	with the names and a count under each. Whether anything would be lost is decided
+	by ancestry against the branch you are standing on, not by
+	<code>git branch -d</code>, which refuses a branch that is ahead of its own
+	<em>stale</em> upstream even when every commit on it is already on
+	<code>main</code>. A branch a worktree holds offers to take the worktree with
+	it, with the disk it would free measured beside it.
+</p>
+
+<h2>Two pages</h2>
+<p>
+	The two things you sit down to do are not panes in a column three hundred points
+	wide. <kbd>⇧⌘L</kbd> opens the log and <kbd>⇧⌘K</kbd> the commit, each as a tab
+	in the editor — and each leaves the window arranged the way you had it, because
+	the panel's height and the tree's width are somebody's own arrangement, chosen
+	for what they were doing a minute ago.
+</p>
+<figure>
+	<img src="images/log.png" alt="The Abydos log page: a commit graph with lanes, refs drawn as labels, author and date as columns, and the selected commit's changed files and diff beside it."
+	     loading="lazy">
+	<figcaption>The log, where a graph has room for its lanes. Refs are labels,
+	   author and date are columns, and the selected commit's files sit beside it
+	   rather than in a tab somewhere else.</figcaption>
+</figure>
+<p>
+	A log scoped to a branch is one <code>git log</code> of both tips under
+	<code>--date-order</code>, so the commits the upstream has and the branch does
+	not arrive already merged into the sequence — dimmed as one piece, the row, the
+	dot and the line down to the commit they were built on. A repository whose own
+	header says <code>1 behind</code> and whose log showed no trace of what there
+	was to pull was telling somebody deciding whether to pull that there was
+	nothing. Folding a merge hides its commits and takes its lanes with it. Commit
+	messages render as markdown, which is what they are written in.
+</p>
+<figure>
+	<img src="images/commit.png" alt="The Abydos commit page: unstaged and staged lists on the left, the diff of the selected file beside them with old and new line numbers, and a summary field with Draft, Amend, Commit and Push along the bottom."
+	     loading="lazy">
+	<figcaption>The commit page. The diff gets the room; the message is two rows
+	   under it, and the description is behind a chevron until it is asked
+	   for.</figcaption>
+</figure>
+<p>
+	Committing is reached from the working copy row, and the row does not say
+	<code>Commit…</code> — that reads as <em>commit now, after a confirmation</em>,
+	and nothing is committed by pressing it. It says <code>Review 2 changes…</code>,
+	which names what happens next, and the context menu and <kbd>⇧⌘K</kbd> say the
+	same words so the three ways in cannot drift.
+</p>
+<p>
+	Changes are shown as the folders they changed rather than as a flat list of
+	paths: a folder stages everything under it and says how much of itself is on
+	this side of the index, with the counts in a column so the plus signs do not
+	step in and out by a digit at every level. Staging answers the click — the rows
+	switch sides on the command's own exit, and the status re-read that follows
+	confirms or corrects it. The selection is kept across the rebuild, and where the
+	row it was on has gone it lands on the nearest surviving one.
+</p>
+
+<h2>Nothing destroyed without being said, and nothing lost</h2>
+<p>
+	Switching a branch over uncommitted work, discarding, resetting, rebasing,
+	amending, deleting a branch that is ahead and moving a tag each say what they
+	will cost — <strong>leading with a number</strong>, because "4 commits leave
+	main" is read and "this cannot be undone" is not — and leave a real branch under
+	<code>backup/</code> before they run. A toast afterwards names it and offers to
+	undo.
+</p>
+<div class="cards">
+	<div class="card">
+		<h3>A branch, and not the reflog</h3>
+		<p>Reflog entries for unreachable commits expire and <code>gc</code>
+		   collects what they pointed at. Not a private ref namespace either:
+		   safety nobody can find with <code>git branch</code> is not safety. The
+		   <code>backup/</code> folder keeps its shape however few refs are under
+		   it, and can be swept by age with the count of what each age would take
+		   shown before you choose.</p>
+	</div>
+	<div class="card">
+		<h3>Uncommitted work is captured without being disturbed</h3>
+		<p><code>git stash create</code> was the obvious way and is the wrong one:
+		   it has no <code>--include-untracked</code>, so discarding a file git had
+		   never seen would have been insured by a commit not containing it.</p>
+	</div>
+	<div class="card">
+		<h3>One question for a whole estate</h3>
+		<p>Every repository backed up before any file is discarded, and one report
+		   naming each repository and its backup ref. Asking two hundred times is
+		   asking nobody — and <em>do not ask again</em> is keyed per repository,
+		   since an answer given while looking at one service is not a decision
+		   about two hundred.</p>
+	</div>
+	<div class="card">
+		<h3>The one thing that is not insured</h3>
+		<p>Force-pushing a branch, and it says so. No local ref can recover
+		   somebody else's commits from a remote.</p>
+	</div>
+</div>
+
+<h2>When git has stopped in the middle</h2>
+<figure>
+	<img src="images/conflict.png" alt="Abydos during a stopped merge: a strip above the tree reading Merging theirs into main, two conflicted files as rows, and a Continue button that is not yet enabled."
+	     loading="lazy">
+	<figcaption>The strip is about the operation, for as long as one is in
+	   progress. The files are rows: click one to open it, right-click for the two
+	   sides — named by branch.</figcaption>
+</figure>
+<p>
+	It says which branch is coming in and where it is going, rather than a short hash
+	and the truncated subject of somebody else's commit. Each row ticks green and
+	strikes through as it clears, the line under the headline counts
+	<code>2 of 3 resolved</code>, and <code>Continue</code> lights when the last one
+	turns — so the disabled button never needs a sentence explaining itself.
+	<code>Continue</code>, <code>Skip</code> and <code>Abort</code> are the three
+	verbs that end one, and a rebase can be carried to its end from here.
+</p>
+<p>
+	<strong>Never "ours" and "theirs" on screen.</strong> Stage 2 is
+	<code>--ours</code> in both a merge and a rebase and they are opposite halves:
+	rebasing replays your commits onto somebody else's, so the branch you are on
+	arrives as <code>--theirs</code>. A menu item saying <em>Use Ours</em> during a
+	rebase throws away the wrong half and nothing in the wording says so.
+</p>
+<p>
+	<strong>Git forgets, so the pane remembers twice.</strong> A path stops being
+	unmerged the moment it is staged, so a list built from what is unmerged
+	<em>now</em> shrinks instead of ticking. The pane holds the set for one stop and
+	also reads what git wrote under <code>#&nbsp;Conflicts:</code> in
+	<code>.git/MERGE_MSG</code>, so a merge reopened tomorrow still counts the files
+	already dealt with. A file whose markers have gone but which is not staged says
+	<code>edited</code> in amber — the one state with no other signal on screen.
+</p>
+
+<h2>A stash you can read</h2>
+<p>
+	A stash used to be a commit nobody could read: a list of file names and no way to
+	find out what was in it short of applying it over a clean working copy, which is
+	the one move somebody with work in progress cannot make. <em>Review…</em> opens
+	one as a page in the commit page's shape — the files, the diff beside them,
+	read-only, because a stash has already happened.
+</p>
+<p>
+	Untracked files come with it. Git keeps them in a third parent, and they are
+	exactly the half somebody has forgotten they had — which is also why putting the
+	working copy aside from its own row takes them <strong>by default</strong>, and
+	that is not git's default: the file you have just written is both the one you are
+	most likely putting aside and the one still untracked. Each stash says whether it
+	would still apply, checked without touching the working copy, and where it would
+	not, branching from it is offered instead — applied on the commit it came from,
+	it cannot conflict.
+</p>
+
+<h2>The message</h2>
+<div class="cards">
+	<div class="card">
+		<h3>Drafted from what is staged</h3>
+		<p><em>Draft</em> writes a summary and description from the staged diff —
+		   not the working copy — with this repository's last twenty subjects
+		   alongside. It fills two fields and stops: nothing staged, nothing
+		   committed, both fields still editable. That the diff is sent is said
+		   once, per project, before the first time.</p>
+	</div>
+	<div class="card">
+		<h3>In the format the tooling reads</h3>
+		<p>The summary is asked for as Conventional Commits v1.0.0 states it —
+		   <code>&lt;type&gt;[scope][!]: &lt;description&gt;</code> — because
+		   changelogs, releases and version bumps all key off it. A toggle turns it
+		   off, and with it off the prompt is byte for byte what it was. What comes
+		   back is never rewritten into the format: prepending a type is
+		   classifying somebody's change on their behalf.</p>
+	</div>
+	<div class="card">
+		<h3>Twenty messages back</h3>
+		<p>A history control beside the summary opens the repository's last twenty
+		   subjects; choosing one fills both fields with that commit's whole
+		   message. One <code>git log -20</code> when the menu opens.</p>
+	</div>
+	<div class="card">
+		<h3>And it survives leaving</h3>
+		<p>A commit message is the most expensive text in the app to lose: written
+		   once, from a diff that has just been read. Both halves travel in the
+		   project's session, and a draft that comes back after you have switched
+		   projects lands in the project it was asked for rather than in the one
+		   now on screen. Onto a message with words in it, a draft is
+		   <em>offered</em> — the button turns red and reads <em>Use draft
+		   instead</em> — rather than thrown away.</p>
+	</div>
+</div>
+
+<h2>Diffs, everywhere one is shown</h2>
+<p>
+	<strong>Git's preamble is not drawn.</strong> <code>diff --git</code>,
+	<code>index</code> and the two <code>---</code>/<code>+++</code> lines say which
+	file this is, and every pane showing a diff has just said that — there is a tree
+	beside it with one row selected. What is kept is the text after the
+	<code>@@</code>, git's guess at the declaration the hunk is inside, drawn as a
+	labelled rule. A one-line change went from eight rows to three.
+</p>
+<p>
+	The two sides can be drawn beside each other, a run of removals paired with the
+	run of additions that follows it. Old and new line numbers are both shown.
+	Selected lines can be staged, unstaged or stashed on their own. A file's own row
+	offers <em>Compare ▸ Against Last Commit</em> — staged and unstaged edits in one
+	answer, not two — and <em>Compare ▸ History…</em>, which opens the log scoped to
+	that file, where a commit then offers <em>Compare with Working Copy</em>.
+</p>
+<p>
+	<strong>And a picture diffs as a picture.</strong> A changed screenshot, icon or
+	exported diagram used to diff as one line: <em>No textual changes.</em> True, and
+	useless. Both sides are read from git and drawn on the same checkerboard the
+	editor uses, each labelled with what it is and its pixel size — side by side, or
+	overlaid with a slider, or with the new one dimmed and the regions that differ
+	outlined and counted. The comparison is arithmetic in the kit, with a channel
+	threshold so a re-encode is not a change, and a plain refusal with a reason for
+	two pictures of different sizes.
+</p>
+
+<h2>An estate is one working copy</h2>
+<p>
+	A refactoring across a microservice estate is done in a superproject that holds
+	two or three hundred repositories as submodules. <kbd>⇧⌘M</kbd> is the page that
+	answers <em>where is this refactoring</em>: a row per service with what changed
+	in it, the branch it is on, how far that is from its remote, whether the
+	superproject records it somewhere else, and its pull request. Ordered by what
+	needs something — conflicted, changed, ahead, moved, then the quiet ones —
+	because three hundred alphabetical rows of which four matter is a page nobody
+	reads twice.
+</p>
+<div class="scroll">
+<table>
+	<thead><tr><th>What was asked, on an estate of 200 services</th><th>Seconds</th></tr></thead>
+	<tbody>
+		<tr><td>What the app used to run on every filesystem event</td><td><strong>1.57</strong></td></tr>
+		<tr><td>The superproject alone, <code>--ignore-submodules=dirty</code></td><td><strong>0.09</strong></td></tr>
+		<tr><td><code>git submodule status</code>, the obvious replacement</td><td><strong>5.31</strong></td></tr>
+		<tr><td>All 200 asked at once, twelve concurrent</td><td><strong>0.45</strong></td></tr>
+		<tr><td>The inventory, one <code>ls-files --stage</code></td><td><strong>0.01</strong></td></tr>
+	</tbody>
+</table>
+</div>
+<p>
+	So one question became two, and the ceiling of twelve is measured rather than
+	chosen: twelve concurrent read 200 in 0.45 s and twenty-four read them in 0.46 s,
+	and unbounded is three hundred git processes against ten cores while a build is
+	running. After the first read nothing is swept — every submodule's git directory
+	lives under the superproject's own, so two watchers cover three hundred
+	repositories and a write inside one service re-reads that service alone.
+</p>
+<p>
+	Every verb is aimed at the repository that owns its path, which is what makes a
+	submodule's file stageable from the superproject at all. A commit across
+	repositories reports itself per repository and <strong>never claims to be
+	atomic</strong>: nothing can make two hundred commits one transaction, and the
+	rollback that would pretend otherwise is <code>git reset --hard</code> in
+	repositories somebody may already have fetched. A failure at the fourth of six
+	leaves five commits standing, says which, and is resumable. Pull requests across
+	the estate are one set keyed by branch, read from the forge every time and never
+	stored.
+</p>
+
+<h2>What is deliberately still Fork's</h2>
+<p>
+	Interactive rebase, three-way merge editing and blame archaeology. Abydos owns
+	the git you do <em>while</em> writing code; the branch pill and the conflict
+	strip both offer Fork for the rest, and that is a stated contract rather than a
+	fallback.
+</p>
+
+<p class="foot-note">
+	Reviewing somebody else's branch is <a href="pull-requests.html">the pull
+	requests page</a>. What the editor's gutter says about the lines you have
+	changed, and who last touched them, is <a href="editor.html">the editor
+	page</a>.
+</p>

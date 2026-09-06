@@ -46,17 +46,22 @@ a broken image.
 ## The pictures
 
 ```sh
-make screenshots        # the nine the pages use, in the app's own theme
+make screenshots        # the seventeen the pages use, in the app's own theme
 make theme-shots        # one scene in each palette, for themes.html
 make shots              # both
 make thumbs             # small copies of all of them, after either
 ```
 
-`make thumbs` is `sips`, which is macOS's own. The front page shows nine at
-once, and nine full screenshots is four megabytes to look at a page of links.
+`make thumbs` is `sips`, which is macOS's own. The front page shows eleven at
+once, and eleven full screenshots is five megabytes to look at a page of links.
 
 Every picture is the app doing the thing the page claims, on a project from the
-examples repository that anybody can clone.
+examples repository that anybody can clone — including the nine repositories
+`git-scenarios` makes, each stuck in a state worth looking at, which the script
+clones and makes for itself. The one exception is `pullrequest`, and it is one
+because a pull request lives on a forge and the examples repository has none: it
+photographs this app's own repository, which is public, and defaults to a pull
+request the repository owner opened rather than somebody else's work.
 
 It needs both other checkouts beside this one:
 
@@ -77,15 +82,15 @@ THEME=light Scripts/screenshots.sh site   # the pages, in daylight
 ```
 
 `THEME` takes what Settings stores — `abydos`, `abydos-light`, `dark`, `light`,
-`dracula`, `dracula-light` — and defaults to `abydos`. It is checked against that
-list before the app is launched, because the app treats an unrecognised value as
-"follow the system": `--theme daylight` on a dark Mac quietly photographs dusk
-instead of failing.
+`dracula`, `dracula-light`, `gray`, `gray-light` — and defaults to `abydos`. It is
+checked against that list before the app is launched, because the app treats an
+unrecognised value as "follow the system": `--theme daylight` on a dark Mac quietly
+photographs dusk instead of failing.
 
 `themes.html` names the palettes — `abydos`, `abydos-light`, `dusk`, `daylight`,
-`dracula`, `dracula-light` — and the script maps between the two spellings. Three
-themes with a light and a dark each is six pictures; the three values that mean
-"follow the system" are not photographed.
+`dracula`, `dracula-light`, `gray`, `gray-light` — and the script maps between the
+two spellings. Four themes with a light and a dark each is eight pictures; the four
+values that mean "follow the system" are not photographed.
 
 The captures are reproducible on purpose: the window is given a size, the panel
 is given a height, and the examples are cloned — not copied, since the titlebar
@@ -93,13 +98,20 @@ says which branch — into a temporary directory first. The clone's `origin` is 
 to wherever the examples checkout points, so the rows the palette offers name
 GitHub rather than a directory in `/tmp`.
 
-Four shots want a working environment rather than just the app. `debugger` needs
+Six shots want a working environment rather than just the app. `debugger` needs
 Delve and a Go toolchain; `terminal` needs `tmux`, and will attach to a session
 that is already running, so check what came out before committing it. `scad`
 needs OpenSCAD and `cadova` a Swift toolchain and the network once — it is also
 the slow one, at about three and a half minutes, since every shot gets a fresh
-clone and compiles a C++ geometry kernel from cold. `diagram` needs nothing: it
-is Mermaid, which is inside the app.
+clone and compiles a C++ geometry kernel from cold. `pullrequest` needs `gh`
+logged in to github.com and the network, and `sops` needs `sops` and `age`, for
+which it makes a key of its own that goes with the temporary directory. `diagram`
+needs nothing: it is Mermaid, which is inside the app.
+
+`sessionlist` synthesises the sessions it counts rather than waiting for real
+ones, so its rows say they have announced nothing yet — which is what the app
+says about a session it has heard from and which has said nothing. A real one
+carries its last line. The caption on that picture says so.
 
 `palette` photographs a popover, which is a window of its own and so is nowhere
 in the picture of the window it is over. The app writes it out beside the

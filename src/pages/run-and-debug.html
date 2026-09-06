@@ -61,6 +61,29 @@ og_description: Makefile goals, Maven, Gradle, Bazel, Conan, Swift packages and 
 	classpath comes from the same server because nothing else knows it.
 </p>
 
+<h2>A Java edit reaches the JVM that is already running</h2>
+<p>
+	Change a method body while a program is being debugged, press <kbd>⌘S</kbd>, and
+	the running JVM takes the new code. The process is not restarted: whatever state
+	it had built up is still there, the breakpoint you spent minutes reaching is
+	still where it was, and for a service in a pod the port-forward is still open.
+	The same works against a JVM you attached to — redefinition is the JVM's own, so
+	where it is running has nothing to do with whether it works.
+</p>
+<p>
+	<strong>Most edits will be refused, and that is the JVM rather than a fault.</strong>
+	HotSpot replaces method bodies and nothing else: adding or removing a method,
+	changing a signature, adding a field and changing what a class extends are all
+	refused, and that is most of what editing feels like. When it happens you get the
+	JVM's own sentence about what it would not take, naming the class, with a restart
+	one press away. Nothing restarts on its own — a debug session holds a stack that
+	was expensive to reach, and for an attached session a restart is somebody's
+	service going down. A method affected by a swap is dropped to and entered again,
+	so if you were stopped inside the one you just edited you end up at the top of its
+	new body; that is the Eclipse debugger's behaviour, and it is said out loud,
+	because unexplained it reads as the debugger losing its place.
+</p>
+
 <h2>Where the program actually runs</h2>
 <div class="cards">
 	<div class="card">
@@ -93,6 +116,46 @@ og_description: Makefile goals, Maven, Gradle, Bazel, Conan, Swift packages and 
 		   last is remembered, so the play button repeats it. It builds, installs,
 		   launches, and the app's own output arrives in the terminal — no Xcode
 		   window, and nothing to keep in step with one.</p>
+	</div>
+</div>
+
+<h2>Smaller things, in the places they are wanted</h2>
+<div class="cards">
+	<div class="card">
+		<h3>A list of the breakpoints</h3>
+		<p>One was drawn in the gutter of its own file and nowhere else, so six
+		   across four files could only be checked by opening four files — and the
+		   verb that silences all but one was reachable only by right-clicking one
+		   of them in a gutter. They belong to the project rather than to the
+		   window, too: a checkout that had never had a debugger pointed at it was
+		   holding four from unrelated projects.</p>
+	</div>
+	<div class="card">
+		<h3><kbd>⌃C</kbd> stops a session from its console</h3>
+		<p>A program printing into the debugger's console could not be stopped from
+		   it; the only stop was closing the tab, which kills the program and takes
+		   away the output saying what it did on the way down. <strong>It is not an
+		   interrupt.</strong> That console owns no process — what travels is the
+		   same request the Stop button makes — so a program with a
+		   <code>SIGINT</code> handler will not run it. <kbd>⌘C</kbd> still copies,
+		   which matters more than it sounds.</p>
+	</div>
+	<div class="card">
+		<h3>Debugging through a wrapper script</h3>
+		<p>Nobody pointing a launch configuration at <code>./mvnw</code> wants to
+		   debug the shell. A script is recognised by the two bytes at the front,
+		   never by its name, and how you ask for a JDWP port differs per wrapper:
+		   <code>MAVEN_OPTS</code> for Maven, <code>--debug-jvm</code> for Gradle —
+		   because <code>GRADLE_OPTS</code> reaches the daemon, and suspending that
+		   hangs the build with the debugger attached to the wrong JVM — and
+		   <code>JAVA_TOOL_OPTIONS</code> for anything else with a shebang.</p>
+	</div>
+	<div class="card">
+		<h3>A watched value can be opened up</h3>
+		<p>A watch on anything but a scalar was a row saying <code>{...}</code> with
+		   no way in. The session had been storing the reference since watches were
+		   written; there was simply no way to address the root of one, so nothing
+		   ever asked what was behind it.</p>
 	</div>
 </div>
 

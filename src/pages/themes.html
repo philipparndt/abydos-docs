@@ -1,14 +1,14 @@
 ---
 title: Themes — Abydos
-description: The three themes Abydos ships with, each in light and dark — the app's own amber one, the blue-grey it started with, and Dracula at upstream's own values — photographed on the same project, with the colours they are built from, and how to write one of your own.
+description: The four themes Abydos ships with, each in light and dark — the app's own amber one, the blue-grey it started with, Dracula at upstream's own values, and a grey that has been let go of the blue — photographed on the same project, with the colours they are built from, and how to write one of your own.
 og_title: Abydos themes
-og_description: Three themes, each with a light and a dark: abydos, abydos-light, dusk, daylight, dracula and its daylight half Alucard, photographed on one project with the palette each is built from.
+og_description: Four themes, each with a light and a dark: abydos, abydos-light, dusk, daylight, dracula and its daylight half Alucard, and gray with gray-light — photographed on one project with the palette each is built from.
 ---
 <header class="inner">
 	<a class="back" href="index.html">← Abydos</a>
 	{{ include partials/icon.svg }}
 	<h1>Themes</h1>
-	<p class="tagline">Three themes, each with a daylight half and a dark one. The
+	<p class="tagline">Four themes, each with a daylight half and a dark one. The
 	   same project, the same file, the same window size — so what differs between
 	   these pictures is only the colour.</p>
 </header>
@@ -21,15 +21,18 @@ og_description: Three themes, each with a light and a dark: abydos, abydos-light
 </p>
 <p>
 	Two questions rather than one list. <strong>Theme</strong> is which palette —
-	Abydos, Blue or Dracula — and <strong>Light or dark</strong> is how light it
-	should be, with <code>System</code> as the third answer to the second question
-	rather than an entry in the first. Three by three, and the six that are not a
-	deferral are below.
+	Abydos, Blue, Dracula or Gray — and <strong>Light or dark</strong> is how light
+	it should be, with <code>System</code> as the third answer to the second question
+	rather than an entry in the first. Four by three, and the eight that are not a
+	deferral are below. A fresh installation opens in Blue: it opened in Abydos for a
+	while, and every current user chose Blue over it, and a default nobody keeps is a
+	first-run chore.
 </p>
 <p>
 	Every picture on this page was taken by <code>make theme-shots</code>, and the
 	colours listed under each are read out of the scheme the app ships —
-	<code>abydos.json</code>, <code>blue.json</code>, <code>dracula.json</code>.
+	<code>abydos.json</code>, <code>blue.json</code>, <code>dracula.json</code>,
+	<code>gray.json</code>.
 </p>
 
 <div class="theme">
@@ -219,19 +222,84 @@ og_description: Three themes, each with a light and a dark: abydos, abydos-light
 	</figure>
 </div>
 
+<div class="theme">
+	<h2 id="gray">Gray</h2>
+	<div class="theme-meta">
+		<span>Settings: <code>Gray</code> + <code>Dark</code></span>
+		<span>Terminal scheme: <code>gray</code>, sixteen of its own</span>
+	</div>
+	<p class="lead">
+		Grey with the blue let go of. Nearly every dark theme carries a blue cast in
+		every surface, which is what makes a window of them look like the same
+		window. This one takes the hue out of the chrome — a hair warm, because an
+		exactly equal grey reads as faintly green on a display and a warm one reads
+		as grey — so the surfaces say nothing at all and the syntax does the talking.
+		The selection is graphite rather than blue, which is the whole point of it:
+		nothing in the chrome competes with the code.
+	</p>
+	<ul class="swatches">
+		<li><b style="background:#202020"></b><span>#202020</span> window</li>
+		<li><b style="background:#292928"></b><span>#292928</span> sidebar</li>
+		<li><b style="background:#CBCAC6"></b><span>#CBCAC6</span> text</li>
+		<li><b style="background:#D6905F"></b><span>#D6905F</span> keyword</li>
+		<li><b style="background:#64A8DC"></b><span>#64A8DC</span> call</li>
+		<li><b style="background:#82AF7B"></b><span>#82AF7B</span> string</li>
+		<li><b style="background:#C78BBE"></b><span>#C78BBE</span> property</li>
+		<li><b style="background:#3E3E3C"></b><span>#3E3E3C</span> selection</li>
+	</ul>
+	<figure>
+		<img src="images/themes/gray.png" alt="Abydos in the Gray theme: the same Go project on neutral dark grey surfaces with no blue in them, with orange keywords, blue calls and green strings."
+		     loading="lazy">
+		<figcaption>Gray. Every value here is this project's own, arrived at on this
+		   screen — the arrangement is the one most editors settled on because it
+		   works, and none of the numbers are anybody else's.</figcaption>
+	</figure>
+</div>
+
+<div class="theme">
+	<h2 id="gray-light">Gray Light</h2>
+	<div class="theme-meta">
+		<span>Settings: <code>Gray</code> + <code>Light</code></span>
+		<span>What <code>Gray</code> + <code>System</code> resolves to in the day</span>
+	</div>
+	<p class="lead">
+		The same idea by day: paper with no blue in it either, and the editor the one
+		near-white surface on the screen. The syntax hues are the dark one's, taken
+		down to where they can be read on paper rather than lightened versions of
+		themselves.
+	</p>
+	<ul class="swatches">
+		<li><b style="background:#F7F7F5"></b><span>#F7F7F5</span> window</li>
+		<li><b style="background:#FDFDFB"></b><span>#FDFDFB</span> editor</li>
+		<li><b style="background:#2A2A26"></b><span>#2A2A26</span> text</li>
+		<li><b style="background:#8A4A14"></b><span>#8A4A14</span> keyword</li>
+		<li><b style="background:#1F6C9E"></b><span>#1F6C9E</span> call</li>
+		<li><b style="background:#3D7A38"></b><span>#3D7A38</span> string</li>
+		<li><b style="background:#8A2E80"></b><span>#8A2E80</span> property</li>
+		<li><b style="background:#DEDED8"></b><span>#DEDED8</span> selection</li>
+	</ul>
+	<figure>
+		<img src="images/themes/gray-light.png" alt="Abydos in the Gray Light theme: the same Go project on warm off-white and light grey surfaces, with dark orange keywords, blue calls and green strings."
+		     loading="lazy">
+		<figcaption>Gray Light. The greys sit close together and the colours do the
+		   separating, which is what a light theme has to do.</figcaption>
+	</figure>
+</div>
+
 <h2>System</h2>
 <p>
 	<code>System</code> is not a palette but a deferral, and it belongs to the
 	second question rather than the first: it follows the Mac's own light and dark
 	setting without touching which theme you chose. Abydos plus <code>System</code>
 	is amber after dark and warm paper by day; Blue gives dusk and daylight;
-	Dracula gives Dracula and Alucard. It changes while the app is running, so a
+	Dracula gives Dracula and Alucard; Gray gives its two greys. It changes while the app is running, so a
 	machine that switches at sunset switches the editor with it.
 </p>
 <h2>One of your own</h2>
 <p>
-	A scheme is a file, and each of the three above is one:
-	<code>abydos.json</code>, <code>blue.json</code>, <code>dracula.json</code>. Two
+	A scheme is a file, and each of the four above is one:
+	<code>abydos.json</code>, <code>blue.json</code>, <code>dracula.json</code>,
+	<code>gray.json</code>. Two
 	sections — <code>app</code> for the editor and its chrome, <code>terminal</code>
 	for the terminal — and every colour a light/dark pair.
 </p>

@@ -1,0 +1,190 @@
+---
+title: Pull requests — Abydos
+description: Reviewing a pull request in the editor rather than in a browser: the list of what is waiting on you, the change against the point it branched from, whole-file diffs with a language server pointed at them, ticks that die when the author pushes, and one submission with a verdict.
+og_title: Reviewing pull requests in Abydos
+og_description: The list, the review page, a worktree to read it in, remarks drawn on the lines they were left on, and one submission with a verdict — all through the GitHub CLI, with no token this program holds.
+---
+<header class="inner">
+	<a class="back" href="index.html">← Abydos</a>
+	{{ include partials/icon.svg }}
+	<h1>Pull requests</h1>
+	<p class="tagline">Reviewing somebody's code means reading code, and this is a
+	   program for reading code. The half that was missing was never the diff
+	   viewer.</p>
+</header>
+
+<p>
+	A review of anything non-trivial used to be done twice: once in the browser to
+	see the diff and leave the remarks, and once here to understand what the diff
+	did — because in a browser there is no language server, no go-to-definition, no
+	outline, no running the tests, and no way to open the file the change is
+	actually about.
+</p>
+
+<figure>
+	<img src="images/pullrequest.png" alt="A pull request open in Abydos: the header naming the number, the title, who wants to merge which branch into which, how many files have been read, and buttons for Review and Check Out; the changed files as a tree on the left and the whole of the selected source file beside them."
+	     loading="lazy">
+	<figcaption>A pull request as a page beside the log and the commit view — this
+	   one being the pull request that added this page. The diff is the whole file,
+	   with the language server pointed at it.</figcaption>
+</figure>
+
+<h2>The list, and what it answers</h2>
+<p>
+	A pull request tool is opened to answer one question — <strong>what is waiting on
+	me</strong> — so the ones this account has been asked to review are marked and
+	sorted to the top rather than mixed into a wall of rows that has to be read to
+	find them. Every row says the number, the title, the author, the branch, whether
+	it is a draft and how far along its checks are. Those last two are there because
+	a pull request whose build is red is usually not worth reading line by line yet,
+	and that is a fact about the work rather than about the reviewer's taste.
+</p>
+<p>
+	Whether <em>waiting on me</em> includes a team you belong to is a switch above
+	the list rather than a rule. <code>user-review-requested:@me</code> and
+	<code>review-requested:@me</code> are two different questions, and which one a
+	repository wants depends on how it assigns its reviews — which cannot be worked
+	out from here. Teams count by default, because that is the setup where the narrow
+	answer is silently empty and somebody concludes nothing is waiting on them.
+</p>
+<p>
+	It has its own button on the rail, beside the git one rather than behind it.
+	What is behind the git button is one tree — the working copy, the stashes and the
+	refs, all things this repository holds. A pull request is none of those: it is on
+	somebody else's server, asked about over the network, and opened to read somebody
+	else's work. So <strong>the list is asked for, never polled</strong>: every other
+	git pane re-reads on each filesystem event because git is local and cheap, and
+	this is a network call against an API with a rate limit.
+</p>
+
+<h2>Reading one</h2>
+<div class="cards">
+	<div class="card">
+		<h3>The change against where it branched from</h3>
+		<p>Not the difference between two tips. A file the base branch moved
+		   underneath the author is not a file they touched, and listing it sends a
+		   reviewer to read somebody else's work. One open pull request against
+		   <code>cli/cli</code>, taken as it stood: three files changed, on a base
+		   that had gained 29 commits touching 17 files since it branched.</p>
+	</div>
+	<div class="card">
+		<h3>The diff can be the whole file</h3>
+		<p>A browser shows three lines either side of a change; here the file is on
+		   disk with a language server pointed at it, and the question a reviewer
+		   actually has is usually about the code <em>around</em> the change. The
+		   hunks are spliced back into the file at the head — the changed lines
+		   exactly as git wrote them, everything else as context — so the same view
+		   draws it with the same colours and honest line numbers.</p>
+	</div>
+	<div class="card">
+		<h3>Made of what the other pages are made of</h3>
+		<p>The same file outline, the same two arrangements, the same line counts,
+		   the same keyboard as the log and the commit view. A second arrangement
+		   of the same thing is how two lists come to disagree about what a rename
+		   looks like.</p>
+	</div>
+	<div class="card">
+		<h3>And nothing here stages anything</h3>
+		<p>The diff view offers staging by line because the changes pane needs it.
+		   On somebody else's branch those gestures are meaningless, and a menu
+		   item that cannot work is worse than none.</p>
+	</div>
+</div>
+
+<h2>Ticking files off, and ticks that die</h2>
+<p>
+	Files are ticked as they are read, through the same checklist the usages list and
+	the search results use: progress, hide-done, and one key to the next thing not
+	yet read. A reviewer's place in a long list is the thing most easily lost and the
+	most annoying to find again, so the ticks are remembered per pull request and
+	outlive the window.
+</p>
+<p>
+	<strong>A tick dies when the file it was about changes.</strong> Ticks are
+	recorded against that file's diff at the head they were made on; when the author
+	pushes, the ticks for files whose diff moved are cleared and the rest are kept.
+	The token is the diff and not the head commit, and that choice is the whole
+	feature: a rebase that changed nothing keeps its ticks — the case a reviewer meets
+	most often and would resent losing — and a force-push that <em>did</em> rewrite
+	one file clears exactly that one, without either being a special case. Clearing
+	everything on every push would be as bad the other way: a pull request pushed to
+	five times during a review could then never be finished, and the reviewer would
+	learn to ignore the ticks.
+</p>
+
+<h2>Reading it in place</h2>
+<p>
+	The branch can be checked out as a worktree beside the project, so the language
+	server, go-to-definition, the outline and the tests are all pointed at the change
+	under review while whatever was being worked on stays where it was. Two pull
+	requests can be open at once, which is what a blocked morning looks like.
+</p>
+<p>
+	It is a switch rather than a door: the page does not move when it is pressed —
+	not the file you were reading, not your place in it, not what you had ticked or
+	written. Pointing the window at the checkout is a separate thing to want, and it
+	is in the list's own menu. A checkout made for a review says so, in the branches
+	pane and in the titlebar menu, because a list of checkouts is a list of places
+	somebody chose to work and a reviewer who opens three a day otherwise grows a
+	checkout a day, each named after a stranger's branch. Finishing with one removes
+	it, and one holding changes refuses and says what is in it.
+</p>
+
+<h2>The conversation, and answering</h2>
+<p>
+	The remarks already on a pull request are drawn on the diff, at the lines they
+	were left on, with who left them and when. A reviewer who cannot see them says
+	again what somebody has already said, which is worse than saying nothing: the
+	author now has two conversations about one line. <strong>A remark whose line has
+	gone is shown, not dropped</strong> — GitHub calls those outdated; they are kept
+	against their file and marked as being about an earlier version, because a
+	conversation that happened is worth knowing about even when the code it was about
+	is not there any more.
+</p>
+<p>
+	Remarks are written on a line or a run of lines — pointing at the first line of a
+	five-line mistake makes the author find the other four — and go in
+	<strong>one submission</strong> with a verdict of approved, commenting or
+	requesting changes. That is how GitHub models it and how a reviewer thinks: a
+	review is a set of remarks and a verdict, not a series of interruptions to the
+	author.
+</p>
+<p>
+	The head the page was read at travels with the review. If the author has pushed
+	since, the line numbers mean something else, and that is said before anything is
+	sent — a remark that lands on the wrong line is a remark about somebody else's
+	code, sent in the reviewer's name. What is written stays written until the
+	submission succeeds; the failure that matters is a review that looks sent and is
+	not, because the author is waiting on it.
+</p>
+
+<h2>Through <code>gh</code>, and never a token this program holds</h2>
+<p>
+	Every request goes through the GitHub CLI. It is already how the rest of this
+	repository talks to GitHub, it is already authenticated on the machines this runs
+	on, it handles Enterprise hosts and SSO and token refresh, and it is a process —
+	like <code>git</code> — so it costs no dependency. A token kept here would be a
+	second place for a credential to leak from and a second thing to expire without
+	saying so.
+</p>
+<p>
+	The cost of that is real and is stated rather than hidden. A missing
+	<code>gh</code>, a <code>gh</code> that is not logged in, and a remote that is not
+	a forge this understands are three first-class answers, each saying what to do
+	about it:
+</p>
+<pre>The GitHub CLI is not logged in to ghe.example.com.
+Log in with `gh auth login --hostname ghe.example.com`.</pre>
+<p>
+	<strong>None of them may render as an empty list.</strong> "No pull requests are
+	open" is a sentence about the repository and "the CLI is not logged in" is a
+	sentence about the machine; a reader cannot tell them apart from a blank pane,
+	and only one of them is something they can act on.
+</p>
+
+<p class="foot-note">
+	Pull requests across an estate of submodules — one set, keyed by branch — are on
+	<a href="git.html">the git page</a>, with the rest of what this app does with a
+	repository. Having an agent review the branch instead is
+	<a href="terminal.html">the terminal page</a>.
+</p>

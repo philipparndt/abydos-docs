@@ -49,7 +49,7 @@ SIZE="${SIZE:-1600x1000}"
 THEME="${THEME:-abydos}"
 APP="$ABYDOS/build/Abydos.app/Contents/MacOS/Abydos"
 
-# The six palettes — three themes with a light and a dark each — minus the three
+# The eight palettes — four themes with a light and a dark each — minus the four
 # values that mean "follow the system", which is not a palette but a deferral and
 # resolves to one of these.
 #
@@ -73,6 +73,7 @@ THEMES=(
 	abydos:abydos abydos-light:abydos-light
 	dark:dusk light:daylight
 	dracula:dracula dracula-light:dracula-light
+	gray:gray gray-light:gray-light
 )
 
 usage() { sed -n '2,23p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
@@ -163,6 +164,18 @@ shoot() {
 shot_editor() {
 	local theme="$1" path="$2"
 	local go; go="$(prepare go-service go-service)"
+	# The devcontainer, out of the clone.
+	#
+	# This scene is the editor and the palette it is drawn in, eight times over
+	# on the themes page, and go-service has since gained a `devcontainer.json`
+	# — so every one of those pictures asks a question in the corner about
+	# starting a container, and answering `Not Now` only trades it for the strip
+	# saying the server was not started. Neither is what any of these pictures
+	# is about. Removed from the clone, which is thrown away afterwards, the
+	# project is the one this gallery was built on and its server starts here.
+	# What a devcontainer does is a row in the table on the front page and has
+	# nothing to prove in a picture of a colour scheme.
+	rm -rf "$go/.devcontainer"
 	shoot "$path" "$theme" --open "$go" --file "$go/main.go" --expand --panel-height 0 --delay 4
 }
 
@@ -333,11 +346,221 @@ shot_palette() {
 	return 0
 }
 
-# No git shot yet. These are fresh clones with nothing uncommitted in them, so
-# the changes pane would be photographed empty, which says the opposite of what
-# it is for. Photographing this repository instead would mean whatever happened
-# to be lying around that day.
-SITE_SHOTS=(editor debugger terminal java breakpoint palette scad cadova diagram)
+# ── Git ─────────────────────────────────────────────────────────────────────
+#
+# Where this file used to say there was no git shot, the objection was right and
+# had no answer at the time: a fresh clone has nothing uncommitted in it, and
+# photographing *this* repository would be photographing whatever was lying
+# around that day. `git-scenarios` is the answer. It is nine repositories, each
+# stuck in a state worth looking at, made by a script the examples repository
+# commits — so every picture below is a state anybody reproduces with
+# `make scenarios` in their own checkout.
+#
+# Cloned and made once for the whole run, because the `large` scenario is three
+# hundred commits. The directory is the marker rather than a variable: a
+# function used as `$(scenarios x)` runs in a subshell and cannot remember
+# anything.
+scenarios() {
+	local out="$WORK/scenarios/git-scenarios/out"
+	if [ ! -d "$out" ]; then
+		git clone --quiet "$EXAMPLES" "$WORK/scenarios" >&2
+		( cd "$WORK/scenarios" && ./git-scenarios/make-scenarios.sh >/dev/null ) >&2
+	fi
+	printf '%s' "$out/$1"
+}
+
+# The refs tree: one list from the top edge of the pane, with the repository as
+# its first row.
+#
+# `branches` on its own is five branches and nothing else — no remote, no tags,
+# a clean working copy — so four of the sections the tree draws would be empty
+# and the row that says how far you are from the remote would have nothing to
+# say. What is added here is what any repository being worked in has: a remote
+# with some branches published and some not, a tag, one commit that has not been
+# pushed, and work in progress.
+shot_git() {
+	local theme="$1" path="$2"
+	local repo; repo="$(scenarios branches)"
+	if [ ! -d "$WORK/git-remote.git" ]; then
+		git init -q --bare "$WORK/git-remote.git"
+		git -C "$repo" remote add origin "$WORK/git-remote.git"
+		git -C "$repo" push -q -u origin main
+		# With `-u`, because a branch pushed without an upstream is still an
+		# unpublished branch as far as the row is concerned — and a tree where
+		# every branch says the same thing shows nothing about the vocabulary.
+		git -C "$repo" push -q -u origin feature/lights fix/timeout
+		git -C "$repo" tag -a v1.2.0 -m "Release 1.2.0"
+		git -C "$repo" push -q origin v1.2.0
+		printf 'one more line\n' >> "$repo/README.md"
+		git -C "$repo" commit -qm "A commit the remote has not seen" README.md
+		printf 'target: 21.5\n' > "$repo/thermostat.yaml"
+		printf 'and this is still being written\n' >> "$repo/README.md"
+	fi
+	shoot "$path" "$theme" --open "$repo" --file "$repo/README.md" \
+		--sidebar branches --sidebar-width 330 --panel-height 0 --delay 7
+}
+
+# The log page, on a history with something in it to draw: five commits, a tag,
+# a topic branch and the merge that brought it back.
+shot_log() {
+	local theme="$1" path="$2"
+	local repo; repo="$(scenarios history)"
+	shoot "$path" "$theme" --open "$repo" --panel-height 0 --log-page "settle:2,file:0" --delay 9
+}
+
+# The commit page, on the scenario that is staged, unstaged and untracked at
+# once — which is the state the two lists exist to tell apart.
+shot_commit() {
+	local theme="$1" path="$2"
+	local repo; repo="$(scenarios uncommitted)"
+	shoot "$path" "$theme" --open "$repo" --panel-height 0 \
+		--commit-page "settle:1,select:README.md" --delay 9
+}
+
+# A merge stopped in the middle, which is the one state where the strip above
+# the tree is the whole of what the pane is for.
+shot_conflict() {
+	local theme="$1" path="$2"
+	local repo; repo="$(scenarios conflict)"
+	# A second conflicted file, because the strip's job is a list and a count:
+	# one row can be read as "the pane found the file", where two rows and
+	# `1 of 2 resolved` is the thing it actually does.
+	if [ ! -f "$repo/limits.yaml" ]; then
+		git -C "$repo" merge --abort
+		git -C "$repo" checkout -q theirs
+		printf 'timeout: 30\n' > "$repo/limits.yaml"
+		git -C "$repo" add limits.yaml
+		git -C "$repo" commit -qm "Wait half a minute"
+		git -C "$repo" checkout -q main
+		printf 'timeout: 10\n' > "$repo/limits.yaml"
+		git -C "$repo" add limits.yaml
+		git -C "$repo" commit -qm "Wait ten seconds"
+		git -C "$repo" merge theirs >/dev/null 2>&1 || true
+	fi
+	shoot "$path" "$theme" --open "$repo" --file "$repo/settings.yaml" \
+		--sidebar branches --sidebar-width 330 --panel-height 0 --delay 7
+}
+
+# A pull request, which is the one picture on this site that is not of the
+# examples repository — because a pull request is on a forge and the examples
+# repository has none. It is this app's own, which is public and can be cloned,
+# and `gh` has to be logged in for it to come out at all.
+#
+# A local clone rather than the checkout beside this one: opening a project
+# writes a session file into it, and that checkout is somebody's working tree.
+# `origin` is then the real one, because `gh` resolves the repository from it.
+# `PR=` to photograph another one. The default is one of this repository
+# owner's own, deliberately: an open pull request is usually somebody else's
+# work, and their name and their branch would be on a page on a website without
+# their having been asked. #19 is also the one that added this page.
+shot_pullrequest() {
+	local theme="$1" path="$2" number="${PR:-19}"
+	if [ ! -d "$WORK/abydos" ]; then
+		git clone --quiet "$ABYDOS" "$WORK/abydos" >&2
+		git -C "$WORK/abydos" remote set-url origin https://github.com/philipparndt/abydos.git
+	fi
+	shoot "$path" "$theme" --open "$WORK/abydos" --panel-height 0 \
+		--pull-requests "settle:2,number:$number,settle:6,pick:2" --delay 22
+}
+
+# The pill on the terminal panel's title bar, counting what is working and what
+# is waiting. The sessions are synthesised rather than waited for: a real one
+# would have to be started, would say whatever it was doing that minute, and
+# would put somebody's own work in a picture on a website.
+#
+# Not go-service, for these three and the two below: it names a devcontainer,
+# and the question about activating one is a toast in the corner that has
+# nothing to do with what any of them are about. maven-service names none.
+shot_sessions() {
+	local theme="$1" path="$2"
+	local project; project="$(prepare java/maven-service sessions)"
+	shoot "$path" "$theme" --open "$project" --file "$project/pom.xml" \
+		--terminal --panel-height 360 --send-bytes 'git status -sb\r' \
+		--claude-running "1a2b3c4d-0001-4000-8000-000000000001:working:sub2" \
+		--claude-running "1a2b3c4d-0002-4000-8000-000000000002:needs" \
+		--claude-running "1a2b3c4d-0003-4000-8000-000000000003:working" \
+		--claude-running "1a2b3c4d-0004-4000-8000-000000000004:done" \
+		--delay 8
+}
+
+# The same register on ⇧⌘A, which is a panel of its own and so lands beside the
+# capture the way the palette and the breakpoint sheet do.
+shot_sessionlist() {
+	local theme="$1" path="$2"
+	local project; project="$(prepare java/maven-service sessionlist)"
+	local popover="${path%.png}-child0.png"
+	rm -f "$popover"
+	shoot "$path" "$theme" --open "$project" --panel-height 0 \
+		--claude-running "1a2b3c4d-0001-4000-8000-000000000001:working:sub2" \
+		--claude-running "1a2b3c4d-0002-4000-8000-000000000002:needs" \
+		--claude-running "1a2b3c4d-0003-4000-8000-000000000003:working" \
+		--claude-running "1a2b3c4d-0004-4000-8000-000000000004:done" \
+		--running-sessions-palette 6 --delay 9
+	[ -f "$popover" ] && mv "$popover" "$path"
+	return 0
+}
+
+# A dotenv file, which opens with its values already unreadable. The file is
+# written into the clone rather than committed to the examples repository,
+# which is where anybody's would come from too — and it is untracked and
+# unignored on purpose, because that is what puts the notice beside the lock.
+#
+# The values are invented, and shaped so that no scanner can mistake them for
+# real ones. The first attempt used a plausible `sk_live_` followed by
+# twenty-four alphanumerics, which is exactly Stripe's own pattern — GitHub's
+# push protection refused the commit, and it was right to: a key-shaped string
+# in a public repository is a key until somebody proves otherwise, and nobody
+# reading a diff is going to run that test. Underscores break the pattern and
+# say what the value is at the same time.
+shot_secrets() {
+	local theme="$1" path="$2"
+	local go; go="$(prepare java/maven-service secrets)"
+	cat > "$go/.env" <<'ENV'
+# The service reads these at start. Nothing here is real.
+APP_ENV=staging
+LOG_LEVEL=debug
+DATABASE_URL=postgres://thermostat:8Jq2wV6nR4xP@db.staging.internal:5432/readings
+STRIPE_SECRET_KEY=sk_live_NOT_A_KEY_ONLY_A_PICTURE
+export SENTRY_DSN=https://not-a-dsn@only.a.picture/6318
+SMTP_PASSWORD=
+# An empty value is not a secret, so it is left as it is.
+ENV
+	shoot "$path" "$theme" --open "$go" --file "$go/.env" --panel-height 0 --delay 6
+}
+
+# A SOPS file, decrypted in place from the chip beside the lock. The key is made
+# for the run and thrown away with the temporary directory, and the values are
+# invented — which is the whole point of photographing this one revealed.
+shot_sops() {
+	local theme="$1" path="$2"
+	local go; go="$(prepare java/maven-service sops)"
+	local keys="$WORK/age.txt"
+	age-keygen -o "$keys" >/dev/null 2>&1
+	local recipient; recipient="$(grep -o 'age1[0-9a-z]*' "$keys" | head -1)"
+	cat > "$go/.sops.yaml" <<RULES
+creation_rules:
+  - path_regex: secrets/.*\.yaml\$
+    age: $recipient
+RULES
+	mkdir -p "$go/secrets"
+	cat > "$go/secrets/dev.yaml" <<'VALUES'
+database:
+  user: thermostat
+  password: 8Jq2wV6nR4xP
+api:
+  stripe: sk_live_NOT_A_KEY_ONLY_A_PICTURE
+  sentry: https://not-a-dsn@only.a.picture/6318
+VALUES
+	( cd "$go" && SOPS_AGE_KEY_FILE="$keys" sops --encrypt --in-place secrets/dev.yaml )
+	SOPS_AGE_KEY_FILE="$keys" \
+		shoot "$path" "$theme" --open "$go" --file "$go/secrets/dev.yaml" \
+			--panel-height 0 --sops "settle:1,decrypt" --delay 8
+}
+
+SITE_SHOTS=(
+	editor debugger terminal java breakpoint palette scad cadova diagram
+	git log commit conflict pullrequest sessions sessionlist secrets sops
+)
 
 if [ "$SET" = site ] || [ "$SET" = all ]; then
 	echo "==> The pages' pictures, in $THEME ($SIZE) → ${OUT#"$DOCS"/}"
@@ -347,7 +570,7 @@ if [ "$SET" = site ] || [ "$SET" = all ]; then
 	done
 fi
 
-# One scene, four palettes. The same shot every time on purpose: a gallery where
+# One scene, eight palettes. The same shot every time on purpose: a gallery where
 # each picture also shows a different file is a gallery about the files.
 if [ "$SET" = themes ] || [ "$SET" = all ]; then
 	echo "==> One scene in each palette ($SIZE) → ${OUT#"$DOCS"/}/themes"

@@ -1,8 +1,8 @@
 ---
 title: Terminal and agents — Abydos
-description: The terminal in Abydos is not a strip at the bottom of an editor: a real PTY with a VT100/xterm emulator, tmux's own windows as the panel's tabs, and agent sessions the app owns rather than a view.
+description: The terminal in Abydos is not a strip at the bottom of an editor: a real PTY with a VT100/xterm emulator, tmux's own windows as the panel's tabs, agent sessions the app owns rather than a view, and a count of every Claude session on the machine that is working or waiting for you.
 og_title: Terminal and agents in Abydos
-og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux windows as tabs. Agent sessions are PTYs the app owns, so hiding one does not kill it, and findings come back over MCP as typed data.
+og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux windows as tabs. Agent sessions are PTYs the app owns, so hiding one does not kill it; ⇧⌘A says which of them are working and which are waiting for you.
 ---
 <header class="inner">
 	<a class="back" href="index.html">← Abydos</a>
@@ -32,7 +32,15 @@ og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux window
 	<kbd>⌘J</kbd> opens one and <kbd>⌘⏎</kbd> gives it the whole window. A pane
 	shows what a command printed even when the command has already finished, and a
 	tab that does not fit is reachable from a chevron that says how many are behind
-	it.
+	it — on every strip, tmux's own included, where the control used to be computed,
+	reserved and clickable with nothing drawn to say so.
+</p>
+<p>
+	<kbd>⌘⇧]</kbd> and <kbd>⌘⇧[</kbd> move along the strip of whatever column the
+	keyboard is in, so pressed in a terminal they walk the terminal's tabs rather
+	than changing the file behind the panel. And a pane has a pager: this one runs
+	vim, htop, an agent's own full-screen interface and tmux, so <code>git log</code>
+	opens <code>less</code> here as it does in every other terminal on the machine.
 </p>
 
 <h2>tmux's windows as the panel's tabs</h2>
@@ -81,3 +89,81 @@ og_description: A real PTY, kitty graphics, a bundled Nerd Font, and tmux window
 		   <a href="project.html">on the project page</a>.</p>
 	</div>
 </div>
+
+<h2>What is running, everywhere</h2>
+<p>
+	Every agent session on this machine already told the app what it was doing: the
+	hook posts an event for each of them, the tmux tabs wear a badge for the session
+	in them, a toast says a line when one in another tab speaks. What none of that
+	answered is the question asked from across the room — <em>is anything waiting for
+	me, and where?</em>
+</p>
+<figure>
+	<img src="images/sessions.png" alt="Abydos with the terminal panel open, and a pill on the panel's title bar showing two counts beside the tmux session tag."
+	     loading="lazy">
+	<figcaption>Left of the <code>tmux · session</code> tag: how many sessions are
+	   working, and how many need you, in the colours the tab badges already use for
+	   the same two states.</figcaption>
+</figure>
+<p>
+	A finished session is not counted, because it waits quietly. A working session
+	that has said nothing for ten minutes is not believed, and one that has said
+	nothing for an hour is forgotten outright — the clock is the last hook event, and
+	hook events bracket a tool call, so a <code>make test</code> is ninety seconds
+	with nothing in between. When nothing is running there is no pill at all, so an
+	idle panel looks as it did.
+</p>
+<figure>
+	<img src="images/sessionlist.png" alt="The Abydos running-sessions list: a filter field, a heading naming the project, four session rows each with a status glyph, one of them saying two subagents, and a footer counting the sessions on this machine."
+	     loading="lazy">
+	<figcaption>The same list on <kbd>⇧⌘A</kbd>, centred over the window that
+	   answered. The four sessions here were made for the picture and have announced
+	   nothing yet, which is what the rows say; a real one carries the line it last
+	   said and how long ago.</figcaption>
+</figure>
+<div class="cards">
+	<div class="card">
+		<h3>A row reaches the terminal it is in</h3>
+		<p>Every terminal the panel starts tells its shell which tab it is, and the
+		   hook passes that on — or, inside tmux, the pane's own id. So a row opens
+		   the tab the session named, in this window or another, or the window and
+		   pane of the mirrored tmux session, or switches this panel's client to
+		   another tmux session. One the app cannot reach is drawn dimmed and
+		   marked <em>elsewhere</em> before it is clicked, and clicking it copies
+		   <code>claude --resume &lt;id&gt;</code> — the one thing the app can offer
+		   for a session it does not hold.</p>
+	</div>
+	<div class="card">
+		<h3>And says how many subagents are out</h3>
+		<p>A row reads <code>2 subagents</code> beside what the session last said,
+		   and says nothing when there are none, because a count of nought is not
+		   news. The count goes up on the tool use that spawns one, down when one
+		   hands its work back, and to nought when the turn ends — which is what
+		   keeps it honest, since a missed event would otherwise leave a count that
+		   only rises.</p>
+	</div>
+	<div class="card">
+		<h3>The order is where, not when</h3>
+		<p>The window's own project first, the rest by name, and within a project
+		   the tmux session, the window's index, then the sessions in no window.
+		   Recency was the first answer and the wrong one: the list is rebuilt on
+		   every hook event and once a second by the staleness clock, and a row
+		   that moves while you are reaching for it cannot be clicked. The order is
+		   decided when the list opens and held while it is open.</p>
+	</div>
+	<div class="card">
+		<h3>Two limits, said plainly</h3>
+		<p>The hook carries no model name, so the list does not show one. And a
+		   session that started before Abydos did, and has sat at a prompt since,
+		   has announced nothing to this run of the app: it appears at its next
+		   event. For the windows the panel mirrors, tmux's own badge stands in
+		   until then.</p>
+	</div>
+</div>
+
+<p class="foot-note">
+	Every control on the panel's strip lights under the pointer and says what it is
+	in a tip drawn in the app's own type — a title, a line of detail, and the key as
+	a chip — and the key comes from the menu bar rather than from the control, so a
+	tip's promise and a keystroke cannot disagree.
+</p>

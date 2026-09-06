@@ -1,6 +1,6 @@
 ---
 title: Editor — Abydos
-description: The editor in Abydos: a persistent rope behind the text, tree-sitter highlighting scoped to the viewport, folding for 24 languages, and a parser allowed to land a frame late so typing never waits for it.
+description: The editor in Abydos: a persistent rope behind the text, tree-sitter highlighting scoped to the viewport, folding for 24 languages, a parser allowed to land a frame late, and a gutter that says which lines you have changed since HEAD.
 og_title: The Abydos editor
 og_description: A persistent rope, highlighting scoped to what is on screen, and a parser off the main thread. A keystroke costs 0.013 ms in a 100,000-line file.
 ---
@@ -97,7 +97,21 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 		<p><kbd>⌘F</kbd> searches this file; the match <kbd>⌘G</kbd> is on is the
 		   loudest thing on the page, and the others are quieter than it on
 		   purpose. A search that found nothing says so in red, and so does a
-		   regular expression that did not run.</p>
+		   regular expression that did not run. Replace is in the same band, with
+		   the highlights following the text as it is edited.</p>
+	</div>
+	<div class="card">
+		<h3><kbd>⇥</kbd> follows the file, not a setting</h3>
+		<p>The file's habit is read once at its head — which of tabs or spaces
+		   begins more of its indented lines, and for spaces the most common run —
+		   and said in the footer as <em>Tabs</em> or <em>Spaces: 2</em>.
+		   <kbd>⇥</kbd>, <kbd>⇧⇥</kbd>, a block indent and return's auto-indent all
+		   insert one level of it, so a two-space <code>values.yaml</code> stops
+		   gaining a tab on the line somebody is typing.</p>
+		<p>The chip opens a menu, and choosing converts the file level by level —
+		   one leading tab, or the old width in spaces, becoming one level of the
+		   new — as a single edit, so one <kbd>⌘Z</kbd> takes the whole conversion
+		   back and the chip goes back with it.</p>
 	</div>
 	<div class="card">
 		<h3>Folding, for every language</h3>
@@ -107,6 +121,34 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 		   than one line.</p>
 	</div>
 </div>
+
+<h2>What the gutter says</h2>
+<p>
+	A file open in the editor used to say nothing about what git thought of it. The
+	question asked far more often than any other — <em>which of these lines have I
+	changed since HEAD?</em> — had no answer short of the commit page or a terminal,
+	and then mapping hunk numbers back to the window by hand.
+</p>
+<p>
+	Open files mark their changes: a bar beside added and modified lines, and a wedge
+	on the boundary that deleted lines vanished from. Staged and unstaged alike, so
+	the marks answer <em>since HEAD</em> rather than <em>since the index</em>. They
+	are anchored the way breakpoints are, so they stay on their lines while somebody
+	types, and they are swept once per repository change across every open tab —
+	commit, checkout, stage — as well as on save and reload. One <code>git diff</code>
+	per file per event, off the main thread, never per keystroke. An untracked file
+	shows nothing: one that is entirely new would be entirely coloured, which says
+	nothing at all.
+</p>
+<p>
+	The gutter has a menu of its own — <em>Show Blame</em> or <em>Hide Blame</em>,
+	the title saying which state it is in, walking the responder chain to the one
+	toggle <kbd>⌥⌘B</kbd> and the View menu already share. Right-clicking the line
+	numbers used to open the <em>text</em> area's menu, which is how blame came to be
+	reported as a missing feature after months of shipping. And a breakpoint outlives
+	the session it was set for, which is most of what makes it a breakpoint rather
+	than a command.
+</p>
 
 <h2>What a tab can be</h2>
 <p>
@@ -120,9 +162,41 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 	was taken, zooming to the pixels rather than zooming the window around it; an
 	SVG drawn rather than shown as markup; a PDF as a PDF. A binary or an oversized
 	file opens as a tab explaining itself, over a hex viewer that memory-maps the
-	file and draws only the rows on screen, so a 100 MB mesh opens instantly.
+	file and draws only the rows on screen, so a 100 MB mesh opens instantly — and it
+	is called binary whatever its size, rather than told it is too large to open as
+	text, which is a statement about text made about something that was never text.
 	<a href="diagrams.html">Diagrams</a> and
 	<a href="3d-modelling.html">3D models</a> have pages of their own.
+</p>
+<p>
+	<strong>A video plays in a tab</strong> — the last rendered form still being
+	handed to a floating panel that covers the editor and closes on a keypress. An
+	<code>.mp4</code>, <code>.mov</code> or <code>.m4v</code> opens as a tab shaped
+	like a picture's, with the system's own transport controls. It never speaks
+	uninvited: it opens paused on its first frame, because an editor tab is often
+	opened mid-meeting; switching away pauses it, and coming back does <em>not</em>
+	resume. Only the containers that decode natively are claimed — a
+	<code>.webm</code> keeps the notice and its Quick Look button, because a player
+	spinning over a black rectangle is worse than a notice that is honest about it.
+</p>
+<p>
+	<kbd>Space</kbd> opens Quick Look for the kinds the system genuinely previews —
+	an image, a video, a PDF — because that is what Space does everywhere else on
+	this machine. Everything else keeps the provisional open, which is what Space is
+	for in a tree of source files. The panel is fed the selection, so four rows with
+	two images in them is a panel of two the arrow keys walk through.
+</p>
+<p>
+	<strong>And a picture on the clipboard pastes as a file.</strong> <kbd>⌘V</kbd>
+	in the project tree writes a board that carries pixels and no file as a PNG where
+	a pasted file would land, under the first free <code>picture-&lt;n&gt;.png</code>,
+	with the row open for renaming and the stem selected. <kbd>⌘V</kbd> over a picture
+	in a Markdown or HTML document writes it into <code>images/</code> beside the
+	document, named for the document, and puts a reference at the caret with the
+	caret inside the empty description so the next thing typed is the alt text. Text
+	on the board still pastes as text; a language with no picture syntax pastes
+	nothing and greys Paste out, since a file written into the source tree that
+	nothing references is a stray screenshot in the repository.
 </p>
 
 <p class="foot-note">
@@ -130,5 +204,6 @@ og_description: A persistent rope, highlighting scoped to what is on screen, and
 	server, a debugger and a build tool is
 	<a href="languages.html">the languages page</a>. The colours all of this is
 	drawn in are <a href="themes.html">the themes page</a>, and are files you can
-	write.
+	write. A <code>.env</code> or a SOPS file opens with its values already
+	unreadable — <a href="secrets.html">the secrets page</a>.
 </p>
